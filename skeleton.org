@@ -8,36 +8,38 @@
 **** Load dataset (as indices)
 **** Create Premise and Hypothesis objects using dimensions 
 **** Create NLI_System, which hooks up Premise and Hypothesis
-***** Pass in embeddings
 **** Use dataset (as indices) to train system 
+***** Pass in embeddings
 **** Use validation set (as indices) to train hyperparameters
+***** Pass in embeddings
 **** Test and check accuracy
 
 * nli_model.py
 ** Premise
 *** process()
+**** take in embeddings as input
 **** return tensor of encoded premise
 ** Hypothesis
 *** process()
+**** take in embeddings as input
 **** return tensor of encoded hypothesis
 ** NLI_System
 *** __init__
 **** setup_placeholders()
-**** setup_embeddings()
-***** Create placeholder for embeddings
+***** create placeholders, including embeddings placeholder
 **** setup_system()
 ***** link premise, hypothesis, etc. into real model
 **** setup_loss()
 ***** calculate loss and create variable for that
 *** Training
 **** optimize()
-***** run session one step with one pair of (x,y) data
+***** run session one step with one batch of (x,y) data
 **** train()
 ***** create optimizer for loss
 ***** run optimize in a loop over test data
 *** Validation
 **** test()
-***** calculate cost for one pair of (x,y) data. Used for tuning hyperparameters
+***** calculate cost for one batch of (x,y) data. Used for tuning hyperparameters
 **** validate()
 ***** take validation dataset and use test() to calculate total validation cost
 *** Testing
