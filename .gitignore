@@ -89,4 +89,5 @@ ENV/
 .ropeproject
 
 # SNLI data
-snli_data/
+data/dwr/
+

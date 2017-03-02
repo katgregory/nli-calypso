@@ -60,7 +60,7 @@ Loads the main glove file and creates matrix of only the embeddings in our vocab
 Saves trimmed glove matrix
 TODO -- Set default for size
 '''
-def process_glove(args, vocab_list, save_path, size):
+def process_glove(args, vocab_list, save_path, size=4e5):
     """
     :param vocab_list: [vocab]
     :return:
@@ -211,10 +211,10 @@ if __name__ == '__main__':
 
     x_dev_ids_path = dev_path + ".ids.premise"
     y_dev_ids_path = dev_path + ".ids.hypothesis"
-    data_to_token_ids(dev_path + ".context", x_dev_ids_path, vocab_path)
-    data_to_token_ids(dev_path + ".question", y_dev_ids_path, vocab_path)
+    data_to_token_ids(dev_path + ".premise", x_dev_ids_path, vocab_path)
+    data_to_token_ids(dev_path + ".hypothesis", y_dev_ids_path, vocab_path)
 
     x_test_ids_path = test_path + ".ids.premise"
     y_test_ids_path = test_path + ".ids.hypothesis"
-    data_to_token_ids(test_path + ".context", x_test_ids_path, vocab_path)
-    data_to_token_ids(test_path + ".question", y_test_ids_path, vocab_path)
+    data_to_token_ids(test_path + ".premise", x_test_ids_path, vocab_path)
+    data_to_token_ids(test_path + ".hypothesis", y_test_ids_path, vocab_path)
