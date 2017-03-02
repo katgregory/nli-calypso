@@ -1,9 +1,18 @@
 * train.py
 ** NLI_Train
 *** initialize_model()
+**** Read in hyperparameters
 *** initialize_vocab()
+**** Read in vocab
 *** main()
-**** Hook up data to model + call train function
+**** Load dataset (as indices)
+**** Create Premise and Hypothesis objects using dimensions 
+**** Create NLI_System, which hooks up Premise and Hypothesis
+***** Pass in embeddings
+**** Use dataset (as indices) to train system 
+**** Use validation set (as indices) to train hyperparameters
+**** Test and check accuracy
+
 * nli_model.py
 ** Premise
 *** process()
@@ -12,13 +21,14 @@
 *** process()
 **** return tensor of encoded hypothesis
 ** NLI_System
-*** setup_system()
-**** link premise, hypothesis, etc. into real model
 *** __init__
-**** setup placeholders
-**** setup embeddings
+**** setup_placeholders()
+**** setup_embeddings()
+***** Create placeholder for embeddings
 **** setup_system()
-**** setup loss
+***** link premise, hypothesis, etc. into real model
+**** setup_loss()
+***** calculate loss and create variable for that
 *** Training
 **** optimize()
 ***** run session one step with one pair of (x,y) data
