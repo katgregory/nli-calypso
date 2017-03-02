@@ -152,6 +152,7 @@ def data_to_token_ids(data_path, target_path, vocabulary_path,
 
 
 if __name__ == '__main__':
+    # ======== Set up arguments and paths =======
     args = setup_args()
     vocab_path = pjoin(args.vocab_dir, "vocab.dat")
 
@@ -159,11 +160,13 @@ if __name__ == '__main__':
     dev_path = pjoin(args.source_dir, "dev")
     test_path = pjoin(args.source_dir, 'test')
 
-
+    # ======== Read data from JSON into separate files =======
+    
     # TODO: TAKE OUT SENTENCES W/O VALID GOLD LABEL
 
     # TODO(Kenny): Parse data from json objects into separate files
 
+    # ======== Create Vocabulary =======
     # Create the de facto vocabulary and store it in vocab.dat
     create_vocabulary(vocab_path,
                       [pjoin(args.source_dir, "train.premise"),
@@ -178,19 +181,18 @@ if __name__ == '__main__':
     # ======== Trim Distributed Word Representation =======
     process_glove(args, rev_vocab, args.source_dir + "/glove.trimmed.{}".format(args.glove_dim))
 
-    # ======== Creating Dataset =========
-    # We created our data files seperately
-    # If your model loads data differently (like in bulk)
-    # You should change the below code
+    # ======== Create Dataset =========
+    x_train_ids_path = train_path + ".ids.premise"
+    y_train_ids_path = train_path + ".ids.hypothesis"
+    data_to_token_ids(train_path + ".premise", x_train_ids_path, vocab_path)
+    data_to_token_ids(train_path + ".hypothesis", y_train_ids_path, vocab_path)
 
-    x_train_dis_path = train_path + ".ids.context"
-    y_train_ids_path = train_path + ".ids.question"
-    data_to_token_ids(train_path + ".context", x_train_dis_path, vocab_path)
-    data_to_token_ids(train_path + ".question", y_train_ids_path, vocab_path)
+    x_dev_ids_path = dev_path + ".ids.premise"
+    y_dev_ids_path = dev_path + ".ids.hypothesis"
+    data_to_token_ids(dev_path + ".context", x_dev_ids_path, vocab_path)
+    data_to_token_ids(dev_path + ".question", y_dev_ids_path, vocab_path)
 
-    x_dis_path = valid_path + ".ids.context"
-    y_ids_path = valid_path + ".ids.question"
-    data_to_token_ids(valid_path + ".context", x_dis_path, vocab_path)
-    data_to_token_ids(valid_path + ".question", y_ids_path, vocab_path)
-
-
+    x_test_ids_path = test_path + ".ids.premise"
+    y_test_ids_path = test_path + ".ids.hypothesis"
+    data_to_token_ids(test_path + ".context", x_test_ids_path, vocab_path)
+    data_to_token_ids(test_path + ".question", y_test_ids_path, vocab_path)
