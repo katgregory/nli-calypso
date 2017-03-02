@@ -1,0 +1,38 @@
+* train.py
+** NLI_Train
+*** initialize_model()
+*** initialize_vocab()
+*** main()
+**** Hook up data to model + call train function
+* nli_model.py
+** Premise
+*** process()
+**** return tensor of encoded premise
+** Hypothesis
+*** process()
+**** return tensor of encoded hypothesis
+** NLI_System
+*** setup_system()
+**** link premise, hypothesis, etc. into real model
+*** __init__
+**** setup placeholders
+**** setup embeddings
+**** setup_system()
+**** setup loss
+*** Training
+**** optimize()
+***** run session one step with one pair of (x,y) data
+**** train()
+***** create optimizer for loss
+***** run optimize in a loop over test data
+*** Validation
+**** test()
+***** calculate cost for one pair of (x,y) data. Used for tuning hyperparameters
+**** validate()
+***** take validation dataset and use test() to calculate total validation cost
+*** Testing
+**** predict()
+***** predict class (using premise + hypothesis)
+**** evaluate_prediction()
+***** Calculate test peformance given dataset, labels, session using a given number of samples
+***** call predict() for each sample
