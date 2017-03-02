@@ -27,9 +27,8 @@ def get_optimizer(opt):
 Represent "Premise" LSTM portion of model.
 """
 class Premise(object):
-  def __init__(self, size, vocab_dim):
-    self.size = size
-    self.vocab_dim = vocab_dim
+  def __init__(self, hidden_size):
+    self.cell = tf.contrib.rnn.BasicLSTMCell(hidden_size)
 
   """
   Run inputs through LSTM and output hidden state.
@@ -42,47 +41,29 @@ class Premise(object):
   return value is of dimensions batch_size x hidden_size
   """
   def process(self, inputs):
-    cell = tf.contrib.rnn.BasicLSTMCell(Config.hidden_size)
-
     batch_size = tf.shape(inputs)[1]
-    initial_state = cell.zero_state(batch_size, tf.float32)
+    initial_state = self.cell.zero_state(batch_size, tf.float32)
 
     output, state = tf.nn.dynamic_rnn(cell, inputs, initial_state=initial_state, time_major=True)
 
     return state[-1]
 
-class Hypothesis(object):
-  def __init__(self, output_size):
-    self.output_size = output_size
-
-  """
-  Run inputs through LSTM and output hidden state.
-
-  :param inputs: Inputs as embeddings
-
-  :return: A hidden state representing the premise
-
-  @inputs is of dimensions sentence_size x batch_size x embedding_size
-  return value is of dimensions batch_size x hidden_size
-  """
-  def process(self, inputs):
-    cell = tf.contrib.rnn.BasicLSTMCell(Config.hidden_size)
-
-    batch_size = tf.shape(inputs)[1]
-    initial_state = cell.zero_state(batch_size, tf.float32)
-
-    output, state = tf.nn.dynamic_rnn(cell, inputs, initial_state=initial_state, time_major=True)
-
-    return state[-1]
-
+# For now, hypothesis is identical to premise
+Hypothesis = Premise
 
 class NLISystem(object):
   def __init__(self, premise, hypothesis, *args):
+
+    vocab_size, embedding_size, num_classes = args
+
     # ==== set up placeholder tokens ========
-    
-    self.premise_placeholder = tf.placeholder(tf.float32, shape=(None, None, Config.embedding_size))
-    self.hypothesis_placeholder = tf.placeholder(tf.float32, shape=(None, None, Config.embedding_size))
-    self.output_placeholder = tf.placeholder(tf.float32, shape=(None, Config.num_classes))
+    # Premise and Hypothesis should be input as matrix of sentence_len x batch_size x embedding_size
+    self.premise_placeholder = tf.placeholder(tf.float32, shape=(None, None, embedding_size))
+    self.hypothesis_placeholder = tf.placeholder(tf.float32, shape=(None, None, embedding_size))
+    self.embedding_placeholder = tf.placeholder(tf.float32, shape=(vocab_size, embedding_size))
+
+    # Output labels should be a matrix of batch_size x num_classes
+    self.output_placeholder = tf.placeholder(tf.float32, shape=(None, num_classes))
 
     # ==== assemble pieces ====
     with tf.variable_scope("nli", initializer=tf.uniform_unit_scaling_initializer(1.0)):
@@ -101,33 +82,47 @@ class NLISystem(object):
       W2 = tf.get_variable("W2", shape=(Config.hidden_size, Config.num_classes), initializer=tf.contrib.layers.xavier_initializer())
       b2 = tf.get_variable("b2", shape=(Config.num_classes,), initializer=tf.contrib.layers.xavier_initializer())
 
-      self.loss = tf.nn.softmax_cross_entropy_with_logits(tf.matmul(r, W2) + b2, output_placeholder)
+      # prediction before softmax layer
+      self.preds = tf.matmul(r, W2) + b2
 
+  def add_train_op(self):
+    loss = tf.nn.softmax_cross_entropy_with_logits(self.preds, output_placeholder)
     self.train_op = get_optimizer().minimize(loss)
     
-
   #############################
   # TRAINING
   #############################
 
-  def optimize(self, session, train_premise, train_hypothesis, train_y):
+  def optimize(self, session, embeddings, train_premise, train_hypothesis, train_y):
     input_feed = {
       self.premise_placeholder: train_premise,
       self.hypothesis_placeholder: train_hypothesis,
+      self.embedding_placeholder: embeddings,
       self.output_placeholder: train_y
     }
 
-    output_feed = [self.loss]
+    output_feed = [self.train_op]
     outputs = session.run(output_feed, input_feed)
 
     return outputs
 
-  def train(self, session, dataset, train_dir):
+  """
+  Loop through dataset and call optimize() to train model
+
+  :param session: passed in from train.py
+  :param dataset: a representation of data
+  :param train_dir: path to the directory where the model checkpoint is saved
+
+  """
+  def train(self, session, dataset, train_dir, embeddings, batch_size):
     tic = time.time()
     params = tf.trainable_variables()
     num_params = sum(map(lambda t: np.prod(tf.shape(t.value()).eval()), params))
     toc = time.time()
     logging.info("Number of params: %d (retreival took %f secs)" % (num_params, toc - tic))
+
+    for i, batch in enumerate(minibatches(dataset, batch_size)):
+      optimize(session, embeddings, *batch)
 
   #############################
   # VALIDATION
@@ -139,7 +134,7 @@ class NLISystem(object):
     # fill in this feed_dictionary like:
     # input_feed['valid_x'] = valid_x
 
-    output_feed = []
+    output_feed = [self.preds]
 
     outputs = session.run(output_feed, input_feed)
 
@@ -189,7 +184,8 @@ class NLISystem(object):
 
     return (a_s, a_e)
 
-  def evaluate_prediction(self, session, dataset, sample=100, log=False):
+  def evaluate
+_prediction(self, session, dataset, sample=100, log=False):
     f1 = 0.
     em = 0.
 

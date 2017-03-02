@@ -20,7 +20,7 @@ tf.app.flags.DEFINE_float("dropout", 0.15, "Fraction of units randomly dropped o
 tf.app.flags.DEFINE_integer("batch_size", 10, "Batch size to use during training.")
 tf.app.flags.DEFINE_integer("epochs", 10, "Number of epochs to train.")
 tf.app.flags.DEFINE_integer("state_size", 200, "Size of each model layer.")
-tf.app.flags.DEFINE_integer("output_size", 750, "The output size of your model.")
+tf.app.flags.DEFINE_integer("output_size", 3, "The output size of your model.")
 tf.app.flags.DEFINE_integer("embedding_size", 100, "Size of the pretrained vocabulary.")
 tf.app.flags.DEFINE_string("data_dir", "data/squad", "SQuAD directory (default ./data/squad)")
 tf.app.flags.DEFINE_string("train_dir", "train", "Training directory to save the model parameters (default: ./train).")
@@ -82,10 +82,10 @@ def main(_):
     vocab_path = FLAGS.vocab_path or pjoin(FLAGS.data_dir, "vocab.dat")
     vocab, rev_vocab = initialize_vocab(vocab_path)
 
-    premise = Premise(size=FLAGS.state_size, vocab_dim=FLAGS.embedding_size)
-    hypothesis = Hypothesis(output_size=FLAGS.output_size)
+    premise = Premise(hidden_size=FLAGS.state_size)
+    hypothesis = Hypothesis(hidden_size=FLAGS.state_size)
 
-    nli = NLISystem(premise, hypothesis)
+    nli = NLISystem(premise, hypothesis, len(vocab), FLAGS.embedding_size, FLAGS.output_size)
 
     if not os.path.exists(FLAGS.log_dir):
       os.makedirs(FLAGS.log_dir)
@@ -98,12 +98,12 @@ def main(_):
 
     with tf.Session() as sess:
       load_train_dir = get_normalized_train_dir(FLAGS.load_train_dir or FLAGS.train_dir)
-      initialize_model(sess, qa, load_train_dir)
+      initialize_model(sess, nli, load_train_dir)
 
       save_train_dir = get_normalized_train_dir(FLAGS.train_dir)
-      qa.train(sess, dataset, save_train_dir)
+      nli.train(sess, dataset, save_train_dir, FLAGS.batch_size)
 
-      qa.evaluate_answer(sess, dataset, vocab, FLAGS.evaluate, log=True)
+      nli.evaluate_prediction(sess, dataset, vocab, FLAGS.evaluate, log=True)
 
 if __name__ == "__main__":
   tf.app.run()
