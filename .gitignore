@@ -90,4 +90,5 @@ ENV/
 
 # SNLI data
 data/dwr/
+data/snli/snli_1.0_*
 
