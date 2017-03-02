@@ -76,34 +76,36 @@ def get_normalized_train_dir(train_dir):
 def main(_):
 
     # Do what you need to load datasets from FLAGS.data_dir
-    dataset = None
+    # dataset = None
 
-    embed_path = FLAGS.embed_path or pjoin("data", "squad", "glove.trimmed.{}.npz".format(FLAGS.embedding_size))
-    vocab_path = FLAGS.vocab_path or pjoin(FLAGS.data_dir, "vocab.dat")
-    vocab, rev_vocab = initialize_vocab(vocab_path)
+  dataset = [("326 1186 1650 818 15 6 25288 53 172 1769 9284 5778 57 6 425 16 2 1020", "3 43 5 1412 20 244 36 2 637", "1")]
 
-    premise = Premise(hidden_size=FLAGS.state_size)
-    hypothesis = Hypothesis(hidden_size=FLAGS.state_size)
+  embed_path = FLAGS.embed_path or pjoin("data", "squad", "glove.trimmed.{}.npz".format(FLAGS.embedding_size))
+  vocab_path = FLAGS.vocab_path or pjoin(FLAGS.data_dir, "vocab.dat")
+  vocab, rev_vocab = initialize_vocab(vocab_path)
 
-    nli = NLISystem(premise, hypothesis, len(vocab), FLAGS.embedding_size, FLAGS.output_size)
+  premise = Premise(hidden_size=FLAGS.state_size)
+  hypothesis = Hypothesis(hidden_size=FLAGS.state_size)
 
-    if not os.path.exists(FLAGS.log_dir):
-      os.makedirs(FLAGS.log_dir)
-      file_handler = logging.FileHandler(pjoin(FLAGS.log_dir, "log.txt"))
-      logging.getLogger().addHandler(file_handler)
+  nli = NLISystem(premise, hypothesis, len(vocab), FLAGS.embedding_size, FLAGS.output_size)
 
-    print(vars(FLAGS))
-    with open(os.path.join(FLAGS.log_dir, "flags.json"), 'w') as fout:
-      json.dump(FLAGS.__flags, fout)
+  if not os.path.exists(FLAGS.log_dir):
+    os.makedirs(FLAGS.log_dir)
+    file_handler = logging.FileHandler(pjoin(FLAGS.log_dir, "log.txt"))
+    logging.getLogger().addHandler(file_handler)
 
-    with tf.Session() as sess:
-      load_train_dir = get_normalized_train_dir(FLAGS.load_train_dir or FLAGS.train_dir)
-      initialize_model(sess, nli, load_train_dir)
+  print(vars(FLAGS))
+  with open(os.path.join(FLAGS.log_dir, "flags.json"), 'w') as fout:
+    json.dump(FLAGS.__flags, fout)
 
-      save_train_dir = get_normalized_train_dir(FLAGS.train_dir)
-      nli.train(sess, dataset, save_train_dir, FLAGS.batch_size)
+  with tf.Session() as sess:
+    load_train_dir = get_normalized_train_dir(FLAGS.load_train_dir or FLAGS.train_dir)
+    initialize_model(sess, nli, load_train_dir)
 
-      nli.evaluate_prediction(sess, dataset, vocab, FLAGS.evaluate, log=True)
+    save_train_dir = get_normalized_train_dir(FLAGS.train_dir)
+    nli.train(sess, dataset, save_train_dir, FLAGS.batch_size)
+
+    nli.evaluate_prediction(sess, dataset, vocab, FLAGS.evaluate, log=True)
 
 if __name__ == "__main__":
   tf.app.run()

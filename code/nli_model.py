@@ -28,7 +28,28 @@ Represent "Premise" LSTM portion of model.
 """
 class Premise(object):
   def __init__(self, hidden_size):
-    self.cell = tf.contrib.rnn.BasicLSTMCell(hidden_size)
+    self.cell = tf.nn.rnn_cell.BasicLSTMCell(hidden_size)
+
+  """
+  Run inputs through LSTM and output hidden state.
+
+  :param inputs: Inputs as embeddings
+
+  :return: A hidden state representing the premise
+
+  @inputs is of dimensions sentence_size x batch_size x embedding_size
+  return value is of dimensions batch_size x hidden_size
+  """
+  def process(self, inputs):
+    batch_size = tf.shape(inputs)[1]
+    initial_state = self.cell.zero_state(batch_size, tf.float32)
+    output, state = tf.nn.dynamic_rnn(self.cell, inputs, initial_state=initial_state, time_major=True)
+
+    return state[-1]
+
+class Hypothesis(object):
+  def __init__(self, hidden_size):
+    self.cell = tf.nn.rnn_cell.BasicLSTMCell(hidden_size)
 
   """
   Run inputs through LSTM and output hidden state.
@@ -44,12 +65,9 @@ class Premise(object):
     batch_size = tf.shape(inputs)[1]
     initial_state = self.cell.zero_state(batch_size, tf.float32)
 
-    output, state = tf.nn.dynamic_rnn(cell, inputs, initial_state=initial_state, time_major=True)
+    output, state = tf.nn.dynamic_rnn(self.cell, inputs, initial_state=initial_state, time_major=True)
 
     return state[-1]
-
-# For now, hypothesis is identical to premise
-Hypothesis = Premise
 
 class NLISystem(object):
   def __init__(self, premise, hypothesis, *args):
@@ -65,22 +83,24 @@ class NLISystem(object):
     # Output labels should be a matrix of batch_size x num_classes
     self.output_placeholder = tf.placeholder(tf.float32, shape=(None, num_classes))
 
-    # ==== assemble pieces ====
-    with tf.variable_scope("nli", initializer=tf.uniform_unit_scaling_initializer(1.0)):
-      hp = premise.process(premise_placeholder)
-      hh = hypothesis.process(hypothesis_placeholder)
+    with tf.variable_scope("premise"):
+      hp = premise.process(self.premise_placeholder)
+    with tf.variable_scope("hypothesis"):
+      hh = hypothesis.process(self.hypothesis_placeholder)
 
+    # ==== assemble pieces ====
+    with tf.variable_scope("nli", initializer=tf.contrib.layers.xavier_initializer()):
       merged = tf.concat([hp, hh], 1)
       
       # r = ReLU(merged W1 + b1)
       hidden_size = tf.shape(merged)[1]
-      W1 = tf.get_variable("W1", shape=(hidden_size, Config.hidden_size), initializer=tf.contrib.layers.xavier_initializer())
-      b1 = tf.get_variable("b1", shape=(Config.hidden_size,), initializer=tf.contrib.layers.xavier_initializer())
+      W1 = tf.get_variable("W1", shape=(hidden_size, Config.hidden_size))
+      b1 = tf.get_variable("b1", shape=(Config.hidden_size,))
       r = tf.nn.relu(tf.matmul(merged, w1) + b1)
       
       # softmax(rW2 + b2)
-      W2 = tf.get_variable("W2", shape=(Config.hidden_size, Config.num_classes), initializer=tf.contrib.layers.xavier_initializer())
-      b2 = tf.get_variable("b2", shape=(Config.num_classes,), initializer=tf.contrib.layers.xavier_initializer())
+      W2 = tf.get_variable("W2", shape=(Config.hidden_size, Config.num_classes))
+      b2 = tf.get_variable("b2", shape=(Config.num_classes,))
 
       # prediction before softmax layer
       self.preds = tf.matmul(r, W2) + b2
@@ -184,8 +204,7 @@ class NLISystem(object):
 
     return (a_s, a_e)
 
-  def evaluate
-_prediction(self, session, dataset, sample=100, log=False):
+  def evaluate_prediction(self, session, dataset, sample=100, log=False):
     f1 = 0.
     em = 0.
 
