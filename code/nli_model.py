@@ -24,9 +24,9 @@ def get_optimizer(opt):
   return optfn
 
 """
-Represent "Premise" LSTM portion of model.
+Represent "Premise" or "Hypothesis" LSTM portion of model.
 """
-class Premise(object):
+class Statement(object):
   def __init__(self, hidden_size):
     self.cell = tf.nn.rnn_cell.BasicLSTMCell(hidden_size)
 
@@ -35,7 +35,7 @@ class Premise(object):
 
   :param inputs: Inputs as embeddings
 
-  :return: A hidden state representing the premise
+  :return: A hidden state representing the statement
 
   @inputs is of dimensions sentence_size x batch_size x embedding_size
   return value is of dimensions batch_size x hidden_size
@@ -46,36 +46,15 @@ class Premise(object):
     output, state = tf.nn.dynamic_rnn(self.cell, inputs, initial_state=initial_state, time_major=True)
 
     return state[-1]
-
-class Hypothesis(object):
-  def __init__(self, hidden_size):
-    self.cell = tf.nn.rnn_cell.BasicLSTMCell(hidden_size)
-
-  """
-  Run inputs through LSTM and output hidden state.
-
-  :param inputs: Inputs as embeddings
-
-  :return: A hidden state representing the premise
-
-  @inputs is of dimensions sentence_size x batch_size x embedding_size
-  return value is of dimensions batch_size x hidden_size
-  """
-  def process(self, inputs):
-    batch_size = tf.shape(inputs)[1]
-    initial_state = self.cell.zero_state(batch_size, tf.float32)
-
-    output, state = tf.nn.dynamic_rnn(self.cell, inputs, initial_state=initial_state, time_major=True)
-
-    return state[-1]
-
+  
 class NLISystem(object):
   def __init__(self, premise, hypothesis, *args):
 
     vocab_size, embedding_size, num_classes = args
 
     # ==== set up placeholder tokens ========
-    # Premise and Hypothesis should be input as matrix of sentence_len x batch_size x embedding_size
+
+    # Premise and Hypothesis should be input as matrix of sentence_len x batch_size
     self.premise_placeholder = tf.placeholder(tf.float32, shape=(None, None, embedding_size))
     self.hypothesis_placeholder = tf.placeholder(tf.float32, shape=(None, None, embedding_size))
     self.embedding_placeholder = tf.placeholder(tf.float32, shape=(vocab_size, embedding_size))
@@ -83,10 +62,13 @@ class NLISystem(object):
     # Output labels should be a matrix of batch_size x num_classes
     self.output_placeholder = tf.placeholder(tf.float32, shape=(None, num_classes))
 
+    premise_embeddings = tf.matmul(self.premise_placeholder, self.embedding_placeholder)
+    hypothesis_embeddings = tf.matmul(self.hypothesis_placeholder, self.embedding_placeholder)
+
     with tf.variable_scope("premise"):
-      hp = premise.process(self.premise_placeholder)
+      hp = premise.process(premise_embeddings)
     with tf.variable_scope("hypothesis"):
-      hh = hypothesis.process(self.hypothesis_placeholder)
+      hh = hypothesis.process(hypothesis_embeddings)
 
     # ==== assemble pieces ====
     with tf.variable_scope("nli", initializer=tf.contrib.layers.xavier_initializer()):

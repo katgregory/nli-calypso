@@ -7,7 +7,7 @@ import json
 
 import tensorflow as tf
 
-from nli_model import Premise, NLISystem, Hypothesis
+from nli_model import Statement, NLISystem
 from os.path import join as pjoin
 
 import logging
@@ -78,14 +78,14 @@ def main(_):
     # Do what you need to load datasets from FLAGS.data_dir
     # dataset = None
 
-  dataset = [("326 1186 1650 818 15 6 25288 53 172 1769 9284 5778 57 6 425 16 2 1020", "3 43 5 1412 20 244 36 2 637", "1")]
+  dataset = None
 
   embed_path = FLAGS.embed_path or pjoin("data", "squad", "glove.trimmed.{}.npz".format(FLAGS.embedding_size))
   vocab_path = FLAGS.vocab_path or pjoin(FLAGS.data_dir, "vocab.dat")
   vocab, rev_vocab = initialize_vocab(vocab_path)
 
-  premise = Premise(hidden_size=FLAGS.state_size)
-  hypothesis = Hypothesis(hidden_size=FLAGS.state_size)
+  premise = Statement(hidden_size=FLAGS.state_size)
+  hypothesis = Statement(hidden_size=FLAGS.state_size)
 
   nli = NLISystem(premise, hypothesis, len(vocab), FLAGS.embedding_size, FLAGS.output_size)
 
