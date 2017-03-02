@@ -3,6 +3,7 @@ import os
 import re
 import tarfile
 import argparse
+import json
 
 from tensorflow.python.platform import gfile
 import numpy as np
@@ -150,19 +151,41 @@ def data_to_token_ids(data_path, target_path, vocabulary_path,
                     token_ids = sentence_to_token_ids(line, vocab, tokenizer)
                     tokens_file.write(" ".join([str(tok) for tok in token_ids]) + "\n")
 
+'''
+Parses the contents of a json file into seperate files for:
+1) Premise
+2) Hypothesis
+3) Gold label
+'''
+def create_files_from_json(json_paths):
+    for json_path, tier in json_paths:
+
+        with open(json_path) as data_file, \
+            open(pjoin(args.source_dir, tier + '.premise'), 'w') as premise_file, \
+            open(pjoin(args.source_dir, tier + '.hypothesis'), 'w') as hypothesis_file, \
+            open(pjoin(args.source_dir, tier + '.goldlabel'), 'w') as goldlabel_file:
+
+            for line in data_file:
+                json_line = json.loads(line)
+                if json_line['gold_label'] == '-': # Filter out the bad labels
+                    continue
+                premise_file.write(json_line['sentence1'] + '\n')
+                hypothesis_file.write(json_line['sentence2'] + '\n')
+                goldlabel_file.write(json_line['gold_label'] + '\n')
+
 
 if __name__ == '__main__':
     args = setup_args()
     vocab_path = pjoin(args.vocab_dir, "vocab.dat")
-
     train_path = pjoin(args.source_dir, "train")
     dev_path = pjoin(args.source_dir, "dev")
     test_path = pjoin(args.source_dir, 'test')
 
+    create_files_from_json([(pjoin(args.source_dir, 'snli_1.0_test.jsonl'), 'test'),
+                            (pjoin(args.source_dir, 'snli_1.0_dev.jsonl'), 'dev'),
+                            (pjoin(args.source_dir, 'snli_1.0_train.jsonl'), 'train')])
 
-    # TODO: TAKE OUT SENTENCES W/O VALID GOLD LABEL
-
-    # TODO(Kenny): Parse data from json objects into separate files
+    5/0
 
     # Create the de facto vocabulary and store it in vocab.dat
     create_vocabulary(vocab_path,
