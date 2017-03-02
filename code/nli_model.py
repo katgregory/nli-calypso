@@ -10,7 +10,7 @@ from six.moves import xrange  # pylint: disable=redefined-builtin
 import tensorflow as tf
 from tensorflow.python.ops import variable_scope as vs
 
-from evaluate import exact_match_score, f1_score
+# from evaluate import exact_match_score, f1_score
 
 logging.basicConfig(level=logging.INFO)
 
@@ -79,7 +79,8 @@ class Hypothesis(object):
 class NLISystem(object):
   def __init__(self, premise, hypothesis, *args):
     # ==== set up placeholder tokens ========
-    self.premise_placeholder = tf.placeholder(tf.float32, shape=(None, None, Config.emebedding_size))
+    
+    self.premise_placeholder = tf.placeholder(tf.float32, shape=(None, None, Config.embedding_size))
     self.hypothesis_placeholder = tf.placeholder(tf.float32, shape=(None, None, Config.embedding_size))
     self.output_placeholder = tf.placeholder(tf.float32, shape=(None, Config.num_classes))
 

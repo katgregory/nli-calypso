@@ -7,7 +7,7 @@ import json
 
 import tensorflow as tf
 
-from qa_model import Encoder, QASystem, Decoder
+from nli_model import Premise, NLISystem, Hypothesis
 from os.path import join as pjoin
 
 import logging
@@ -29,7 +29,7 @@ tf.app.flags.DEFINE_string("log_dir", "log", "Path to store log and flag files (
 tf.app.flags.DEFINE_string("optimizer", "adam", "adam / sgd")
 tf.app.flags.DEFINE_integer("print_every", 1, "How many iterations to do per print.")
 tf.app.flags.DEFINE_integer("keep", 0, "How many checkpoints to keep, 0 indicates keep all.")
-tf.app.flags.DEFINE_string("vocab_path", "data/squad/vocab.dat", "Path to vocab file (default: ./data/squad/vocab.dat)")
+tf.app.flags.DEFINE_string("vocab_path", "../data/snli/vocab.dat", "Path to vocab file (default: ../data/snli/vocab.dat)")
 tf.app.flags.DEFINE_string("embed_path", "", "Path to the trimmed GLoVe embedding (default: ./data/squad/glove.trimmed.{embedding_size}.npz)")
 
 FLAGS = tf.app.flags.FLAGS
@@ -82,10 +82,10 @@ def main(_):
     vocab_path = FLAGS.vocab_path or pjoin(FLAGS.data_dir, "vocab.dat")
     vocab, rev_vocab = initialize_vocab(vocab_path)
 
-    encoder = Encoder(size=FLAGS.state_size, vocab_dim=FLAGS.embedding_size)
-    decoder = Decoder(output_size=FLAGS.output_size)
+    premise = Premise(size=FLAGS.state_size, vocab_dim=FLAGS.embedding_size)
+    hypothesis = Hypothesis(output_size=FLAGS.output_size)
 
-    qa = QASystem(encoder, decoder)
+    nli = NLISystem(premise, hypothesis)
 
     if not os.path.exists(FLAGS.log_dir):
       os.makedirs(FLAGS.log_dir)
