@@ -36,7 +36,7 @@ def setup_args():
 def basic_tokenizer(sentence):
     words = []
     for space_separated_fragment in sentence.strip().split():
-        words.extend([word.strip(string.punctuation)] for word in re.split(" ", space_separated_fragment))
+        words.extend(word.strip(string.punctuation) for word in re.split(" ", space_separated_fragment))
     return [w for w in words if w]
 
 
