@@ -73,12 +73,36 @@ def get_normalized_train_dir(train_dir):
     os.symlink(os.path.abspath(train_dir), global_train_dir)
   return global_train_dir
 
+def convert_label(label):
+  if label == 'neutral':
+    return 1
+  elif label == 'entailment':
+    return 2
+  elif label == 'contradiction':
+    return 3
+  print 'failed to convert: ' + label
+  return 5/0
+
+def load_dataset(tier): # tier: 'test', 'train', 'dev'
+  premises = []
+  hypotheses = []
+  goldlabels = []
+  with open(pjoin(FLAGS.data_dir, tier, '.ids.premise')) as premise_file, \
+      open(pjoin(FLAGS.data_dir, tier, '.ids.hypothesis')) as hypothesis_file, \
+      open(pjoin(FLAGS.data_dir, tier, '.goldlabel')) as goldlabel_file:
+
+      for line in premise_file:  
+        premises.append(line.strip())
+      for line in hypothesis_file:
+        hypotheses.append(line.strip())
+      for line in goldlabel_file:
+        goldlabels.append(convert_label(line.strip()))
+      return (premises, hypotheses, goldlabels)
+
 def main(_):
 
     # Do what you need to load datasets from FLAGS.data_dir
-    dataset = None
-
-    # TODO: Load the dataset
+    dataset = load_dataset('dev') # TODO: CHANGE LATER
 
     embed_path = FLAGS.embed_path or pjoin("data", "snli", "glove.trimmed.{}.npz".format(FLAGS.embedding_size))
     vocab_path = FLAGS.vocab_path or pjoin(FLAGS.data_dir, "vocab.dat")
@@ -87,7 +111,7 @@ def main(_):
     encoder = Encoder(size=FLAGS.state_size, vocab_dim=FLAGS.embedding_size)
     decoder = Decoder(output_size=FLAGS.output_size)
 
-    nli = NLISystem(...) # TODO: Fix the paramters
+    nli = NLISystem(...) # TODO: Fix the parameters
 
     if not os.path.exists(FLAGS.log_dir):
       os.makedirs(FLAGS.log_dir)
