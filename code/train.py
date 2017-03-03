@@ -103,33 +103,33 @@ def main(_):
     vocab_path = FLAGS.vocab_path or pjoin(FLAGS.data_dir, "vocab.dat")
 
     # Get vocab and embeddings
-    embeddings = np.load(embed_path)
-    vocab, rev_vocab = initialize_vocab(vocab_path)
+    with np.load(embed_path) as embeddings:
+      vocab, rev_vocab = initialize_vocab(vocab_path)
 
-    # Initalize the NLI System
-    premise = Statement(hidden_size=FLAGS.state_size)
-    hypothesis = Statement(hidden_size=FLAGS.state_size)
-    nli = NLISystem(premise, hypothesis, len(vocab), FLAGS.embedding_size, FLAGS.num_classes)
-    nli.add_train_op()
+      # Initalize the NLI System
+      premise = Statement(hidden_size=FLAGS.state_size)
+      hypothesis = Statement(hidden_size=FLAGS.state_size)
+      nli = NLISystem(premise, hypothesis, len(vocab), FLAGS.embedding_size, FLAGS.num_classes)
+      nli.add_train_op()
 
-    if not os.path.exists(FLAGS.log_dir):
-      os.makedirs(FLAGS.log_dir)
-      file_handler = logging.FileHandler(pjoin(FLAGS.log_dir, "log.txt"))
-      logging.getLogger().addHandler(file_handler)
+      if not os.path.exists(FLAGS.log_dir):
+        os.makedirs(FLAGS.log_dir)
+        file_handler = logging.FileHandler(pjoin(FLAGS.log_dir, "log.txt"))
+        logging.getLogger().addHandler(file_handler)
 
-    print(vars(FLAGS))
-    with open(os.path.join(FLAGS.log_dir, "flags.json"), 'w') as fout:
-      json.dump(FLAGS.__flags, fout)
+      print(vars(FLAGS))
+      with open(os.path.join(FLAGS.log_dir, "flags.json"), 'w') as fout:
+        json.dump(FLAGS.__flags, fout)
 
-    with tf.Session() as sess:
-      initialize_model(sess, nli, FLAGS.load_train_dir)
+      with tf.Session() as sess:
+        initialize_model(sess, nli, FLAGS.load_train_dir)
 
-      # Train the model
-      nli.train(sess, train_dataset, FLAGS.train_dir, embeddings, FLAGS.batch_size)
+        # Train the model
+        nli.train(sess, train_dataset, FLAGS.train_dir, embeddings, FLAGS.batch_size)
 
-      # Evaluate on the dev set
+        # Evaluate on the dev set
 
-      # nli.evaluate_prediction(sess, dev_dataset, vocab, 100, log=True)
+        # nli.evaluate_prediction(sess, dev_dataset, vocab, 100, log=True)
 
 if __name__ == "__main__":
   tf.app.run()

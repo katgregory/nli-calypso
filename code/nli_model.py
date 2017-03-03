@@ -126,7 +126,7 @@ class NLISystem(object):
     input_feed = {
       self.premise_placeholder: premise_arr,
       self.hypothesis_placeholder: hypothesis_arr,
-      self.embedding_placeholder: embeddings,
+      self.embedding_placeholder: embeddings['glove'],
       self.output_placeholder: train_y
     }
 
