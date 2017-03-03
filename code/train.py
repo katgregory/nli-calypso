@@ -20,17 +20,17 @@ tf.app.flags.DEFINE_float("dropout", 0.15, "Fraction of units randomly dropped o
 tf.app.flags.DEFINE_integer("batch_size", 10, "Batch size to use during training.")
 tf.app.flags.DEFINE_integer("epochs", 10, "Number of epochs to train.")
 tf.app.flags.DEFINE_integer("state_size", 200, "Size of each model layer.")
-tf.app.flags.DEFINE_integer("output_size", 3, "The output size of your model.")
+tf.app.flags.DEFINE_integer("output_size", 750, "The output size of your model.")
 tf.app.flags.DEFINE_integer("embedding_size", 100, "Size of the pretrained vocabulary.")
-tf.app.flags.DEFINE_string("data_dir", "data/squad", "SQuAD directory (default ./data/squad)")
+tf.app.flags.DEFINE_string("data_dir", "data/snli", "snli directory (default ./data/snli)")
 tf.app.flags.DEFINE_string("train_dir", "train", "Training directory to save the model parameters (default: ./train).")
 tf.app.flags.DEFINE_string("load_train_dir", "", "Training directory to load model parameters from to resume training (default: {train_dir}).")
 tf.app.flags.DEFINE_string("log_dir", "log", "Path to store log and flag files (default: ./log)")
 tf.app.flags.DEFINE_string("optimizer", "adam", "adam / sgd")
 tf.app.flags.DEFINE_integer("print_every", 1, "How many iterations to do per print.")
 tf.app.flags.DEFINE_integer("keep", 0, "How many checkpoints to keep, 0 indicates keep all.")
-tf.app.flags.DEFINE_string("vocab_path", "../data/snli/vocab.dat", "Path to vocab file (default: ../data/snli/vocab.dat)")
-tf.app.flags.DEFINE_string("embed_path", "", "Path to the trimmed GLoVe embedding (default: ./data/squad/glove.trimmed.{embedding_size}.npz)")
+tf.app.flags.DEFINE_string("vocab_path", "data/snli/vocab.dat", "Path to vocab file (default: ./data/snli/vocab.dat)")
+tf.app.flags.DEFINE_string("embed_path", "", "Path to the trimmed GLoVe embedding (default: ./data/snli/glove.trimmed.{embedding_size}.npz)")
 
 FLAGS = tf.app.flags.FLAGS
 
@@ -76,36 +76,37 @@ def get_normalized_train_dir(train_dir):
 def main(_):
 
     # Do what you need to load datasets from FLAGS.data_dir
-    # dataset = None
+    dataset = None
 
-  dataset = None
+    # TODO: Load the dataset
 
-  embed_path = FLAGS.embed_path or pjoin("data", "squad", "glove.trimmed.{}.npz".format(FLAGS.embedding_size))
-  vocab_path = FLAGS.vocab_path or pjoin(FLAGS.data_dir, "vocab.dat")
-  vocab, rev_vocab = initialize_vocab(vocab_path)
+    embed_path = FLAGS.embed_path or pjoin("data", "snli", "glove.trimmed.{}.npz".format(FLAGS.embedding_size))
+    vocab_path = FLAGS.vocab_path or pjoin(FLAGS.data_dir, "vocab.dat")
+    vocab, rev_vocab = initialize_vocab(vocab_path)
 
-  premise = Statement(hidden_size=FLAGS.state_size)
-  hypothesis = Statement(hidden_size=FLAGS.state_size)
+    encoder = Encoder(size=FLAGS.state_size, vocab_dim=FLAGS.embedding_size)
+    decoder = Decoder(output_size=FLAGS.output_size)
 
-  nli = NLISystem(premise, hypothesis, len(vocab), FLAGS.embedding_size, FLAGS.output_size)
+    nli = NLISystem(...) # TODO: Fix the paramters
 
-  if not os.path.exists(FLAGS.log_dir):
-    os.makedirs(FLAGS.log_dir)
-    file_handler = logging.FileHandler(pjoin(FLAGS.log_dir, "log.txt"))
-    logging.getLogger().addHandler(file_handler)
+    if not os.path.exists(FLAGS.log_dir):
+      os.makedirs(FLAGS.log_dir)
+      file_handler = logging.FileHandler(pjoin(FLAGS.log_dir, "log.txt"))
+      logging.getLogger().addHandler(file_handler)
 
-  print(vars(FLAGS))
-  with open(os.path.join(FLAGS.log_dir, "flags.json"), 'w') as fout:
-    json.dump(FLAGS.__flags, fout)
+    print(vars(FLAGS))
+    with open(os.path.join(FLAGS.log_dir, "flags.json"), 'w') as fout:
+      json.dump(FLAGS.__flags, fout)
 
-  with tf.Session() as sess:
-    load_train_dir = get_normalized_train_dir(FLAGS.load_train_dir or FLAGS.train_dir)
-    initialize_model(sess, nli, load_train_dir)
+    with tf.Session() as sess:
+      load_train_dir = get_normalized_train_dir(FLAGS.load_train_dir or FLAGS.train_dir)
+      initialize_model(sess, nli, load_train_dir)
 
-    save_train_dir = get_normalized_train_dir(FLAGS.train_dir)
-    nli.train(sess, dataset, save_train_dir, FLAGS.batch_size)
+      save_train_dir = get_normalized_train_dir(FLAGS.train_dir)
+      nli.train(sess, dataset, save_train_dir)
 
-    nli.evaluate_prediction(sess, dataset, vocab, FLAGS.evaluate, log=True)
+      nli.evaluate_answer(sess, dataset, vocab, FLAGS.evaluate, log=True)
 
 if __name__ == "__main__":
   tf.app.run()
+

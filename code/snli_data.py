@@ -183,10 +183,9 @@ if __name__ == '__main__':
     test_path = pjoin(args.source_dir, 'test')
 
     # ======== Read data from JSON into separate files =======
-    create_files_from_json([(pjoin(args.source_dir, 'snli_1.0_test.jsonl'), 'test'),
+    create_files_from_json([(pjoin(args.source_dir, 'snli_1.0_test.jsonl'), 'test')])
                             (pjoin(args.source_dir, 'snli_1.0_dev.jsonl'), 'dev'),
                             (pjoin(args.source_dir, 'snli_1.0_train.jsonl'), 'train')])
-
     
     # ======== Create Vocabulary =======
     # Create the de facto vocabulary and store it in vocab.dat
