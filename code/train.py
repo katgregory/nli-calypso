@@ -69,7 +69,7 @@ def convert_label(label):
   print 'failed to convert: ' + label
   return 5/0
 
-def load_dataset(tier): # tier: 'test', 'train', 'dev'
+def load_dataset(tier, num_samples=None): # tier: 'test', 'train', 'dev'
   premises = []
   hypotheses = []
   goldlabels = []
@@ -77,26 +77,37 @@ def load_dataset(tier): # tier: 'test', 'train', 'dev'
       open(pjoin(FLAGS.data_dir, tier, '.ids.hypothesis')) as hypothesis_file, \
       open(pjoin(FLAGS.data_dir, tier, '.goldlabel')) as goldlabel_file:
 
-      for line in premise_file:  
-        premises.append(line.strip())
-      for line in hypothesis_file:
-        hypotheses.append(line.strip())
-      for line in goldlabel_file:
-        goldlabels.append(convert_label(line.strip()))
+      if num_samples:
+        for i in xrange(num_samples):
+          premises.append(premise_file.readline().strip())
+          hypotheses.append(hypothesis_file.readline().strip())
+          goldlabels.append(goldlabel.readline().strip())
+      else:
+        for line in premise_file:  
+          premises.append(line.strip()) 
+        for line in hypothesis_file:
+          hypotheses.append(line.strip())
+        for line in goldlabel_file:
+          goldlabels.append(convert_label(line.strip()))
       return (premises, hypotheses, goldlabels)
 
 def main(_):
 
     # Do what you need to load datasets from FLAGS.data_dir
-    dataset = load_dataset('dev')
+    train_dataset = load_dataset('train', 1000)
+    dev_dataset = load_dataset('dev', 100)
 
+    # Define paths
     embed_path = FLAGS.embed_path or pjoin("data", "snli", "glove.trimmed.{}.npz".format(FLAGS.embedding_size))
     vocab_path = FLAGS.vocab_path or pjoin(FLAGS.data_dir, "vocab.dat")
+
+    # Get vocab and embeddings
+    embeddings = np.load(embed_path)
     vocab, rev_vocab = initialize_vocab(vocab_path)
 
+    # Initalize the NLI System
     premise = Statement(hidden_size=FLAGS.state_size)
     hypothesis = Statement(hidden_size=FLAGS.state_size)
-
     nli = NLISystem(premise, hypothesis, len(vocab), FLAGS.embedding_size, FLAGS.num_classes)
 
     if not os.path.exists(FLAGS.log_dir):
@@ -110,9 +121,13 @@ def main(_):
 
     with tf.Session() as sess:
       initialize_model(sess, nli, FLAGS.load_train_dir)
-      nli.train(sess, dataset, FLAGS.train_dir)
 
-      nli.evaluate_answer(sess, dataset, vocab, FLAGS.evaluate, log=True)
+      # Train the model
+      nli.train(sess, train_dataset, FLAGS.train_dir, embeddings, FLAGS.batch_size)
+
+      # Evaluate on the dev set
+
+      # nli.evaluate_prediction(sess, dev_dataset, vocab, 100, log=True)
 
 if __name__ == "__main__":
   tf.app.run()
