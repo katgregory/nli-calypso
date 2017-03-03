@@ -31,6 +31,7 @@ tf.app.flags.DEFINE_integer("print_every", 1, "How many iterations to do per pri
 tf.app.flags.DEFINE_integer("keep", 0, "How many checkpoints to keep, 0 indicates keep all.")
 tf.app.flags.DEFINE_string("vocab_path", "data/snli/vocab.dat", "Path to vocab file (default: ./data/snli/vocab.dat)")
 tf.app.flags.DEFINE_string("embed_path", "", "Path to the trimmed GLoVe embedding (default: ./data/snli/glove.trimmed.{embedding_size}.npz)")
+tf.app.flags.DEFINE_float("num_classes", 3, "Neutral, Entailment, Contradiction")
 
 FLAGS = tf.app.flags.FLAGS
 
@@ -57,21 +58,6 @@ def initialize_vocab(vocab_path):
         return vocab, rev_vocab
     else:
         raise ValueError("Vocabulary file %s not found.", vocab_path)
-
-def get_normalized_train_dir(train_dir):
-  """
-    Adds symlink to {train_dir} from /tmp/cs224n-squad-train to canonicalize the
-    file paths saved in the checkpoint. This allows the model to be reloaded even
-    if the location of the checkpoint files has moved, allowing usage with CodaLab.
-    This must be done on both train.py and qa_answer.py in order to work.
-    """
-  global_train_dir = '/tmp/cs224n-squad-train'
-  if os.path.exists(global_train_dir):
-    os.unlink(global_train_dir)
-  if not os.path.exists(train_dir):
-    os.makedirs(train_dir)
-    os.symlink(os.path.abspath(train_dir), global_train_dir)
-  return global_train_dir
 
 def convert_label(label):
   if label == 'neutral':
@@ -102,16 +88,16 @@ def load_dataset(tier): # tier: 'test', 'train', 'dev'
 def main(_):
 
     # Do what you need to load datasets from FLAGS.data_dir
-    dataset = load_dataset('dev') # TODO: CHANGE LATER
+    dataset = load_dataset('dev')
 
     embed_path = FLAGS.embed_path or pjoin("data", "snli", "glove.trimmed.{}.npz".format(FLAGS.embedding_size))
     vocab_path = FLAGS.vocab_path or pjoin(FLAGS.data_dir, "vocab.dat")
     vocab, rev_vocab = initialize_vocab(vocab_path)
 
-    encoder = Encoder(size=FLAGS.state_size, vocab_dim=FLAGS.embedding_size)
-    decoder = Decoder(output_size=FLAGS.output_size)
+    premise = Statement(hidden_size=FLAGS.state_size)
+    hypothesis = Statement(hidden_size=FLAGS.state_size)
 
-    nli = NLISystem(...) # TODO: Fix the parameters
+    nli = NLISystem(premise, hypothesis, len(vocab), FLAGS.embedding_size, FLAGS.num_classes)
 
     if not os.path.exists(FLAGS.log_dir):
       os.makedirs(FLAGS.log_dir)
@@ -123,11 +109,8 @@ def main(_):
       json.dump(FLAGS.__flags, fout)
 
     with tf.Session() as sess:
-      load_train_dir = get_normalized_train_dir(FLAGS.load_train_dir or FLAGS.train_dir)
-      initialize_model(sess, nli, load_train_dir)
-
-      save_train_dir = get_normalized_train_dir(FLAGS.train_dir)
-      nli.train(sess, dataset, save_train_dir)
+      initialize_model(sess, nli, FLAGS.load_train_dir)
+      nli.train(sess, dataset, FLAGS.train_dir)
 
       nli.evaluate_answer(sess, dataset, vocab, FLAGS.evaluate, log=True)
 
