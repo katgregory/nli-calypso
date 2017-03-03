@@ -103,10 +103,27 @@ class NLISystem(object):
   # TRAINING
   #############################
 
+  def pad_sequences(self, data, max_length):
+    ret = []
+    for sentence in data:
+      new_sentence = sentence[:max_length] + [0] * max(0, (max_length - len(sentence)))
+      ret.append(new_sentence)
+    return ret
+
+
   def optimize(self, session, embeddings, train_premise, train_hypothesis, train_y):
+    premise_arr = [[int(word_idx) for word_idx in premise.split()] for premise in train_premise]
+    hypothesis_arr = [[int(word_idx) for word_idx in hypothesis.split()] for hypothesis in train_hypothesis]
+    
+    premise_max = len(max(train_premise, key=len).split())
+    hypothesis_max = len(max(train_premise, key=len).split())
+
+    premise_arr = np.array(self.pad_sequences(premise_arr, premise_max))
+    hypothesis_arr = np.array(self.pad_sequences(hypothesis_arr, hypothesis_max))
+
     input_feed = {
-      self.premise_placeholder: [[int(word_idx) for word_idx in premise.split()] for premise in train_premise],
-      self.hypothesis_placeholder: [[int(word_idx) for word_idx in hypothesis.split()] for hypothesis in train_hypothesis],
+      self.premise_placeholder: premise_arr,
+      self.hypothesis_placeholder: hypothesis_arr,
       self.embedding_placeholder: embeddings,
       self.output_placeholder: train_y
     }
