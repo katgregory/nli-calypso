@@ -98,8 +98,8 @@ class NLISystem(object):
       self.add_train_op()
 
   def add_train_op(self):
-    loss = tf.nn.softmax_cross_entropy_with_logits(self.preds, self.output_placeholder)
-    self.train_op = get_optimizer().minimize(loss)
+    self.loss = tf.nn.softmax_cross_entropy_with_logits(self.preds, self.output_placeholder)
+    self.train_op = get_optimizer().minimize(self.loss)
     
   #############################
   # TRAINING
@@ -193,39 +193,28 @@ class NLISystem(object):
   # TEST
   #############################
 
-  # def decode(self, session, test_x):
-  #   input_feed = {}
-
-  #   # fill in this feed_dictionary like:
-  #   # input_feed['test_x'] = test_x
-
-  #   output_feed = []
-
-  #   outputs = session.run(output_feed, input_feed)
-
-  #   return outputs
-
   def predict(self, session, embeddings, premise, hypothesis, goldlabel):
     input_feed = {
-      self.premise_placeholder: np.array([int(x) for x in premise[0].split()]).T,
-      self.hypothesis_placeholder: np.array([int(x) for x in hypothesis[0].split()]).T,
+      self.premise_placeholder: np.array([[int(x) for x in premise[0].split()]]).T,
+      self.hypothesis_placeholder: np.array([[int(x) for x in hypothesis[0].split()]]).T,
+      self.output_placeholder: goldlabel,
       self.embeddings_placeholder: embeddings
     }
 
-    output_feed = [self.preds]
-    output = session.run(output_feed, input_feed)
-
-    print(output)
-    print(goldlabel)
-    print('-------------------------------------------')
-
-
-    return output
+    output_feed = [tf.nn.softmax(self.preds), self.loss]
+    output, loss = session.run(output_feed, input_feed)
+    return 1 if np.argmax(output) == np.argmax(goldlabel) else 0, loss
 
   def evaluate_prediction(self, session, dataset, embeddings):
     print("TESTING")
 
+    total_loss = 0
+    total_correct = 0
     for batch in minibatches(dataset, 1):
-      prediction = self.predict(session, embeddings, *batch)
+      correct, loss = self.predict(session, embeddings, *batch)
+      total_correct += correct
+      total_loss += loss
+    print(total_correct / float(len(dataset[0])))
+    print(total_loss / float(len(dataset[0])))
 
 

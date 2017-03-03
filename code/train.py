@@ -95,7 +95,7 @@ def load_dataset(tier, num_samples=None): # tier: 'test', 'train', 'dev'
 def main(_):
 
     # Do what you need to load datasets from FLAGS.data_dir
-    train_dataset = load_dataset('train', 1000)
+    train_dataset = load_dataset('train', 100000)
     test_dataset = load_dataset('test', 100)
 
     # Define paths
