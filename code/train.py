@@ -110,6 +110,7 @@ def main(_):
     premise = Statement(hidden_size=FLAGS.state_size)
     hypothesis = Statement(hidden_size=FLAGS.state_size)
     nli = NLISystem(premise, hypothesis, len(vocab), FLAGS.embedding_size, FLAGS.num_classes)
+    nli.add_train_op()
 
     if not os.path.exists(FLAGS.log_dir):
       os.makedirs(FLAGS.log_dir)

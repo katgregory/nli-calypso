@@ -9,16 +9,22 @@ import numpy as np
 from six.moves import xrange  # pylint: disable=redefined-builtin
 import tensorflow as tf
 from tensorflow.python.ops import variable_scope as vs
+from util import minibatches
 
 # from evaluate import exact_match_score, f1_score
 
 logging.basicConfig(level=logging.INFO)
 
-def get_optimizer(opt):
+class Config:
+  ff_hidden_size = 200
+  num_classes = 3
+  lr = 0.01
+
+def get_optimizer(opt="adam"):
   if opt == "adam":
-    optfn = tf.train.AdamOptimizer
+    optfn = tf.train.AdamOptimizer(Config.lr)
   elif opt == "sgd":
-    optfn = tf.train.GradientDescentOptimizer
+    optfn = tf.train.GradientDescentOptimizer(Config.lr)
   else:
     assert (False)
   return optfn
@@ -55,8 +61,8 @@ class NLISystem(object):
     # ==== set up placeholder tokens ========
 
     # Premise and Hypothesis should be input as matrix of sentence_len x batch_size
-    self.premise_placeholder = tf.placeholder(tf.int32, shape=(None, None, embedding_size))
-    self.hypothesis_placeholder = tf.placeholder(tf.int32, shape=(None, None, embedding_size))
+    self.premise_placeholder = tf.placeholder(tf.int32, shape=(None, None))
+    self.hypothesis_placeholder = tf.placeholder(tf.int32, shape=(None, None))
     self.embedding_placeholder = tf.placeholder(tf.float32, shape=(vocab_size, embedding_size))
 
     # Output labels should be a matrix of batch_size x num_classes
@@ -74,23 +80,23 @@ class NLISystem(object):
 
     # ==== assemble pieces ====
     with tf.variable_scope("nli", initializer=tf.contrib.layers.xavier_initializer()):
-      merged = tf.concat([hp, hh], 1)
+      merged = tf.concat(1, [hp, hh])
       
       # r = ReLU(merged W1 + b1)
-      hidden_size = tf.shape(merged)[1]
-      W1 = tf.get_variable("W1", shape=(hidden_size, Config.hidden_size))
-      b1 = tf.get_variable("b1", shape=(Config.hidden_size,))
-      r = tf.nn.relu(tf.matmul(merged, w1) + b1)
+      merged_size = merged.get_shape().as_list()[1]
+      W1 = tf.get_variable("W1", shape=(merged_size, Config.ff_hidden_size))
+      b1 = tf.get_variable("b1", shape=(Config.ff_hidden_size,))
+      r = tf.nn.relu(tf.matmul(merged, W1) + b1)
       
       # softmax(rW2 + b2)
-      W2 = tf.get_variable("W2", shape=(Config.hidden_size, Config.num_classes))
+      W2 = tf.get_variable("W2", shape=(Config.ff_hidden_size, Config.num_classes))
       b2 = tf.get_variable("b2", shape=(Config.num_classes,))
 
       # prediction before softmax layer
       self.preds = tf.matmul(r, W2) + b2
 
   def add_train_op(self):
-    loss = tf.nn.softmax_cross_entropy_with_logits(self.preds, output_placeholder)
+    loss = tf.nn.softmax_cross_entropy_with_logits(self.preds, self.output_placeholder)
     self.train_op = get_optimizer().minimize(loss)
     
   #############################
@@ -99,8 +105,8 @@ class NLISystem(object):
 
   def optimize(self, session, embeddings, train_premise, train_hypothesis, train_y):
     input_feed = {
-      self.premise_placeholder: train_premise,
-      self.hypothesis_placeholder: train_hypothesis,
+      self.premise_placeholder: [[int(word_idx) for word_idx in premise.split()] for premise in train_premise],
+      self.hypothesis_placeholder: [[int(word_idx) for word_idx in hypothesis.split()] for hypothesis in train_hypothesis],
       self.embedding_placeholder: embeddings,
       self.output_placeholder: train_y
     }
@@ -126,7 +132,7 @@ class NLISystem(object):
     logging.info("Number of params: %d (retreival took %f secs)" % (num_params, toc - tic))
 
     for i, batch in enumerate(minibatches(dataset, batch_size)):
-      optimize(session, embeddings, *batch)
+      self.optimize(session, embeddings, *batch)
 
   #############################
   # VALIDATION
