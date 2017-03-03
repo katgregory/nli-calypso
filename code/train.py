@@ -10,6 +10,7 @@ import tensorflow as tf
 from nli_model import Statement, NLISystem
 from os.path import join as pjoin
 
+import numpy as np
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -66,22 +67,22 @@ def convert_label(label):
     return 2
   elif label == 'contradiction':
     return 3
-  print 'failed to convert: ' + label
+  print ('failed to convert: ' + str(label))
   return 5/0
 
 def load_dataset(tier, num_samples=None): # tier: 'test', 'train', 'dev'
   premises = []
   hypotheses = []
   goldlabels = []
-  with open(pjoin(FLAGS.data_dir, tier, '.ids.premise')) as premise_file, \
-      open(pjoin(FLAGS.data_dir, tier, '.ids.hypothesis')) as hypothesis_file, \
-      open(pjoin(FLAGS.data_dir, tier, '.goldlabel')) as goldlabel_file:
+  with open(pjoin(FLAGS.data_dir, tier + '.ids.premise')) as premise_file, \
+      open(pjoin(FLAGS.data_dir, tier + '.ids.hypothesis')) as hypothesis_file, \
+      open(pjoin(FLAGS.data_dir, tier + '.goldlabel')) as goldlabel_file:
 
       if num_samples:
         for i in xrange(num_samples):
           premises.append(premise_file.readline().strip())
           hypotheses.append(hypothesis_file.readline().strip())
-          goldlabels.append(goldlabel.readline().strip())
+          goldlabels.append(goldlabel_file.readline().strip())
       else:
         for line in premise_file:  
           premises.append(line.strip()) 
