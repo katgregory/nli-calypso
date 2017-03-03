@@ -60,13 +60,13 @@ def initialize_vocab(vocab_path):
     else:
         raise ValueError("Vocabulary file %s not found.", vocab_path)
 
-def convert_label(label):
-  if label == 'neutral':
-    return 1
-  elif label == 'entailment':
-    return 2
+def convert_to_one_hot(label):
+  if label == 'entailment':
+    return np.array([1, 0, 0])
+  elif label == 'neutral':
+    return np.array([0, 1, 0])
   elif label == 'contradiction':
-    return 3
+    return np.array([0, 0, 1])
   print ('failed to convert: ' + str(label))
   return 5/0
 
@@ -82,14 +82,14 @@ def load_dataset(tier, num_samples=None): # tier: 'test', 'train', 'dev'
         for i in xrange(num_samples):
           premises.append(premise_file.readline().strip())
           hypotheses.append(hypothesis_file.readline().strip())
-          goldlabels.append(convert_label(goldlabel_file.readline().strip()))
+          goldlabels.append(convert_to_one_hot(goldlabel_file.readline().strip()))
       else:
         for line in premise_file:  
           premises.append(line.strip()) 
         for line in hypothesis_file:
           hypotheses.append(line.strip())
         for line in goldlabel_file:
-          goldlabels.append(convert_label(line.strip()))
+          goldlabels.append(convert_to_one_hot(line.strip()))
       return (premises, hypotheses, goldlabels)
 
 def main(_):
