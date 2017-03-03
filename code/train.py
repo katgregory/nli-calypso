@@ -96,14 +96,15 @@ def main(_):
 
     # Do what you need to load datasets from FLAGS.data_dir
     train_dataset = load_dataset('train', 1000)
-    dev_dataset = load_dataset('dev', 100)
+    test_dataset = load_dataset('test', 100)
 
     # Define paths
     embed_path = FLAGS.embed_path or pjoin("data", "snli", "glove.trimmed.{}.npz".format(FLAGS.embedding_size))
     vocab_path = FLAGS.vocab_path or pjoin(FLAGS.data_dir, "vocab.dat")
 
     # Get vocab and embeddings
-    with np.load(embed_path) as embeddings:
+    with np.load(embed_path) as embeddings_dict:
+      embeddings = embeddings_dict['glove']
       vocab, rev_vocab = initialize_vocab(vocab_path)
 
       # Initalize the NLI System
@@ -129,7 +130,7 @@ def main(_):
 
         # Evaluate on the dev set
 
-        # nli.evaluate_prediction(sess, dev_dataset, vocab, 100, log=True)
+        nli.evaluate_prediction(sess, test_dataset, embeddings)
 
 if __name__ == "__main__":
   tf.app.run()
