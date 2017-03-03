@@ -62,9 +62,11 @@ class NLISystem(object):
     # Output labels should be a matrix of batch_size x num_classes
     self.output_placeholder = tf.placeholder(tf.float32, shape=(None, num_classes))
 
-    premise_embeddings = tf.matmul(self.premise_placeholder, self.embedding_placeholder)
-    hypothesis_embeddings = tf.matmul(self.hypothesis_placeholder, self.embedding_placeholder)
+    # Convert to embeddings; should be matrix of dim sentence_len x batch_size x embedding_size
+    premise_embeddings = tf.nn.embedding_lookup(self.embedding_placeholder, self.premise_placeholder)
+    hypothesis_embeddings = tf.nn.embedding_lookup(self.embedding_placeholder, self.hypothesis_placeholder)
 
+    # Scoping used here violates encapsulation slightly for convenience
     with tf.variable_scope("premise"):
       hp = premise.process(premise_embeddings)
     with tf.variable_scope("hypothesis"):
