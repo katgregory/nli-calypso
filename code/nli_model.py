@@ -95,6 +95,8 @@ class NLISystem(object):
       # prediction before softmax layer
       self.preds = tf.matmul(r, W2) + b2
 
+      self.add_train_op()
+
   def add_train_op(self):
     loss = tf.nn.softmax_cross_entropy_with_logits(self.preds, self.output_placeholder)
     self.train_op = get_optimizer().minimize(loss)
