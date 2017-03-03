@@ -82,7 +82,7 @@ def load_dataset(tier, num_samples=None): # tier: 'test', 'train', 'dev'
         for i in xrange(num_samples):
           premises.append(premise_file.readline().strip())
           hypotheses.append(hypothesis_file.readline().strip())
-          goldlabels.append(goldlabel_file.readline().strip())
+          goldlabels.append(convert_label(goldlabel_file.readline().strip()))
       else:
         for line in premise_file:  
           premises.append(line.strip()) 
