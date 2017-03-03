@@ -123,9 +123,10 @@ class NLISystem(object):
     premise_arr = np.array(self.pad_sequences(premise_arr, premise_max))
     hypothesis_arr = np.array(self.pad_sequences(hypothesis_arr, hypothesis_max))
 
+
     input_feed = {
-      self.premise_placeholder: premise_arr,
-      self.hypothesis_placeholder: hypothesis_arr,
+      self.premise_placeholder: premise_arr.T,
+      self.hypothesis_placeholder: hypothesis_arr.T,
       self.embedding_placeholder: embeddings['glove'],
       self.output_placeholder: train_y
     }
