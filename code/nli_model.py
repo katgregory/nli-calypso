@@ -63,14 +63,14 @@ class NLISystem(object):
     # Premise and Hypothesis should be input as matrix of sentence_len x batch_size
     self.premise_placeholder = tf.placeholder(tf.int32, shape=(None, None))
     self.hypothesis_placeholder = tf.placeholder(tf.int32, shape=(None, None))
-    self.embedding_placeholder = tf.placeholder(tf.float32, shape=(vocab_size, embedding_size))
+    self.embeddings_placeholder = tf.placeholder(tf.float32, shape=(vocab_size, embedding_size))
 
     # Output labels should be a matrix of batch_size x num_classes
     self.output_placeholder = tf.placeholder(tf.int32, shape=(None, num_classes))
 
     # Convert to embeddings; should be matrix of dim sentence_len x batch_size x embedding_size
-    premise_embeddings = tf.nn.embedding_lookup(self.embedding_placeholder, self.premise_placeholder)
-    hypothesis_embeddings = tf.nn.embedding_lookup(self.embedding_placeholder, self.hypothesis_placeholder)
+    premise_embeddings = tf.nn.embedding_lookup(self.embeddings_placeholder, self.premise_placeholder)
+    hypothesis_embeddings = tf.nn.embedding_lookup(self.embeddings_placeholder, self.hypothesis_placeholder)
 
     # Scoping used here violates encapsulation slightly for convenience
     with tf.variable_scope("premise"):
@@ -127,7 +127,7 @@ class NLISystem(object):
     input_feed = {
       self.premise_placeholder: premise_arr.T,
       self.hypothesis_placeholder: hypothesis_arr.T,
-      self.embedding_placeholder: embeddings['glove'],
+      self.embeddings_placeholder: embeddings,
       self.output_placeholder: train_y
     }
 
@@ -205,21 +205,27 @@ class NLISystem(object):
 
   #   return outputs
 
-  def predict(self, session, test_x):
+  def predict(self, session, embeddings, premise, hypothesis, goldlabel):
+    input_feed = {
+      self.premise_placeholder: np.array([int(x) for x in premise[0].split()]).T,
+      self.hypothesis_placeholder: np.array([int(x) for x in hypothesis[0].split()]).T,
+      self.embeddings_placeholder: embeddings
+    }
 
-    yp, yp2 = self.decode(session, test_x)
+    output_feed = [self.preds]
+    output = session.run(output_feed, input_feed)
 
-    a_s = np.argmax(yp, axis=1)
-    a_e = np.argmax(yp2, axis=1)
+    print(output)
+    print(goldlabel)
+    print('-------------------------------------------')
 
-    return (a_s, a_e)
 
-  def evaluate_prediction(self, session, dataset, sample=100, log=False):
-    f1 = 0.
-    em = 0.
+    return output
 
-    if log:
-      logging.info("F1: {}, EM: {}, for {} samples".format(f1, em, sample))
+  def evaluate_prediction(self, session, dataset, embeddings):
+    print("TESTING")
 
-    return f1, em
+    for batch in minibatches(dataset, 1):
+      prediction = self.predict(session, embeddings, *batch)
+
 
