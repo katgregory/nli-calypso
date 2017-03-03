@@ -61,12 +61,12 @@ class NLISystem(object):
     # ==== set up placeholder tokens ========
 
     # Premise and Hypothesis should be input as matrix of sentence_len x batch_size
-    self.premise_placeholder = tf.placeholder(tf.int32, shape=(None, None))
-    self.hypothesis_placeholder = tf.placeholder(tf.int32, shape=(None, None))
-    self.embeddings_placeholder = tf.placeholder(tf.float32, shape=(vocab_size, embedding_size))
+    self.premise_placeholder = tf.placeholder(tf.int32, shape=(None, None), name="premise")
+    self.hypothesis_placeholder = tf.placeholder(tf.int32, shape=(None, None), name="hypothesis")
+    self.embeddings_placeholder = tf.placeholder(tf.float32, shape=(vocab_size, embedding_size), name="embeddings")
 
     # Output labels should be a matrix of batch_size x num_classes
-    self.output_placeholder = tf.placeholder(tf.int32, shape=(None, num_classes))
+    self.output_placeholder = tf.placeholder(tf.int32, shape=(None, num_classes), name="output")
 
     # Convert to embeddings; should be matrix of dim sentence_len x batch_size x embedding_size
     premise_embeddings = tf.nn.embedding_lookup(self.embeddings_placeholder, self.premise_placeholder)
