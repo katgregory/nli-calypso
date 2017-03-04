@@ -10,6 +10,7 @@ from six.moves import xrange  # pylint: disable=redefined-builtin
 import tensorflow as tf
 from tensorflow.python.ops import variable_scope as vs
 from util import minibatches
+from util import ConfusionMatrix
 
 # from evaluate import exact_match_score, f1_score
 
@@ -19,6 +20,8 @@ class Config:
   ff_hidden_size = 200
   num_classes = 3
   lr = 0.01
+  verbose = True
+  LBLS = ['entailment', 'neutral', 'contradiction']
 
 def get_optimizer(opt="adam"):
   if opt == "adam":
@@ -152,6 +155,8 @@ class NLISystem(object):
     logging.info("Number of params: %d (retreival took %f secs)" % (num_params, toc - tic))
 
     for i, batch in enumerate(minibatches(dataset, batch_size)):
+      if Config.verbose and (i % 10 == 0):
+        print("Training batch", i)
       self.optimize(session, embeddings, *batch)
 
   #############################
@@ -193,6 +198,16 @@ class NLISystem(object):
   # TEST
   #############################
 
+  # Given an array of probabilities across the three labels, 
+  # returns string of the label with the highest probability
+  # (For debugging purposes only)
+  def label_to_name(self, label):
+    return {
+      '0': "entailment",
+      '1': 'neutral',
+      '2': 'contradiction'
+    }[str(np.argmax(label))]
+
   def predict(self, session, embeddings, premise, hypothesis, goldlabel):
     input_feed = {
       self.premise_placeholder: np.array([[int(x) for x in premise[0].split()]]).T,
@@ -203,18 +218,26 @@ class NLISystem(object):
 
     output_feed = [tf.nn.softmax(self.preds), self.loss]
     output, loss = session.run(output_feed, input_feed)
-    return 1 if np.argmax(output) == np.argmax(goldlabel) else 0, loss
+
+    if Config.verbose:
+      print('predicts:', self.label_to_name(output))
+      if (np.argmax(goldlabel) != np.argmax(output)):
+        print('\t\t\tcorrect:', self.label_to_name(goldlabel))
+
+    return np.argmax(goldlabel), np.argmax(output), loss
 
   def evaluate_prediction(self, session, dataset, embeddings):
-    print("TESTING")
+    print("EVALUATING")
 
+    cm = ConfusionMatrix(labels=Config.LBLS)
     total_loss = 0
     total_correct = 0
     for batch in minibatches(dataset, 1):
-      correct, loss = self.predict(session, embeddings, *batch)
-      total_correct += correct
+      gold_idx, predicted_idx, loss = self.predict(session, embeddings, *batch)
+      total_correct += 1 if predicted_idx == gold_idx else 0
       total_loss += loss
+      cm.update(gold_idx, predicted_idx)
     print(total_correct / float(len(dataset[0])))
     print(total_loss / float(len(dataset[0])))
-
-
+    print("Token-level confusion matrix:\n" + cm.as_table())
+    print("Token-level scores:\n" + cm.summary())
