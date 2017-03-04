@@ -103,7 +103,9 @@ class NLISystem(object):
   def add_train_op(self):
     self.loss = tf.nn.softmax_cross_entropy_with_logits(self.preds, self.output_placeholder)
     self.train_op = get_optimizer().minimize(self.loss)
-    
+    tf.summary.scalar("mean_batch_loss", tf.reduce_mean(self.loss))
+    self.summary_op = tf.summary.merge_all()
+
   #############################
   # TRAINING
   #############################
@@ -114,7 +116,6 @@ class NLISystem(object):
       new_sentence = sentence[:max_length] + [0] * max(0, (max_length - len(sentence)))
       ret.append(new_sentence)
     return ret
-
 
   def optimize(self, session, embeddings, train_premise, train_hypothesis, train_y):
     premise_arr = [[int(word_idx) for word_idx in premise.split()] for premise in train_premise]
@@ -134,9 +135,13 @@ class NLISystem(object):
       self.output_placeholder: train_y
     }
 
-    output_feed = [self.train_op]
-    outputs = session.run(output_feed, input_feed)
-
+    summary_writer = tf.summary.FileWriter('./logs',graph=session.graph)
+    output_feed = [self.summary_op, self.train_op]
+    summary, outputs = session.run(output_feed, input_feed)
+    if not hasattr(self, "iteration"): self.iteration = 0
+    summary_writer.add_summary(summary, self.iteration)
+    self.iteration += 1
+    
     return outputs
 
   def run_epoch(self, session, dataset, train_dir, embeddings, batch_size):
