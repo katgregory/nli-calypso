@@ -9,8 +9,7 @@ import numpy as np
 from six.moves import xrange  # pylint: disable=redefined-builtin
 import tensorflow as tf
 from tensorflow.python.ops import variable_scope as vs
-from util import minibatches
-from util import ConfusionMatrix
+from util import Progbar, minibatches, ConfusionMatrix
 
 # from evaluate import exact_match_score, f1_score
 
@@ -22,6 +21,7 @@ class Config:
   lr = 0.01
   verbose = True
   LBLS = ['entailment', 'neutral', 'contradiction']
+  n_epochs = 10
 
 def get_optimizer(opt="adam"):
   if opt == "adam":
@@ -139,6 +139,14 @@ class NLISystem(object):
 
     return outputs
 
+  def run_epoch(self, session, dataset, train_dir, embeddings, batch_size):
+    # prog = Progbar(target=1 + int(len(dataset[0]) / batch_size))
+    for i, batch in enumerate(minibatches(dataset, batch_size)):
+      if Config.verbose and (i % 10 == 0):
+        print("Batch", i)
+      self.optimize(session, embeddings, *batch)
+      # prog.update(i + 1)
+
   """
   Loop through dataset and call optimize() to train model
 
@@ -154,10 +162,9 @@ class NLISystem(object):
     toc = time.time()
     logging.info("Number of params: %d (retreival took %f secs)" % (num_params, toc - tic))
 
-    for i, batch in enumerate(minibatches(dataset, batch_size)):
-      if Config.verbose and (i % 10 == 0):
-        print("Training batch", i)
-      self.optimize(session, embeddings, *batch)
+    for epoch in range(Config.n_epochs):
+      print("Epoch", epoch + 1, "out of", Config.n_epochs)
+      self.run_epoch(session, dataset, train_dir, embeddings, batch_size)
 
   #############################
   # VALIDATION
@@ -222,8 +229,8 @@ class NLISystem(object):
     if Config.verbose:
       print('predicts:', self.label_to_name(output))
       if (np.argmax(goldlabel) != np.argmax(output)):
-        print('\t\t\tcorrect:', self.label_to_name(goldlabel))
-
+        print('\t\t\t\t correct:', self.label_to_name(goldlabel))
+  
     return np.argmax(goldlabel), np.argmax(output), loss
 
   def evaluate_prediction(self, session, dataset, embeddings):
