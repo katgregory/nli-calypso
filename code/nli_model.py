@@ -88,44 +88,35 @@ class NLISystem(object):
       merged = tf.concat(1, [hp, hh], name="merged")
       
       # r1 = tanh(merged W1 + b1)
-      with tf.name_scope("FF-First-Layer"):
+      with tf.variable_scope("FF-First-Layer"):
         merged_size = merged.get_shape().as_list()[1]
-        W1 = tf.get_variable("W1", shape=(merged_size, Config.ff_hidden_size))
-        b1 = tf.get_variable("b1", shape=(Config.ff_hidden_size,))
-        r1 = tf.nn.tanh(tf.matmul(merged, W1) + b1, name="r1")
+        W1 = tf.get_variable("W", shape=(merged_size, Config.ff_hidden_size))
+        b1 = tf.get_variable("b", shape=(Config.ff_hidden_size,))
+        r1 = tf.nn.tanh(tf.matmul(merged, W1) + b1, name="r")
 
-        tf.summary.histogram("W1", W1)
-        tf.summary.histogram("b1", b1)
+        tf.summary.histogram("W", W1)
+        tf.summary.histogram("b", b1)
 
       # r2 = tanh(r1 W2 + b2)
-      with tf.name_scope("FF-Second-Layer"):
-        W2 = tf.get_variable("W2", shape=(Config.ff_hidden_size, Config.ff_hidden_size))
-        b2 = tf.get_variable("b2", shape=(Config.ff_hidden_size,))
-        r2 = tf.nn.tanh(tf.matmul(r1, W2) + b2, name="r2")
+      with tf.variable_scope("FF-Second-Layer"):
+        W2 = tf.get_variable("W", shape=(Config.ff_hidden_size, Config.ff_hidden_size))
+        b2 = tf.get_variable("b", shape=(Config.ff_hidden_size,))
+        r2 = tf.nn.tanh(tf.matmul(r1, W2) + b2, name="r")
 
-        tf.summary.histogram("W2", W2)
-        tf.summary.histogram("b2", b2)
+        tf.summary.histogram("W", W2)
+        tf.summary.histogram("b", b2)
 
       # r3 = tanh(r2 W3 + b3)
-      with tf.name_scope("FF-Third-Layer"):
-        W3 = tf.get_variable("W3", shape=(Config.ff_hidden_size, Config.ff_hidden_size))
-        b3 = tf.get_variable("b3", shape=(Config.ff_hidden_size,))
-        r3 = tf.nn.tanh(tf.matmul(r2, W3) + b3, name="r3")
+      with tf.variable_scope("FF-Third-Layer"):
+        W3 = tf.get_variable("W", shape=(Config.ff_hidden_size, Config.num_classes))
+        b3 = tf.get_variable("b", shape=(Config.num_classes,))
+        self.preds = tf.nn.tanh(tf.matmul(r2, W3) + b3, name="r")
 
-        tf.summary.histogram("W3", W3)
-        tf.summary.histogram("b3", b3)
-
-      # softmax(r3 W4 + b4)
-      with tf.name_scope("FF-3-Way-Layer"):
-        W4 = tf.get_variable("W4", shape=(Config.ff_hidden_size, Config.num_classes))
-        b4 = tf.get_variable("b4", shape=(Config.num_classes,))
-        self.preds = tf.matmul(r3, W4) + b4
-
-        tf.summary.histogram("W4", W4)
-        tf.summary.histogram("b4", b4)
+        tf.summary.histogram("W", W3)
+        tf.summary.histogram("b", b3)
 
       # prediction before softmax layer
-      with tf.name_scope("FF-Softmax"):
+      with tf.variable_scope("FF-Softmax"):
         loss = tf.nn.softmax_cross_entropy_with_logits(self.preds, self.output_placeholder)
         self.mean_loss = tf.reduce_mean(loss)
 
@@ -136,7 +127,7 @@ class NLISystem(object):
     with tf.name_scope("Gradients"):
       # summarize out gradients of loss w.r.t all trainable vars
       # trainable_vars = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES)
-      trainable_vars = [W1, W2, W3, W4, b1, b2, b3, b4, r1, r2, r3, merged] # manually specify for clarity
+      trainable_vars = [W1, W2, W3, b1, b2, b3, r1, r2, r3, merged] # manually specify for clarity
       gradients = tf.gradients(self.mean_loss, trainable_vars)
 
       for i, gradient in enumerate(gradients):
