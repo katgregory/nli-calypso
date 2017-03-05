@@ -21,7 +21,7 @@ tf.app.flags.DEFINE_float("dropout", 0.15, "Fraction of units randomly dropped o
 tf.app.flags.DEFINE_integer("batch_size", 10, "Batch size to use during training.")
 tf.app.flags.DEFINE_integer("epochs", 10, "Number of epochs to train.")
 tf.app.flags.DEFINE_integer("state_size", 200, "Size of each model layer.")
-tf.app.flags.DEFINE_integer("output_size", 750, "The output size of your model.")
+tf.app.flags.DEFINE_integer("output_size", 3, "The output size of your model.")
 tf.app.flags.DEFINE_integer("embedding_size", 100, "Size of the pretrained vocabulary.")
 tf.app.flags.DEFINE_string("data_dir", "data/snli", "snli directory (default ./data/snli)")
 tf.app.flags.DEFINE_string("train_dir", "train", "Training directory to save the model parameters (default: ./train).")
@@ -95,7 +95,7 @@ def load_dataset(tier, num_samples=None): # tier: 'test', 'train', 'dev'
 def main(_):
 
     # Do what you need to load datasets from FLAGS.data_dir
-    train_dataset = load_dataset('train', 10000)
+    train_dataset = load_dataset('train', 100000)
     test_dataset = load_dataset('test', 100)
 
     # Define paths

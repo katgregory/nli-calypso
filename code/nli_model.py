@@ -2,9 +2,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import time
-import logging
-import shutil
+import time, logging, shutil, sys
 
 import numpy as np
 from six.moves import xrange  # pylint: disable=redefined-builtin
@@ -92,6 +90,9 @@ class NLISystem(object):
         W1 = tf.get_variable("W1", shape=(merged_size, Config.ff_hidden_size))
         b1 = tf.get_variable("b1", shape=(Config.ff_hidden_size,))
         r = tf.nn.relu(tf.matmul(merged, W1) + b1)
+
+        tf.summary.histogram("W1", W1)
+        tf.summary.histogram("b1", b1)
       
       # softmax(rW2 + b2)
       with tf.name_scope("FF-Second-Layer"):
@@ -99,13 +100,17 @@ class NLISystem(object):
         b2 = tf.get_variable("b2", shape=(Config.num_classes,))
         self.preds = tf.matmul(r, W2) + b2
 
+        tf.summary.histogram("W2", W2)
+        tf.summary.histogram("b2", b2)
+
       # prediction before softmax layer
       with tf.name_scope("FF-Softmax"):
-        self.loss = tf.nn.softmax_cross_entropy_with_logits(self.preds, self.output_placeholder)
+        loss = tf.nn.softmax_cross_entropy_with_logits(self.preds, self.output_placeholder)
+        self.mean_loss = tf.reduce_mean(loss)
 
     with tf.name_scope("Optimizer"):
-      self.train_op = get_optimizer().minimize(self.loss)
-      tf.summary.scalar("mean_batch_loss", tf.reduce_mean(self.loss))
+      self.train_op = get_optimizer().minimize(self.mean_loss)
+      tf.summary.scalar("mean_batch_loss", self.mean_loss)
 
   #############################
   # TRAINING
@@ -146,7 +151,8 @@ class NLISystem(object):
     # prog = Progbar(target=1 + int(len(dataset[0]) / batch_size))
     for i, batch in enumerate(minibatches(dataset, batch_size)):
       if Config.verbose and (i % 10 == 0):
-        print("Batch", i)
+        sys.stdout.write(str(i) + "...")
+        sys.stdout.flush()
 
       self.optimize(session, embeddings, *batch)
 
@@ -170,7 +176,7 @@ class NLISystem(object):
     shutil.rmtree(logpath, ignore_errors=True)
     self.summary_writer = tf.summary.FileWriter(logpath, graph=session.graph)
     for epoch in range(Config.n_epochs):
-      print("Epoch", epoch + 1, "out of", Config.n_epochs)
+      print("\nEpoch", epoch + 1, "out of", Config.n_epochs)
       self.run_epoch(session, dataset, train_dir, embeddings, batch_size)
 
   #############################
@@ -230,8 +236,8 @@ class NLISystem(object):
       self.embeddings_placeholder: embeddings
     }
 
-    output_feed = [tf.nn.softmax(self.preds), self.loss]
-    output, loss = session.run(output_feed, input_feed)
+    output_feed = [tf.nn.softmax(self.preds), self.mean_loss]
+    output, mean_loss = session.run(output_feed, input_feed)
 
     if Config.verbose:
       print('predicts:', self.label_to_name(output))
@@ -239,7 +245,7 @@ class NLISystem(object):
       if (np.argmax(goldlabel) != np.argmax(output)):
         print('\t\t\t\t correct:', self.label_to_name(goldlabel))
   
-    return np.argmax(goldlabel), np.argmax(output), loss
+    return np.argmax(goldlabel), np.argmax(output), mean_loss
 
   def evaluate_prediction(self, session, dataset, embeddings):
     print("EVALUATING")
