@@ -110,7 +110,7 @@ def main(_):
       # Initalize the NLI System
       premise = Statement(hidden_size=FLAGS.state_size)
       hypothesis = Statement(hidden_size=FLAGS.state_size)
-      nli = NLISystem(premise, hypothesis, len(vocab), FLAGS.embedding_size, FLAGS.num_classes)
+      nli = NLISystem(embeddings, premise, hypothesis, len(vocab), FLAGS.embedding_size, FLAGS.num_classes)
 
       if not os.path.exists(FLAGS.log_dir):
         os.makedirs(FLAGS.log_dir)
@@ -125,11 +125,11 @@ def main(_):
         initialize_model(sess, nli, FLAGS.load_train_dir)
 
         # Train the model
-        nli.train(sess, train_dataset, FLAGS.train_dir, embeddings, FLAGS.batch_size)
+        nli.train(sess, train_dataset, FLAGS.train_dir, FLAGS.batch_size)
 
         # Evaluate on the dev set
 
-        nli.evaluate_prediction(sess, test_dataset, embeddings)
+        nli.evaluate_prediction(sess, test_dataset)
 
 if __name__ == "__main__":
   tf.app.run()

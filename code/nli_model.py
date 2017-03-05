@@ -56,7 +56,7 @@ class Statement(object):
     return state[-1]
   
 class NLISystem(object):
-  def __init__(self, premise, hypothesis, *args):
+  def __init__(self, pretrained_embeddings, premise, hypothesis, *args):
 
     vocab_size, embedding_size, num_classes = args
 
@@ -65,19 +65,22 @@ class NLISystem(object):
     # Premise and Hypothesis should be input as matrix of sentence_len x batch_size
     self.premise_placeholder = tf.placeholder(tf.int32, shape=(None, None), name="Premise-Placeholder")
     self.hypothesis_placeholder = tf.placeholder(tf.int32, shape=(None, None), name="Hypothesis-Placeholder")
-    self.embeddings_placeholder = tf.placeholder(tf.float32, shape=(vocab_size, embedding_size), name="embeddings")
+    # self.pretrained_embeddings_placeholder = tf.placeholder(tf.float32, shape=(vocab_size, embedding_size), name="embeddings")
 
     # Output labels should be a matrix of batch_size x num_classes
     self.output_placeholder = tf.placeholder(tf.int32, shape=(None, num_classes), name="Output-Placeholder")
 
-    # Convert to embeddings; should be matrix of dim sentence_len x batch_size x embedding_size
-    premise_embeddings = tf.nn.embedding_lookup(self.embeddings_placeholder, self.premise_placeholder)
-    hypothesis_embeddings = tf.nn.embedding_lookup(self.embeddings_placeholder, self.hypothesis_placeholder)
+    with tf.name_scope("Embeddings"):
+      self.embeddings = tf.Variable(pretrained_embeddings, name="Embeddings", dtype=tf.float32)
+
+      # Convert to embeddings; should be matrix of dim sentence_len x batch_size x embedding_size
+      premise_embeddings = tf.nn.embedding_lookup(self.embeddings, self.premise_placeholder)
+      hypothesis_embeddings = tf.nn.embedding_lookup(self.embeddings, self.hypothesis_placeholder)
 
     # Scoping used here violates encapsulation slightly for convenience
-    with tf.variable_scope("LSTM-premise"):
+    with tf.variable_scope("LSTM-premise", initializer=tf.contrib.layers.xavier_initializer()):
       hp = premise.process(premise_embeddings)
-    with tf.variable_scope("LSTM-hypothesis"):
+    with tf.variable_scope("LSTM-hypothesis", initializer=tf.contrib.layers.xavier_initializer()):
       hh = hypothesis.process(hypothesis_embeddings)
 
     # ==== assemble pieces ====
@@ -141,7 +144,7 @@ class NLISystem(object):
       ret.append(new_sentence)
     return ret
 
-  def optimize(self, session, embeddings, train_premise, train_hypothesis, train_y):
+  def optimize(self, session, train_premise, train_hypothesis, train_y):
     premise_arr = [[int(word_idx) for word_idx in premise.split()] for premise in train_premise]
     hypothesis_arr = [[int(word_idx) for word_idx in hypothesis.split()] for hypothesis in train_hypothesis]
     
@@ -154,7 +157,6 @@ class NLISystem(object):
     input_feed = {
       self.premise_placeholder: premise_arr.T,
       self.hypothesis_placeholder: hypothesis_arr.T,
-      self.embeddings_placeholder: embeddings,
       self.output_placeholder: train_y
     }
 
@@ -165,14 +167,14 @@ class NLISystem(object):
     self.summary_writer.add_summary(summary, self.iteration)
     self.iteration += 1
 
-  def run_epoch(self, session, dataset, train_dir, embeddings, batch_size):
+  def run_epoch(self, session, dataset, train_dir, batch_size):
     # prog = Progbar(target=1 + int(len(dataset[0]) / batch_size))
     for i, batch in enumerate(minibatches(dataset, batch_size)):
       if Config.verbose and (i % 10 == 0):
         sys.stdout.write(str(i) + "...")
         sys.stdout.flush()
 
-      self.optimize(session, embeddings, *batch)
+      self.optimize(session, *batch)
 
   """
   Loop through dataset and call optimize() to train model
@@ -182,7 +184,7 @@ class NLISystem(object):
   :param train_dir: path to the directory where the model checkpoint is saved
 
   """
-  def train(self, session, dataset, train_dir, embeddings, batch_size):
+  def train(self, session, dataset, train_dir, batch_size):
     tic = time.time()
     params = tf.trainable_variables()
     num_params = sum(map(lambda t: np.prod(tf.shape(t.value()).eval()), params))
@@ -195,7 +197,7 @@ class NLISystem(object):
     self.summary_writer = tf.summary.FileWriter(logpath, graph=session.graph)
     for epoch in range(Config.n_epochs):
       print("\nEpoch", epoch + 1, "out of", Config.n_epochs)
-      self.run_epoch(session, dataset, train_dir, embeddings, batch_size)
+      self.run_epoch(session, dataset, train_dir, batch_size)
 
   #############################
   # VALIDATION
@@ -246,12 +248,11 @@ class NLISystem(object):
       '2': 'contradiction'
     }[str(np.argmax(label))]
 
-  def predict(self, session, embeddings, premise, hypothesis, goldlabel):
+  def predict(self, session, premise, hypothesis, goldlabel):
     input_feed = {
       self.premise_placeholder: np.array([[int(x) for x in premise[0].split()]]).T,
       self.hypothesis_placeholder: np.array([[int(x) for x in hypothesis[0].split()]]).T,
-      self.output_placeholder: goldlabel,
-      self.embeddings_placeholder: embeddings
+      self.output_placeholder: goldlabel
     }
 
     output_feed = [tf.nn.softmax(self.preds), self.mean_loss]
@@ -265,14 +266,14 @@ class NLISystem(object):
   
     return np.argmax(goldlabel), np.argmax(output), mean_loss
 
-  def evaluate_prediction(self, session, dataset, embeddings):
+  def evaluate_prediction(self, session, dataset):
     print("EVALUATING")
 
     cm = ConfusionMatrix(labels=Config.LBLS)
     total_loss = 0
     total_correct = 0
     for batch in minibatches(dataset, 1):
-      gold_idx, predicted_idx, loss = self.predict(session, embeddings, *batch)
+      gold_idx, predicted_idx, loss = self.predict(session, *batch)
       total_correct += 1 if predicted_idx == gold_idx else 0
       total_loss += loss
       cm.update(gold_idx, predicted_idx)
