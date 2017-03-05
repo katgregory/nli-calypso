@@ -84,24 +84,42 @@ class NLISystem(object):
     with tf.variable_scope("nli", initializer=tf.contrib.layers.xavier_initializer()):
       merged = tf.concat(1, [hp, hh])
       
-      # r = ReLU(merged W1 + b1)
+      # r1 = tanh(merged W1 + b1)
       with tf.name_scope("FF-First-Layer"):
         merged_size = merged.get_shape().as_list()[1]
         W1 = tf.get_variable("W1", shape=(merged_size, Config.ff_hidden_size))
         b1 = tf.get_variable("b1", shape=(Config.ff_hidden_size,))
-        r = tf.nn.relu(tf.matmul(merged, W1) + b1)
+        r1 = tf.nn.tanh(tf.matmul(merged, W1) + b1)
 
         tf.summary.histogram("W1", W1)
         tf.summary.histogram("b1", b1)
-      
-      # softmax(rW2 + b2)
+
+      # r2 = tanh(r1 W2 + b2)
       with tf.name_scope("FF-Second-Layer"):
-        W2 = tf.get_variable("W2", shape=(Config.ff_hidden_size, Config.num_classes))
-        b2 = tf.get_variable("b2", shape=(Config.num_classes,))
-        self.preds = tf.matmul(r, W2) + b2
+        W2 = tf.get_variable("W2", shape=(Config.ff_hidden_size, Config.ff_hidden_size))
+        b2 = tf.get_variable("b2", shape=(Config.ff_hidden_size,))
+        r2 = tf.nn.tanh(tf.matmul(r1, W2) + b2)
 
         tf.summary.histogram("W2", W2)
         tf.summary.histogram("b2", b2)
+
+      # r3 = tanh(r2 W3 + b3)
+      with tf.name_scope("FF-Third-Layer"):
+        W3 = tf.get_variable("W3", shape=(Config.ff_hidden_size, Config.ff_hidden_size))
+        b3 = tf.get_variable("b3", shape=(Config.ff_hidden_size,))
+        r3 = tf.nn.tanh(tf.matmul(r2, W3) + b3)
+
+        tf.summary.histogram("W3", W3)
+        tf.summary.histogram("b3", b3)
+
+      # softmax(r3 W4 + b4)
+      with tf.name_scope("FF-3-Way-Layer"):
+        W4 = tf.get_variable("W4", shape=(Config.ff_hidden_size, Config.num_classes))
+        b4 = tf.get_variable("b4", shape=(Config.num_classes,))
+        self.preds = tf.matmul(r3, W4) + b4
+
+        tf.summary.histogram("W4", W4)
+        tf.summary.histogram("b4", b4)
 
       # prediction before softmax layer
       with tf.name_scope("FF-Softmax"):
