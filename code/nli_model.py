@@ -127,7 +127,7 @@ class NLISystem(object):
     with tf.name_scope("Gradients"):
       # summarize out gradients of loss w.r.t all trainable vars
       # trainable_vars = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES)
-      trainable_vars = [W1, W2, W3, b1, b2, b3, r1, r2, r3, merged] # manually specify for clarity
+      trainable_vars = [W1, W2, W3, b1, b2, b3, r1, r2, self.preds, merged] # manually specify for clarity
       gradients = tf.gradients(self.mean_loss, trainable_vars)
 
       for i, gradient in enumerate(gradients):
