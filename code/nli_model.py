@@ -2,7 +2,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import time, logging, shutil, sys
+import time, logging, shutil, sys, re
 
 import numpy as np
 from six.moves import xrange  # pylint: disable=redefined-builtin
@@ -85,14 +85,14 @@ class NLISystem(object):
 
     # ==== assemble pieces ====
     with tf.variable_scope("nli", initializer=tf.contrib.layers.xavier_initializer()):
-      merged = tf.concat(1, [hp, hh])
+      merged = tf.concat(1, [hp, hh], name="merged")
       
       # r1 = tanh(merged W1 + b1)
       with tf.name_scope("FF-First-Layer"):
         merged_size = merged.get_shape().as_list()[1]
         W1 = tf.get_variable("W1", shape=(merged_size, Config.ff_hidden_size))
         b1 = tf.get_variable("b1", shape=(Config.ff_hidden_size,))
-        r1 = tf.nn.tanh(tf.matmul(merged, W1) + b1)
+        r1 = tf.nn.tanh(tf.matmul(merged, W1) + b1, name="r1")
 
         tf.summary.histogram("W1", W1)
         tf.summary.histogram("b1", b1)
@@ -101,7 +101,7 @@ class NLISystem(object):
       with tf.name_scope("FF-Second-Layer"):
         W2 = tf.get_variable("W2", shape=(Config.ff_hidden_size, Config.ff_hidden_size))
         b2 = tf.get_variable("b2", shape=(Config.ff_hidden_size,))
-        r2 = tf.nn.tanh(tf.matmul(r1, W2) + b2)
+        r2 = tf.nn.tanh(tf.matmul(r1, W2) + b2, name="r2")
 
         tf.summary.histogram("W2", W2)
         tf.summary.histogram("b2", b2)
@@ -110,7 +110,7 @@ class NLISystem(object):
       with tf.name_scope("FF-Third-Layer"):
         W3 = tf.get_variable("W3", shape=(Config.ff_hidden_size, Config.ff_hidden_size))
         b3 = tf.get_variable("b3", shape=(Config.ff_hidden_size,))
-        r3 = tf.nn.tanh(tf.matmul(r2, W3) + b3)
+        r3 = tf.nn.tanh(tf.matmul(r2, W3) + b3, name="r3")
 
         tf.summary.histogram("W3", W3)
         tf.summary.histogram("b3", b3)
@@ -132,6 +132,17 @@ class NLISystem(object):
     with tf.name_scope("Optimizer"):
       self.train_op = get_optimizer().minimize(self.mean_loss)
       tf.summary.scalar("mean_batch_loss", self.mean_loss)
+
+    with tf.name_scope("Gradients"):
+      # summarize out gradients of loss w.r.t all trainable vars
+      # trainable_vars = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES)
+      trainable_vars = [W1, W2, W3, W4, b1, b2, b3, b4, r1, r2, r3, merged] # manually specify for clarity
+      gradients = tf.gradients(self.mean_loss, trainable_vars)
+
+      for i, gradient in enumerate(gradients):
+        variable = trainable_vars[i]
+        variable_name = re.sub(r':', "_", variable.name)
+        tf.summary.histogram(variable_name + "/gradients", gradient)
 
   #############################
   # TRAINING
