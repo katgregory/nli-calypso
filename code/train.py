@@ -95,7 +95,7 @@ def load_dataset(tier, num_samples=None): # tier: 'test', 'train', 'dev'
 def main(_):
 
     # Do what you need to load datasets from FLAGS.data_dir
-    train_dataset = load_dataset('train', 1000)
+    train_dataset = load_dataset('train', 10000)
     test_dataset = load_dataset('test', 100)
 
     # Define paths
@@ -111,7 +111,6 @@ def main(_):
       premise = Statement(hidden_size=FLAGS.state_size)
       hypothesis = Statement(hidden_size=FLAGS.state_size)
       nli = NLISystem(premise, hypothesis, len(vocab), FLAGS.embedding_size, FLAGS.num_classes)
-      nli.add_train_op()
 
       if not os.path.exists(FLAGS.log_dir):
         os.makedirs(FLAGS.log_dir)

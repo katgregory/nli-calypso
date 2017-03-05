@@ -4,6 +4,7 @@ from __future__ import print_function
 
 import time
 import logging
+import shutil
 
 import numpy as np
 from six.moves import xrange  # pylint: disable=redefined-builtin
@@ -64,21 +65,21 @@ class NLISystem(object):
     # ==== set up placeholder tokens ========
 
     # Premise and Hypothesis should be input as matrix of sentence_len x batch_size
-    self.premise_placeholder = tf.placeholder(tf.int32, shape=(None, None), name="premise")
-    self.hypothesis_placeholder = tf.placeholder(tf.int32, shape=(None, None), name="hypothesis")
+    self.premise_placeholder = tf.placeholder(tf.int32, shape=(None, None), name="Premise-Placeholder")
+    self.hypothesis_placeholder = tf.placeholder(tf.int32, shape=(None, None), name="Hypothesis-Placeholder")
     self.embeddings_placeholder = tf.placeholder(tf.float32, shape=(vocab_size, embedding_size), name="embeddings")
 
     # Output labels should be a matrix of batch_size x num_classes
-    self.output_placeholder = tf.placeholder(tf.int32, shape=(None, num_classes), name="output")
+    self.output_placeholder = tf.placeholder(tf.int32, shape=(None, num_classes), name="Output-Placeholder")
 
     # Convert to embeddings; should be matrix of dim sentence_len x batch_size x embedding_size
     premise_embeddings = tf.nn.embedding_lookup(self.embeddings_placeholder, self.premise_placeholder)
     hypothesis_embeddings = tf.nn.embedding_lookup(self.embeddings_placeholder, self.hypothesis_placeholder)
 
     # Scoping used here violates encapsulation slightly for convenience
-    with tf.variable_scope("premise"):
+    with tf.variable_scope("LSTM-premise"):
       hp = premise.process(premise_embeddings)
-    with tf.variable_scope("hypothesis"):
+    with tf.variable_scope("LSTM-hypothesis"):
       hh = hypothesis.process(hypothesis_embeddings)
 
     # ==== assemble pieces ====
@@ -86,25 +87,25 @@ class NLISystem(object):
       merged = tf.concat(1, [hp, hh])
       
       # r = ReLU(merged W1 + b1)
-      merged_size = merged.get_shape().as_list()[1]
-      W1 = tf.get_variable("W1", shape=(merged_size, Config.ff_hidden_size))
-      b1 = tf.get_variable("b1", shape=(Config.ff_hidden_size,))
-      r = tf.nn.relu(tf.matmul(merged, W1) + b1)
+      with tf.name_scope("FF-First-Layer"):
+        merged_size = merged.get_shape().as_list()[1]
+        W1 = tf.get_variable("W1", shape=(merged_size, Config.ff_hidden_size))
+        b1 = tf.get_variable("b1", shape=(Config.ff_hidden_size,))
+        r = tf.nn.relu(tf.matmul(merged, W1) + b1)
       
       # softmax(rW2 + b2)
-      W2 = tf.get_variable("W2", shape=(Config.ff_hidden_size, Config.num_classes))
-      b2 = tf.get_variable("b2", shape=(Config.num_classes,))
+      with tf.name_scope("FF-Second-Layer"):
+        W2 = tf.get_variable("W2", shape=(Config.ff_hidden_size, Config.num_classes))
+        b2 = tf.get_variable("b2", shape=(Config.num_classes,))
+        self.preds = tf.matmul(r, W2) + b2
 
       # prediction before softmax layer
-      self.preds = tf.matmul(r, W2) + b2
+      with tf.name_scope("FF-Softmax"):
+        self.loss = tf.nn.softmax_cross_entropy_with_logits(self.preds, self.output_placeholder)
 
-      self.add_train_op()
-
-  def add_train_op(self):
-    self.loss = tf.nn.softmax_cross_entropy_with_logits(self.preds, self.output_placeholder)
-    self.train_op = get_optimizer().minimize(self.loss)
-    tf.summary.scalar("mean_batch_loss", tf.reduce_mean(self.loss))
-    self.summary_op = tf.summary.merge_all()
+    with tf.name_scope("Optimizer"):
+      self.train_op = get_optimizer().minimize(self.loss)
+      tf.summary.scalar("mean_batch_loss", tf.reduce_mean(self.loss))
 
   #############################
   # TRAINING
@@ -127,7 +128,6 @@ class NLISystem(object):
     premise_arr = np.array(self.pad_sequences(premise_arr, premise_max))
     hypothesis_arr = np.array(self.pad_sequences(hypothesis_arr, hypothesis_max))
 
-
     input_feed = {
       self.premise_placeholder: premise_arr.T,
       self.hypothesis_placeholder: hypothesis_arr.T,
@@ -135,22 +135,20 @@ class NLISystem(object):
       self.output_placeholder: train_y
     }
 
-    summary_writer = tf.summary.FileWriter('./logs',graph=session.graph)
     output_feed = [self.summary_op, self.train_op]
-    summary, outputs = session.run(output_feed, input_feed)
+    summary, _ = session.run(output_feed, input_feed)
+
     if not hasattr(self, "iteration"): self.iteration = 0
-    summary_writer.add_summary(summary, self.iteration)
+    self.summary_writer.add_summary(summary, self.iteration)
     self.iteration += 1
-    
-    return outputs
 
   def run_epoch(self, session, dataset, train_dir, embeddings, batch_size):
     # prog = Progbar(target=1 + int(len(dataset[0]) / batch_size))
     for i, batch in enumerate(minibatches(dataset, batch_size)):
       if Config.verbose and (i % 10 == 0):
         print("Batch", i)
+
       self.optimize(session, embeddings, *batch)
-      # prog.update(i + 1)
 
   """
   Loop through dataset and call optimize() to train model
@@ -167,6 +165,10 @@ class NLISystem(object):
     toc = time.time()
     logging.info("Number of params: %d (retreival took %f secs)" % (num_params, toc - tic))
 
+    self.summary_op = tf.summary.merge_all()
+    logpath = './logs'
+    shutil.rmtree(logpath, ignore_errors=True)
+    self.summary_writer = tf.summary.FileWriter(logpath, graph=session.graph)
     for epoch in range(Config.n_epochs):
       print("Epoch", epoch + 1, "out of", Config.n_epochs)
       self.run_epoch(session, dataset, train_dir, embeddings, batch_size)
@@ -233,6 +235,7 @@ class NLISystem(object):
 
     if Config.verbose:
       print('predicts:', self.label_to_name(output))
+      print('with probabilities: ', output)
       if (np.argmax(goldlabel) != np.argmax(output)):
         print('\t\t\t\t correct:', self.label_to_name(goldlabel))
   
