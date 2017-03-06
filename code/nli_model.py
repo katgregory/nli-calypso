@@ -16,8 +16,9 @@ logging.basicConfig(level=logging.INFO)
 
 class Config:
   ff_hidden_size = 200
+  hidden_size = 200
   num_classes = 3
-  lr = 0.0001
+  lr = 0.001
   verbose = True
   LBLS = ['entailment', 'neutral', 'contradiction']
   n_epochs = 10
@@ -35,8 +36,8 @@ def get_optimizer(opt="adam"):
 Represent "Premise" or "Hypothesis" LSTM portion of model.
 """
 class Statement(object):
-  def __init__(self, hidden_size):
-    self.cell = tf.nn.rnn_cell.BasicLSTMCell(hidden_size)
+  def __init__(self):
+    self.cell = tf.nn.rnn_cell.BasicLSTMCell(Config.hidden_size)
 
   """
   Run inputs through LSTM and output hidden state.
@@ -87,9 +88,19 @@ class NLISystem(object):
       hh = hypothesis.process(hypothesis_embeddings)
       tf.summary.histogram("hidden", hh)
 
+    # weight hidden layers before merging
+    with tf.variable_scope("Hidden-Weights"):
+      wp = tf.get_variable("Wp", shape=(Config.hidden_size, Config.hidden_size), initializer=tf.contrib.layers.xavier_initializer())
+      whp = tf.matmul(hp, wp)
+      tf.summary.histogram("whp", whp)
+
+      wh = tf.get_variable("Wh", shape=(Config.hidden_size, Config.hidden_size), initializer=tf.contrib.layers.xavier_initializer())
+      whh = tf.matmul(hh, wh)
+      tf.summary.histogram("whh", whh)
+
     # ==== assemble pieces ====
     with tf.variable_scope("nli"):
-      merged = tf.concat(1, [hp, hh, hh-hp], name="merged")
+      merged = tf.concat(1, [whp, whh, whh-whp], name="merged")
       
       # r1 = tanh(merged W1 + b1)
       with tf.variable_scope("FF-First-Layer"):

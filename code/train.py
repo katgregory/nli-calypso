@@ -108,8 +108,8 @@ def main(_):
       vocab, rev_vocab = initialize_vocab(vocab_path)
 
       # Initalize the NLI System
-      premise = Statement(hidden_size=FLAGS.state_size)
-      hypothesis = Statement(hidden_size=FLAGS.state_size)
+      premise = Statement()
+      hypothesis = Statement()
       nli = NLISystem(embeddings, premise, hypothesis, len(vocab), FLAGS.embedding_size, FLAGS.num_classes)
 
       if not os.path.exists(FLAGS.log_dir):
