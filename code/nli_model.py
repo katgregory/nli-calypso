@@ -17,7 +17,7 @@ logging.basicConfig(level=logging.INFO)
 class Config:
   ff_hidden_size = 200
   num_classes = 3
-  lr = 0.01
+  lr = 0.0001
   verbose = True
   LBLS = ['entailment', 'neutral', 'contradiction']
   n_epochs = 10
@@ -49,13 +49,13 @@ class Statement(object):
   return value is of dimensions batch_size x hidden_size
   """
   def process(self, inputs):
-    # batch_size = tf.shape(inputs)[1]
-    # initial_state = self.cell.zero_state(batch_size, tf.float32)
-    # output, state = tf.nn.dynamic_rnn(self.cell, inputs, initial_state=initial_state, time_major=True)
-    # return state[-1]
+    batch_size = tf.shape(inputs)[1]
+    initial_state = self.cell.zero_state(batch_size, tf.float32)
+    output, state = tf.nn.dynamic_rnn(self.cell, inputs, initial_state=initial_state, time_major=True)
+    return state[-1]
 
     # temp: just use bag of words
-    return tf.reduce_mean(inputs, 0)
+    # return tf.reduce_mean(inputs, 0)
   
 class NLISystem(object):
   def __init__(self, pretrained_embeddings, premise, hypothesis, *args):
@@ -89,7 +89,7 @@ class NLISystem(object):
 
     # ==== assemble pieces ====
     with tf.variable_scope("nli"):
-      merged = tf.concat(1, [hp, hh], name="merged")
+      merged = tf.concat(1, [hp, hh, hh-hp], name="merged")
       
       # r1 = tanh(merged W1 + b1)
       with tf.variable_scope("FF-First-Layer"):
