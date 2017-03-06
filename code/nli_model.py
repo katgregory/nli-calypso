@@ -49,11 +49,13 @@ class Statement(object):
   return value is of dimensions batch_size x hidden_size
   """
   def process(self, inputs):
-    batch_size = tf.shape(inputs)[1]
-    initial_state = self.cell.zero_state(batch_size, tf.float32)
-    output, state = tf.nn.dynamic_rnn(self.cell, inputs, initial_state=initial_state, time_major=True)
+    # batch_size = tf.shape(inputs)[1]
+    # initial_state = self.cell.zero_state(batch_size, tf.float32)
+    # output, state = tf.nn.dynamic_rnn(self.cell, inputs, initial_state=initial_state, time_major=True)
+    # return state[-1]
 
-    return state[-1]
+    # temp: just use bag of words
+    return tf.reduce_mean(inputs, 0)
   
 class NLISystem(object):
   def __init__(self, pretrained_embeddings, premise, hypothesis, *args):
@@ -96,6 +98,7 @@ class NLISystem(object):
 
         tf.summary.histogram("W", W1)
         tf.summary.histogram("b", b1)
+        tf.summary.histogram("r1", r1)
 
       # r2 = tanh(r1 W2 + b2)
       with tf.variable_scope("FF-Second-Layer"):
@@ -105,6 +108,7 @@ class NLISystem(object):
 
         tf.summary.histogram("W", W2)
         tf.summary.histogram("b", b2)
+        tf.summary.histogram("r2", r2)
 
       # r3 = tanh(r2 W3 + b3)
       with tf.variable_scope("FF-Third-Layer"):
@@ -114,6 +118,7 @@ class NLISystem(object):
 
         tf.summary.histogram("W", W3)
         tf.summary.histogram("b", b3)
+        tf.summary.histogram("preds", self.preds)
 
       # prediction before softmax layer
       with tf.variable_scope("FF-Softmax"):
@@ -133,8 +138,8 @@ class NLISystem(object):
       for i, gradient in enumerate(gradients):
         variable = trainable_vars[i]
         variable_name = re.sub(r':', "_", variable.name)
-        tf.summary.histogram(variable_name + "/gradients", gradient)
-        tf.summary.scalar(variable_name + "/gradient_norms", tf.sqrt(tf.reduce_sum(tf.square(gradient))))
+        tf.summary.histogram(variable_name + "/loss_gradients", gradient)
+        tf.summary.scalar(variable_name + "/loss_gradient_norms", tf.sqrt(tf.reduce_sum(tf.square(gradient))))
 
   #############################
   # TRAINING
