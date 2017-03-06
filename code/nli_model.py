@@ -84,14 +84,14 @@ class NLISystem(object):
       hh = hypothesis.process(hypothesis_embeddings)
 
     # ==== assemble pieces ====
-    with tf.variable_scope("nli", initializer=tf.contrib.layers.xavier_initializer()):
+    with tf.variable_scope("nli"):
       merged = tf.concat(1, [hp, hh], name="merged")
       
       # r1 = tanh(merged W1 + b1)
       with tf.variable_scope("FF-First-Layer"):
         merged_size = merged.get_shape().as_list()[1]
-        W1 = tf.get_variable("W", shape=(merged_size, Config.ff_hidden_size))
-        b1 = tf.get_variable("b", shape=(Config.ff_hidden_size,))
+        W1 = tf.get_variable("W", shape=(merged_size, Config.ff_hidden_size), initializer=tf.contrib.layers.xavier_initializer())
+        b1 = tf.Variable(tf.zeros([Config.ff_hidden_size,]), name="b")
         r1 = tf.nn.relu(tf.matmul(merged, W1) + b1, name="r")
 
         tf.summary.histogram("W", W1)
@@ -99,8 +99,8 @@ class NLISystem(object):
 
       # r2 = tanh(r1 W2 + b2)
       with tf.variable_scope("FF-Second-Layer"):
-        W2 = tf.get_variable("W", shape=(Config.ff_hidden_size, Config.ff_hidden_size))
-        b2 = tf.get_variable("b", shape=(Config.ff_hidden_size,))
+        W2 = tf.get_variable("W", shape=(Config.ff_hidden_size, Config.ff_hidden_size), initializer=tf.contrib.layers.xavier_initializer())
+        b2 = tf.Variable(tf.zeros([Config.ff_hidden_size,]), name="b")
         r2 = tf.nn.relu(tf.matmul(r1, W2) + b2, name="r")
 
         tf.summary.histogram("W", W2)
@@ -108,8 +108,8 @@ class NLISystem(object):
 
       # r3 = tanh(r2 W3 + b3)
       with tf.variable_scope("FF-Third-Layer"):
-        W3 = tf.get_variable("W", shape=(Config.ff_hidden_size, Config.num_classes))
-        b3 = tf.get_variable("b", shape=(Config.num_classes,))
+        W3 = tf.get_variable("W", shape=(Config.ff_hidden_size, Config.num_classes), initializer=tf.contrib.layers.xavier_initializer())
+        b3 = tf.Variable(tf.zeros([Config.num_classes,]), name="b")
         self.preds = tf.nn.relu(tf.matmul(r2, W3) + b3, name="r")
 
         tf.summary.histogram("W", W3)
@@ -117,7 +117,7 @@ class NLISystem(object):
 
       # prediction before softmax layer
       with tf.variable_scope("FF-Softmax"):
-        loss = tf.nn.softmax_cross_entropy_with_logits(self.preds, self.output_placeholder)
+        loss = tf.nn.softmax_cross_entropy_with_logits(logits=self.preds, labels=self.output_placeholder, name="loss")
         self.mean_loss = tf.reduce_mean(loss)
 
     with tf.name_scope("Optimizer"):
@@ -127,7 +127,7 @@ class NLISystem(object):
     with tf.name_scope("Gradients"):
       # summarize out gradients of loss w.r.t all trainable vars
       # trainable_vars = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES)
-      trainable_vars = [W1, W2, W3, b1, b2, b3, r1, r2, self.preds, merged] # manually specify for clarity
+      trainable_vars = [W1, W2, W3, b1, b2, b3, r1, r2, self.preds, merged, self.mean_loss] # manually specify for clarity
       gradients = tf.gradients(self.mean_loss, trainable_vars)
 
       for i, gradient in enumerate(gradients):
