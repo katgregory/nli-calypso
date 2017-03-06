@@ -82,8 +82,10 @@ class NLISystem(object):
     # Scoping used here violates encapsulation slightly for convenience
     with tf.variable_scope("LSTM-premise", initializer=tf.contrib.layers.xavier_initializer()):
       hp = premise.process(premise_embeddings)
+      tf.summary.histogram("hidden", hp)
     with tf.variable_scope("LSTM-hypothesis", initializer=tf.contrib.layers.xavier_initializer()):
       hh = hypothesis.process(hypothesis_embeddings)
+      tf.summary.histogram("hidden", hh)
 
     # ==== assemble pieces ====
     with tf.variable_scope("nli"):
@@ -121,7 +123,12 @@ class NLISystem(object):
         tf.summary.histogram("preds", self.preds)
 
       # prediction before softmax layer
-      with tf.variable_scope("FF-Softmax"):
+      with tf.variable_scope("FF-Softmax"):        
+
+        # for logging purposes only
+        probs = tf.nn.softmax(self.preds)
+        tf.summary.histogram("probs", probs)
+
         loss = tf.nn.softmax_cross_entropy_with_logits(logits=self.preds, labels=self.output_placeholder, name="loss")
         self.mean_loss = tf.reduce_mean(loss)
 
