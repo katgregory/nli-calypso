@@ -92,7 +92,7 @@ class NLISystem(object):
         merged_size = merged.get_shape().as_list()[1]
         W1 = tf.get_variable("W", shape=(merged_size, Config.ff_hidden_size))
         b1 = tf.get_variable("b", shape=(Config.ff_hidden_size,))
-        r1 = tf.nn.tanh(tf.matmul(merged, W1) + b1, name="r")
+        r1 = tf.nn.relu(tf.matmul(merged, W1) + b1, name="r")
 
         tf.summary.histogram("W", W1)
         tf.summary.histogram("b", b1)
@@ -101,7 +101,7 @@ class NLISystem(object):
       with tf.variable_scope("FF-Second-Layer"):
         W2 = tf.get_variable("W", shape=(Config.ff_hidden_size, Config.ff_hidden_size))
         b2 = tf.get_variable("b", shape=(Config.ff_hidden_size,))
-        r2 = tf.nn.tanh(tf.matmul(r1, W2) + b2, name="r")
+        r2 = tf.nn.relu(tf.matmul(r1, W2) + b2, name="r")
 
         tf.summary.histogram("W", W2)
         tf.summary.histogram("b", b2)
@@ -110,7 +110,7 @@ class NLISystem(object):
       with tf.variable_scope("FF-Third-Layer"):
         W3 = tf.get_variable("W", shape=(Config.ff_hidden_size, Config.num_classes))
         b3 = tf.get_variable("b", shape=(Config.num_classes,))
-        self.preds = tf.nn.tanh(tf.matmul(r2, W3) + b3, name="r")
+        self.preds = tf.nn.relu(tf.matmul(r2, W3) + b3, name="r")
 
         tf.summary.histogram("W", W3)
         tf.summary.histogram("b", b3)
@@ -134,6 +134,7 @@ class NLISystem(object):
         variable = trainable_vars[i]
         variable_name = re.sub(r':', "_", variable.name)
         tf.summary.histogram(variable_name + "/gradients", gradient)
+        tf.summary.scalar(variable_name + "/gradient_norms", tf.sqrt(tf.reduce_sum(tf.square(gradient))))
 
   #############################
   # TRAINING
