@@ -125,7 +125,7 @@ def main(_):
         initialize_model(sess, nli, FLAGS.load_train_dir)
 
         # Train the model
-        nli.train(sess, train_dataset, FLAGS.train_dir, FLAGS.batch_size)
+        nli.train(sess, train_dataset, rev_vocab, FLAGS.train_dir, FLAGS.batch_size)
 
         # Evaluate on the dev set
 

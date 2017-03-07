@@ -15,13 +15,13 @@ from util import Progbar, minibatches, ConfusionMatrix
 logging.basicConfig(level=logging.INFO)
 
 class Config:
-  ff_hidden_size = 200
-  hidden_size = 200
+  ff_hidden_size = 100
+  hidden_size = 100
   num_classes = 3
-  lr = 0.001
+  lr = 0.0001
   verbose = True
   LBLS = ['entailment', 'neutral', 'contradiction']
-  n_epochs = 10
+  n_epochs = 1
 
 def get_optimizer(opt="adam"):
   if opt == "adam":
@@ -50,13 +50,13 @@ class Statement(object):
   return value is of dimensions batch_size x hidden_size
   """
   def process(self, inputs):
-    batch_size = tf.shape(inputs)[1]
-    initial_state = self.cell.zero_state(batch_size, tf.float32)
-    output, state = tf.nn.dynamic_rnn(self.cell, inputs, initial_state=initial_state, time_major=True)
-    return state[-1]
+    # batch_size = tf.shape(inputs)[1]
+    # initial_state = self.cell.zero_state(batch_size, tf.float32)
+    # output, state = tf.nn.dynamic_rnn(self.cell, inputs, initial_state=initial_state, time_major=True)
+    # return state[-1]
 
     # temp: just use bag of words
-    # return tf.reduce_mean(inputs, 0)
+    return tf.reduce_mean(inputs, 0)
   
 class NLISystem(object):
   def __init__(self, pretrained_embeddings, premise, hypothesis, *args):
@@ -170,9 +170,17 @@ class NLISystem(object):
       ret.append(new_sentence)
     return ret
 
-  def optimize(self, session, train_premise, train_hypothesis, train_y):
+  def optimize(self, session, rev_vocab, train_premise, train_hypothesis, train_y):
     premise_arr = [[int(word_idx) for word_idx in premise.split()] for premise in train_premise]
     hypothesis_arr = [[int(word_idx) for word_idx in hypothesis.split()] for hypothesis in train_hypothesis]
+
+    if hasattr(self, "iteration") and self.iteration % 100 == 0:
+      premise_stmt = premise_arr[0]
+      hypothesis_stmt = hypothesis_arr[0]
+      print("Iteration: ", self.iteration)
+      print( " ".join([rev_vocab[i] for i in premise_stmt]))
+      print( " ".join([rev_vocab[i] for i in hypothesis_stmt]))
+      print(train_y)
     
     premise_max = len(max(train_premise, key=len).split())
     hypothesis_max = len(max(train_premise, key=len).split())
@@ -193,14 +201,13 @@ class NLISystem(object):
     self.summary_writer.add_summary(summary, self.iteration)
     self.iteration += 1
 
-  def run_epoch(self, session, dataset, train_dir, batch_size):
+  def run_epoch(self, session, dataset, rev_vocab, train_dir, batch_size):
     # prog = Progbar(target=1 + int(len(dataset[0]) / batch_size))
     for i, batch in enumerate(minibatches(dataset, batch_size)):
       if Config.verbose and (i % 10 == 0):
         sys.stdout.write(str(i) + "...")
         sys.stdout.flush()
-
-      self.optimize(session, *batch)
+      self.optimize(session, rev_vocab, *batch)
 
   """
   Loop through dataset and call optimize() to train model
@@ -210,7 +217,7 @@ class NLISystem(object):
   :param train_dir: path to the directory where the model checkpoint is saved
 
   """
-  def train(self, session, dataset, train_dir, batch_size):
+  def train(self, session, dataset, rev_vocab, train_dir, batch_size):
     tic = time.time()
     params = tf.trainable_variables()
     num_params = sum(map(lambda t: np.prod(tf.shape(t.value()).eval()), params))
@@ -223,7 +230,7 @@ class NLISystem(object):
     self.summary_writer = tf.summary.FileWriter(logpath, graph=session.graph)
     for epoch in range(Config.n_epochs):
       print("\nEpoch", epoch + 1, "out of", Config.n_epochs)
-      self.run_epoch(session, dataset, train_dir, batch_size)
+      self.run_epoch(session, dataset, rev_vocab, train_dir, batch_size)
 
   #############################
   # VALIDATION
