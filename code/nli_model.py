@@ -185,7 +185,7 @@ class NLISystem(object):
       print(train_y)
 
     premise_max = len(max(train_premise, key=len).split())
-    hypothesis_max = len(max(train_premise, key=len).split())
+    hypothesis_max = len(max(train_hypothesis, key=len).split())
 
     premise_arr = np.array(self.pad_sequences(premise_arr, premise_max))
     hypothesis_arr = np.array(self.pad_sequences(hypothesis_arr, hypothesis_max))
