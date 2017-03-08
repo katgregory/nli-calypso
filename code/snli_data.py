@@ -112,6 +112,7 @@ def create_vocabulary(vocabulary_path, data_paths, tokenizer=None):
                         print("processing line %d" % counter)
                     tokens = tokenizer(line) if tokenizer else basic_tokenizer(line)
                     for w in tokens:
+                        w = w.lower()
                         if w in vocab:
                             vocab[w] += 1
                         else:
@@ -131,11 +132,11 @@ def sentence_to_token_ids(sentence, vocabulary, tokenizer=None):
         words = tokenizer(sentence)
     else:
         words = basic_tokenizer(sentence)
-    return [vocabulary.get(w, UNK_ID) for w in words]
+    return [vocabulary.get(w.lower(), UNK_ID) for w in words]
 
 
 '''
-For a data set, initializes a vocab, 
+For a data set, initializes a vocab,
 '''
 def data_to_token_ids(data_path, target_path, vocabulary_path,
                       tokenizer=None):
@@ -184,7 +185,7 @@ if __name__ == '__main__':
     test_path = pjoin(args.source_dir, 'test')
 
     # ======== Read data from JSON into separate files =======
-    create_files_from_json([(pjoin(args.source_dir, 'snli_1.0_test.jsonl'), 'test')])
+    create_files_from_json([(pjoin(args.source_dir, 'snli_1.0_test.jsonl'), 'test'),
                             (pjoin(args.source_dir, 'snli_1.0_dev.jsonl'), 'dev'),
                             (pjoin(args.source_dir, 'snli_1.0_train.jsonl'), 'train')])
     
