@@ -79,6 +79,8 @@ class NLISystem(object):
       # Convert to embeddings; should be matrix of dim sentence_len x batch_size x embedding_size
       premise_embeddings = tf.nn.embedding_lookup(self.embeddings, self.premise_placeholder)
       hypothesis_embeddings = tf.nn.embedding_lookup(self.embeddings, self.hypothesis_placeholder)
+      self.premise_embeddings = premise_embeddings
+      self.hypothesis_embeddings = hypothesis_embeddings
 
     # Scoping used here violates encapsulation slightly for convenience
     with tf.variable_scope("LSTM-premise", initializer=tf.contrib.layers.xavier_initializer()):
@@ -181,7 +183,7 @@ class NLISystem(object):
       print( " ".join([rev_vocab[i] for i in premise_stmt]))
       print( " ".join([rev_vocab[i] for i in hypothesis_stmt]))
       print(train_y)
-    
+
     premise_max = len(max(train_premise, key=len).split())
     hypothesis_max = len(max(train_premise, key=len).split())
 
@@ -193,9 +195,11 @@ class NLISystem(object):
       self.hypothesis_placeholder: hypothesis_arr.T,
       self.output_placeholder: train_y
     }
-
-    output_feed = [self.summary_op, self.train_op]
-    summary, _ = session.run(output_feed, input_feed)
+    output_feed = [self.summary_op, self.train_op, self.premise_embeddings, self.hypothesis_embeddings]
+    summary, _, premise_embeddings, hypothesis_embeddings = session.run(output_feed, input_feed)
+    if hasattr(self, "iteration") and self.iteration % 100 == 0 and Config.verbose:
+      print(premise_embeddings)
+      5/0
 
     if not hasattr(self, "iteration"): self.iteration = 0
     self.summary_writer.add_summary(summary, self.iteration)
