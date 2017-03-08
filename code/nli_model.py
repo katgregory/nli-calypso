@@ -197,9 +197,8 @@ class NLISystem(object):
     }
     output_feed = [self.summary_op, self.train_op, self.premise_embeddings, self.hypothesis_embeddings]
     summary, _, premise_embeddings, hypothesis_embeddings = session.run(output_feed, input_feed)
-    if hasattr(self, "iteration") and self.iteration % 100 == 0 and Config.verbose:
-      print(premise_embeddings)
-      5/0
+    # if hasattr(self, "iteration") and self.iteration % 100 == 0 and Config.verbose:
+    #   print(premise_embeddings)
 
     if not hasattr(self, "iteration"): self.iteration = 0
     self.summary_writer.add_summary(summary, self.iteration)
