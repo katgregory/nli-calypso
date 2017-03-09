@@ -22,6 +22,7 @@ class Config:
   verbose = True
   LBLS = ['entailment', 'neutral', 'contradiction']
   n_epochs = 1
+  logpath = './logs'
 
 def get_optimizer(opt="adam"):
   if opt == "adam":
@@ -228,9 +229,7 @@ class NLISystem(object):
     logging.info("Number of params: %d (retreival took %f secs)" % (num_params, toc - tic))
 
     self.summary_op = tf.summary.merge_all()
-    logpath = './logs'
-    shutil.rmtree(logpath, ignore_errors=True)
-    self.summary_writer = tf.summary.FileWriter(logpath, graph=session.graph)
+    self.summary_writer = tf.summary.FileWriter('%s/%s' % (Config.logpath, time.time()), graph=session.graph)
     for epoch in range(Config.n_epochs):
       print("\nEpoch", epoch + 1, "out of", Config.n_epochs)
       self.run_epoch(session, dataset, rev_vocab, train_dir, batch_size)
