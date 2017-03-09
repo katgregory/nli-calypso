@@ -39,13 +39,13 @@ def load_dataset(tier): # tier: 'test', 'train', 'dev'
     return (premises, goldlabels)
 
 class Config:
-  ff_hidden_size = 100
+  ff_hidden_size = 1
   hidden_size = 100
   num_classes = 3
-  lr = 0.0005
-  verbose = False
+  lr = 0.005
+  verbose = True
   LBLS = ['entailment', 'neutral', 'contradiction']
-  n_epochs = 3
+  n_epochs = 1
   logpath = './logs'
 
   
@@ -55,15 +55,14 @@ class ToyModel(object):
     embedding_size, num_classes = args
 
     # Premise and Hypothesis should be input as matrix of sentence_len x batch_size
-    self.premise_placeholder = tf.placeholder(tf.float32, shape=(1, None), name="Premise-Placeholder")
+    self.premise_placeholder = tf.placeholder(tf.float32, shape=(1, 1), name="Premise-Placeholder")
 
     # Output labels should be a matrix of batch_size x num_classes
     self.output_placeholder = tf.placeholder(tf.float32, shape=(1, num_classes), name="Output-Placeholder")
-    return
+
     # ==== assemble pieces ====
     with tf.variable_scope("nli"):
-      print("INIT")
-      
+
       # r1 = tanh(merged W1 + b1)
       with tf.variable_scope("FF-First-Layer"):
         W1 = tf.get_variable("W", shape=(1, Config.ff_hidden_size), initializer=tf.contrib.layers.xavier_initializer())
@@ -98,27 +97,27 @@ class ToyModel(object):
       with tf.variable_scope("FF-Softmax"):
 
         # for logging purposes only
-        probs = tf.nn.softmax(self.preds)
-        tf.summary.histogram("probs", probs)
+        self.probs = tf.nn.softmax(self.preds)
+        # tf.summary.histogram("probs", probs)
 
         loss = tf.nn.softmax_cross_entropy_with_logits(logits=self.preds, labels=self.output_placeholder, name="loss")
         self.mean_loss = tf.reduce_mean(loss)
 
     with tf.name_scope("Optimizer"):
       self.train_op = tf.train.AdamOptimizer(Config.lr).minimize(self.mean_loss)
-      tf.summary.scalar("mean_batch_loss", self.mean_loss)
+      # tf.summary.scalar("mean_batch_loss", self.mean_loss)
 
-    with tf.name_scope("Gradients"):
+    # with tf.name_scope("Gradients"):
       # summarize out gradients of loss w.r.t all trainable vars
       # trainable_vars = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES)
-      trainable_vars = [W1, b1, r1, W2, b2, self.preds, self.mean_loss] # manually specify for clarity
-      gradients = tf.gradients(self.mean_loss, trainable_vars)
+      # trainable_vars = [W1, b1, r1, W2, b2, self.preds, self.probs, self.mean_loss] # manually specify for clarity
+      # gradients = tf.gradients(self.mean_loss, trainable_vars)
 
-      for i, gradient in enumerate(gradients):
-        variable = trainable_vars[i]
-        variable_name = re.sub(r':', "_", variable.name)
-        tf.summary.histogram(variable_name + "/loss_gradients", gradient)
-        tf.summary.scalar(variable_name + "/loss_gradient_norms", tf.sqrt(tf.reduce_sum(tf.square(gradient))))
+      # for i, gradient in enumerate(gradients):
+        # variable = trainable_vars[i]
+        # variable_name = re.sub(r':', "_", variable.name)
+        # tf.summary.histogram(variable_name + "/loss_gradients", gradient)
+        # tf.summary.scalar(variable_name + "/loss_gradient_norms", tf.sqrt(tf.reduce_sum(tf.square(gradient))))
 
     print("FINISHED INIT")
 
@@ -129,24 +128,24 @@ class ToyModel(object):
   def optimize(self, session, train_premise, train_y):
     premise_arr = np.array([[float(premise)] for premise in train_premise])
 
-    if hasattr(self, "iteration") and self.iteration % 100 == 0:
-      premise_stmt = premise_arr[0]
-      hypothesis_stmt = hypothesis_arr[0]
-      print("Iteration: ", self.iteration)
-      print( " ".join([rev_vocab[i] for i in premise_stmt]))
-      print( " ".join([rev_vocab[i] for i in hypothesis_stmt]))
-      print(train_y)
+    # if hasattr(self, "iteration") and self.iteration % 100 == 0:
+    #   premise_stmt = premise_arr[0]
+    #   hypothesis_stmt = hypothesis_arr[0]
+    #   print("Iteration: ", self.iteration)
+    #   print( " ".join([rev_vocab[i] for i in premise_stmt]))
+    #   print( " ".join([rev_vocab[i] for i in hypothesis_stmt]))
+    #   print(train_y)
 
     input_feed = {
       self.premise_placeholder: premise_arr.T,
       self.output_placeholder: train_y
     }
-    output_feed = [self.premise_placeholder]
-    premise_placeholder = session.run(output_feed, input_feed)
-    print(premise_placeholder)
+    output_feed = [self.probs]
+    probs = session.run(output_feed, input_feed)
+    print(probs)
 
     if not hasattr(self, "iteration"): self.iteration = 0
-    self.summary_writer.add_summary(summary, self.iteration)
+    # self.summary_writer.add_summary(summary, self.iteration)
     self.iteration += 1
 
   def run_epoch(self, session, dataset):
@@ -227,9 +226,11 @@ class ToyModel(object):
       '2': 'contradiction'
     }[str(np.argmax(label))]
 
-  def predict(self, session, premise, hypothesis, goldlabel):
+  def predict(self, session, premises, goldlabel):
+    premise_arr = np.array([[float(premise)] for premise in premises])
+
     input_feed = {
-      self.premise_placeholder: np.array([[int(x) for x in premise[0].split()]]).T,
+      self.premise_placeholder: premise_arr.T,
       self.output_placeholder: goldlabel
     }
 
@@ -260,8 +261,20 @@ class ToyModel(object):
     print("Token-level confusion matrix:\n" + cm.as_table())
     print("Token-level scores:\n" + cm.summary())
 
+
+def initialize_model(session, model, train_dir):
+  ckpt = tf.train.get_checkpoint_state(train_dir)
+  v2_path = ckpt.model_checkpoint_path + ".index" if ckpt else ""
+  if ckpt and (tf.gfile.Exists(ckpt.model_checkpoint_path) or tf.gfile.Exists(v2_path)):
+      logging.info("Reading model parameters from %s" % ckpt.model_checkpoint_path)
+      model.saver.restore(session, ckpt.model_checkpoint_path)
+  else:
+      logging.info("Created model with fresh parameters.")
+      session.run(tf.global_variables_initializer())
+      logging.info('Num params: %d' % sum(v.get_shape().num_elements() for v in tf.trainable_variables()))
+  return model
+
 def main(_):
-  print("hi")
   train_dataset = load_dataset('train')
   test_dataset = load_dataset('test')
 
@@ -270,6 +283,7 @@ def main(_):
 
   model = ToyModel(embedding_size, num_classes)
   with tf.Session() as sess:
+    initialize_model(sess, model, "")
     print("train")
     model.train(sess, train_dataset)
     print("test")
