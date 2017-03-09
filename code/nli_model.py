@@ -19,9 +19,9 @@ class Config:
   hidden_size = 100
   num_classes = 3
   lr = 0.0005
-  verbose = True
+  verbose = False
   LBLS = ['entailment', 'neutral', 'contradiction']
-  n_epochs = 1
+  n_epochs = 3
   logpath = './logs'
 
 def get_optimizer(opt="adam"):
