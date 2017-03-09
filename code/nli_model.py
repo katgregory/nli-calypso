@@ -93,11 +93,11 @@ class NLISystem(object):
 
     # weight hidden layers before merging
     with tf.variable_scope("Hidden-Weights"):
-      wp = tf.get_variable("Wp", shape=(Config.hidden_size, Config.hidden_size), initializer=tf.contrib.layers.xavier_initializer())
+      wp = tf.get_variable("Wp", shape=(embedding_size, Config.hidden_size), initializer=tf.contrib.layers.xavier_initializer())
       whp = tf.matmul(hp, wp)
       tf.summary.histogram("whp", whp)
 
-      wh = tf.get_variable("Wh", shape=(Config.hidden_size, Config.hidden_size), initializer=tf.contrib.layers.xavier_initializer())
+      wh = tf.get_variable("Wh", shape=(embedding_size, Config.hidden_size), initializer=tf.contrib.layers.xavier_initializer())
       whh = tf.matmul(hh, wh)
       tf.summary.histogram("whh", whh)
 
