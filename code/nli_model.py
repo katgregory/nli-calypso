@@ -18,10 +18,10 @@ class Config:
   ff_hidden_size = 100
   hidden_size = 100
   num_classes = 3
-  lr = 0.0005
+  lr = 0.00005
   verbose = False
   LBLS = ['entailment', 'neutral', 'contradiction']
-  n_epochs = 3
+  n_epochs = 10
   logpath = './logs'
 
 def get_optimizer(opt="adam"):
@@ -183,7 +183,6 @@ class NLISystem(object):
       print("Iteration: ", self.iteration)
       print( " ".join([rev_vocab[i] for i in premise_stmt]))
       print( " ".join([rev_vocab[i] for i in hypothesis_stmt]))
-      print(train_y)
 
     premise_max = len(max(train_premise, key=len).split())
     hypothesis_max = len(max(train_hypothesis, key=len).split())
