@@ -1,11 +1,12 @@
 TODO
 - Set up LSTMs
 - Padding / Masking?
-- Paramter tuning
+- Paramter tuning <==
 - Checkpointing
 - Attention model
-- Run epochs to convergence
-- Batch sizes for validation
+- Run epochs to convergence <== (DONE)
+- Batch sizes for validation <== (DONE)
+- Set the random seed <== (DONE)
 
 DIFFERENCES FROM LITERATURE
 - We use Adam, not Adadelta. Slower but better accuracy.

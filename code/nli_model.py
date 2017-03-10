@@ -228,12 +228,16 @@ class NLISystem(object):
   def run_epoch(self, session, dataset, rev_vocab, train_dir, batch_size):
     # prog = Progbar(target=1 + int(len(dataset[0]) / batch_size))
     num_correct = 0
+    num_batches = 0
+    total_mean_loss = 0
     for i, batch in enumerate(minibatches(dataset, batch_size)):
       if Config.verbose and (i % 10 == 0):
         sys.stdout.write(str(i) + "...")
         sys.stdout.flush()
       premises, hypotheses, goldlabels = batch
       mean_loss, probs = self.optimize(session, rev_vocab, premises, hypotheses, goldlabels)
+      total_mean_loss += mean_loss
+      num_batches += 1
 
       # Record correctness of training predictions
       for i in xrange(len(probs)):
@@ -241,12 +245,14 @@ class NLISystem(object):
           num_correct += 1
 
       # LOGGING CODE
-      if (i * batch_size) % 200 == 0:
-        print("Training Example: " + str(i * batch_size))
-        print("Loss: " + str(mean_loss))
+      # if (i * batch_size) % 1000 == 0:
+        # print("Training Example: " + str(i * batch_size))
+        # print("Loss: " + str(mean_loss))
     train_accuracy = num_correct / float(len(dataset[0]))
+    epoch_mean_loss = total_mean_loss / float(num_batches)
     print("Training accuracy for this epoch: " + str(train_accuracy))
-    return train_accuracy, mean_loss
+    print("Mean loss for this epoch: " + str(epoch_mean_loss))
+    return train_accuracy, epoch_mean_loss
 
 
   """
@@ -268,13 +274,23 @@ class NLISystem(object):
     self.summary_writer = tf.summary.FileWriter('%s/%s' % (Config.logpath, time.time()), graph=session.graph)
     losses = []
     best_epoch = (-1, 0)
-    for epoch in range(Config.n_epochs):
-      print("\nEpoch", epoch + 1, "out of", Config.n_epochs)
+    epoch = 1
+    while True:
+      print("\nEpoch", epoch)
       curr_accuracy, curr_loss = self.run_epoch(session, dataset, rev_vocab, train_dir, batch_size)
       if curr_accuracy > best_epoch[1]:
         print("\tNEW BEST")
         best_epoch = (epoch, curr_accuracy)
       losses.append(curr_loss)
+      epoch += 1
+
+      # TEST FOR CONVERGENCE 
+      if len(losses) >= 3 and (max(losses[-3:]) - min(losses[-3:])) <= 0.05: 
+        break # TODO: Replace everything with constants
+
+      if epoch > 50: # HARD CUTOFF?
+        break
+
     return (best_epoch[0], best_epoch[1], losses)
 
   #############################
@@ -316,36 +332,60 @@ class NLISystem(object):
   # TEST
   #############################
 
-  def predict(self, session, premise, hypothesis, goldlabel):
+  def predict(self, session, batch_size, test_premise, test_hypothesis, test_goldlabel):
+    premise_arr = [[int(word_idx) for word_idx in premise.split()] for premise in test_premise]
+    hypothesis_arr = [[int(word_idx) for word_idx in hypothesis.split()] for hypothesis in test_hypothesis]
+
+    premise_max = len(max(test_premise, key=len).split())
+    hypothesis_max = len(max(test_hypothesis, key=len).split())
+
+    premise_arr = np.array(self.pad_sequences(premise_arr, premise_max))
+    hypothesis_arr = np.array(self.pad_sequences(hypothesis_arr, hypothesis_max))
+
     input_feed = {
-      self.premise_placeholder: np.array([[int(x) for x in premise[0].split()]]).T,
-      self.hypothesis_placeholder: np.array([[int(x) for x in hypothesis[0].split()]]).T,
-      self.output_placeholder: goldlabel,
+      self.premise_placeholder: premise_arr.T,
+      self.hypothesis_placeholder: hypothesis_arr.T,
+      self.output_placeholder: test_goldlabel,
       self.dropout_placeholder: 1
     }
 
+    # (OLDER VERSION - NOT BATCHED)
+    # input_feed = {
+    #   self.premise_placeholder: np.array([[int(x) for x in premise[0].split()]]).T,
+    #   self.hypothesis_placeholder: np.array([[int(x) for x in hypothesis[0].split()]]).T,
+    #   self.output_placeholder: goldlabel,
+    #   self.dropout_placeholder: 1
+    # }
+
     output_feed = [self.probs, self.mean_loss]
-    output, mean_loss = session.run(output_feed, input_feed)
+    probs, mean_loss = session.run(output_feed, input_feed)
 
-    if Config.verbose:
-      print('predicts:', label_to_name(output))
-      print('with probabilities: ', output)
-      if (np.argmax(goldlabel) != np.argmax(output)):
-        print('\t\t\t\t correct:', label_to_name(goldlabel))
-  
-    return np.argmax(goldlabel), np.argmax(output), mean_loss
+    # if Config.verbose:
+    #   print('predicts:', label_to_name(output))
+    #   print('with probabilities: ', output)
+    #   if (np.argmax(goldlabel) != np.argmax(output)):
+    #     print('\t\t\t\t correct:', label_to_name(goldlabel))
+ 
+    # return np.argmax(goldlabel), np.argmax(output), mean_loss
+    return probs, mean_loss
 
-  def evaluate_prediction(self, session, dataset):
+  # TODO: Actually use the parameter batch_size
+  def evaluate_prediction(self, session, batch_size, dataset):
     print("\nEVALUATING")
 
     cm = ConfusionMatrix(labels=Config.LBLS)
     total_loss = 0
     total_correct = 0
-    for batch in minibatches(dataset, 1):
-      gold_idx, predicted_idx, loss = self.predict(session, *batch)
-      total_correct += 1 if predicted_idx == gold_idx else 0
+    for batch in minibatches(dataset, batch_size):
+      probs, loss = self.predict(session, batch_size, *batch)
+      _, _, goldlabels = batch
+      for i in xrange(len(probs)):
+        total_correct += 1 if label_to_name(probs[i]) == label_to_name(goldlabels[i]) else 0
+
+        gold_idx = np.argmax(goldlabels[i])
+        predicted_idx = np.argmax(probs[i])
+        cm.update(gold_idx, predicted_idx)
       total_loss += loss
-      cm.update(gold_idx, predicted_idx)
     accuracy = total_correct / float(len(dataset[0]))
     print("Accuracy: " + str(accuracy))
     average_loss = total_loss / float(len(dataset[0]))
