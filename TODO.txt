@@ -1,0 +1,19 @@
+TODO
+- Set up LSTMS
+- Padding / Masking?
+- Paramter tuning
+- Checkpointing
+- Attention model
+- Regularization
+- Run epochs to convergence
+
+DIFFERENCES FROM LITERATURE
+- We use Adam, not Adadelta. Slower but better accuracy.
+
+VALIDATION PARAMETERS
+- Dropout
+- LR
+
+DONE
+- Train accuracy
+- Dropout
