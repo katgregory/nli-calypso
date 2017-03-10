@@ -379,6 +379,7 @@ class NLISystem(object):
     cm = ConfusionMatrix(labels=Config.LBLS)
     total_loss = 0
     total_correct = 0
+    num_batches = 0
     for batch in minibatches(dataset, batch_size):
       probs, loss = self.predict(session, batch_size, *batch)
       _, _, goldlabels = batch
@@ -389,9 +390,10 @@ class NLISystem(object):
         predicted_idx = np.argmax(probs[i])
         cm.update(gold_idx, predicted_idx)
       total_loss += loss
+      num_batches += 1
     accuracy = total_correct / float(len(dataset[0]))
     print("Accuracy: " + str(accuracy))
-    average_loss = total_loss / float(len(dataset[0]))
+    average_loss = total_loss / float(num_batches)
     print("Average Loss: " + str(average_loss))
     print("Token-level confusion matrix:\n" + cm.as_table())
     print("Token-level scores:\n" + cm.summary())
