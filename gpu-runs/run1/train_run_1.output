@@ -1,0 +1,3607 @@
+I tensorflow/stream_executor/dso_loader.cc:128] successfully opened CUDA library libcublas.so locally
+I tensorflow/stream_executor/dso_loader.cc:128] successfully opened CUDA library libcudnn.so locally
+I tensorflow/stream_executor/dso_loader.cc:128] successfully opened CUDA library libcufft.so locally
+I tensorflow/stream_executor/dso_loader.cc:128] successfully opened CUDA library libcuda.so.1 locally
+I tensorflow/stream_executor/dso_loader.cc:128] successfully opened CUDA library libcurand.so locally
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-08 	dropout: 0.1 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:885] Found device 0 with properties: 
+name: Tesla M60
+major: 5 minor: 2 memoryClockRate (GHz) 1.1775
+pciBusID 8dec:00:00.0
+Total memory: 7.93GiB
+Free memory: 7.86GiB
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:906] DMA: 0 
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:916] 0:   Y 
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.140731 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.5090868473 secs
+Training accuracy for this epoch: 0.33388
+Mean loss for this epoch: 1.24317363286
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 12.927339077 secs
+Training accuracy for this epoch: 0.33674
+Mean loss for this epoch: 1.24145320477
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 18.4099550247 secs
+Training accuracy for this epoch: 0.33564
+Mean loss for this epoch: 1.24154029737
+
+EVALUATING
+Accuracy: 0.347388742126
+Average Loss: 1.11057315477
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	1247.00      	1302.00      	780.00       
+neutral      	1164.00      	1372.00      	699.00       
+contradiction	1141.00      	1337.00      	800.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.55         	0.35         	0.37         	0.36         
+neutral      	0.54         	0.34         	0.42         	0.38         
+contradiction	0.60         	0.35         	0.24         	0.29         
+micro        	0.56         	0.35         	0.35         	0.35         
+macro        	0.56         	0.35         	0.35         	0.34         
+not-O        	0.55         	0.35         	0.40         	0.37         
+
+############################
+TRIAL RESULTS:  	lr: 1e-08 	dropout: 0.1 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.33674 	test: 0.347388742126
+		New best TRAIN
+		New best TEST
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-07 	dropout: 0.1 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.140183 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.3321230412 secs
+Training accuracy for this epoch: 0.33328
+Mean loss for this epoch: 1.20890855667
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 12.9897818565 secs
+Training accuracy for this epoch: 0.33488
+Mean loss for this epoch: 1.2082066853
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 13.6210041046 secs
+Training accuracy for this epoch: 0.33362
+Mean loss for this epoch: 1.2062914655
+
+EVALUATING
+Accuracy: 0.347287136761
+Average Loss: 1.1113759287
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	2647.00      	296.00       	386.00       
+neutral      	2359.00      	308.00       	568.00       
+contradiction	2565.00      	250.00       	463.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.43         	0.35         	0.80         	0.49         
+neutral      	0.65         	0.36         	0.10         	0.15         
+contradiction	0.62         	0.33         	0.14         	0.20         
+micro        	0.56         	0.35         	0.35         	0.35         
+macro        	0.56         	0.35         	0.34         	0.28         
+not-O        	0.54         	0.35         	0.45         	0.39         
+
+############################
+TRIAL RESULTS:  	lr: 1e-07 	dropout: 0.1 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.33488 	test: 0.347287136761
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-06 	dropout: 0.1 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.140341 secs)
+
+Epoch 1
+Amount of time to run this epoch: 12.8154540062 secs
+Training accuracy for this epoch: 0.33652
+Mean loss for this epoch: 1.25298590787
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 13.2044360638 secs
+Training accuracy for this epoch: 0.3333
+Mean loss for this epoch: 1.23321145392
+
+Epoch 3
+Amount of time to run this epoch: 15.0667338371 secs
+Training accuracy for this epoch: 0.33458
+Mean loss for this epoch: 1.20928551306
+
+EVALUATING
+Accuracy: 0.325645194066
+Average Loss: 1.11136513407
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	292.00       	2064.00      	973.00       
+neutral      	199.00       	2043.00      	993.00       
+contradiction	220.00       	2188.00      	870.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.65         	0.41         	0.09         	0.14         
+neutral      	0.45         	0.32         	0.63         	0.43         
+contradiction	0.56         	0.31         	0.27         	0.28         
+micro        	0.55         	0.33         	0.33         	0.33         
+macro        	0.55         	0.35         	0.33         	0.29         
+not-O        	0.55         	0.33         	0.36         	0.34         
+
+############################
+TRIAL RESULTS:  	lr: 1e-06 	dropout: 0.1 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.33652 	test: 0.325645194066
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-05 	dropout: 0.1 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.137096 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.0273599625 secs
+Training accuracy for this epoch: 0.33094
+Mean loss for this epoch: 1.16348521027
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 12.8703219891 secs
+Training accuracy for this epoch: 0.33434
+Mean loss for this epoch: 1.12764584835
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 14.1006269455 secs
+Training accuracy for this epoch: 0.3361
+Mean loss for this epoch: 1.11887756531
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.349319244056
+Average Loss: 1.11110100498
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	2718.00      	368.00       	243.00       
+neutral      	2422.00      	449.00       	364.00       
+contradiction	2607.00      	400.00       	271.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.43         	0.35         	0.82         	0.49         
+neutral      	0.64         	0.37         	0.14         	0.20         
+contradiction	0.63         	0.31         	0.08         	0.13         
+micro        	0.57         	0.35         	0.35         	0.35         
+macro        	0.57         	0.34         	0.35         	0.27         
+not-O        	0.53         	0.35         	0.48         	0.41         
+
+############################
+TRIAL RESULTS:  	lr: 1e-05 	dropout: 0.1 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.3361 	test: 0.349319244056
+		New best TEST
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 0.0001 	dropout: 0.1 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.139341 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.0886888504 secs
+Training accuracy for this epoch: 0.34068
+Mean loss for this epoch: 1.12057777972
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 12.6590030193 secs
+Training accuracy for this epoch: 0.3444
+Mean loss for this epoch: 1.11023104191
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 15.3966898918 secs
+Training accuracy for this epoch: 0.3476
+Mean loss for this epoch: 1.10887961558
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.413838650681
+Average Loss: 1.10803079218
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	2843.00      	486.00       	0.00         
+neutral      	2005.00      	1230.00      	0.00         
+contradiction	2661.00      	617.00       	0.00         
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.48         	0.38         	0.85         	0.52         
+neutral      	0.68         	0.53         	0.38         	0.44         
+contradiction	0.00         	0.00         	0.00         	0.00         
+micro        	0.61         	0.41         	0.41         	0.41         
+macro        	0.39         	0.30         	0.41         	0.32         
+not-O        	0.58         	0.41         	0.62         	0.50         
+
+############################
+TRIAL RESULTS:  	lr: 0.0001 	dropout: 0.1 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.3476 	test: 0.413838650681
+		New best TRAIN
+		New best TEST
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 0.001 	dropout: 0.1 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.138081 secs)
+
+Epoch 1
+Amount of time to run this epoch: 12.8748910427 secs
+Training accuracy for this epoch: 0.3337
+Mean loss for this epoch: 1.11113934017
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 12.83770895 secs
+Training accuracy for this epoch: 0.33394
+Mean loss for this epoch: 1.10558479247
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 13.071449995 secs
+Training accuracy for this epoch: 0.33502
+Mean loss for this epoch: 1.10342202528
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.338244259297
+Average Loss: 1.10245347023
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	3329.00      	0.00         	0.00         
+neutral      	3235.00      	0.00         	0.00         
+contradiction	3278.00      	0.00         	0.00         
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.34         	0.34         	1.00         	0.51         
+neutral      	0.00         	0.00         	0.00         	0.00         
+contradiction	0.00         	0.00         	0.00         	0.00         
+micro        	0.56         	0.34         	0.34         	0.34         
+macro        	0.11         	0.11         	0.33         	0.17         
+not-O        	0.50         	0.34         	0.51         	0.41         
+
+############################
+TRIAL RESULTS:  	lr: 0.001 	dropout: 0.1 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.33502 	test: 0.338244259297
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-08 	dropout: 0.2 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took -0.005759 secs)
+
+Epoch 1
+Amount of time to run this epoch: 12.978415966 secs
+Training accuracy for this epoch: 0.33396
+Mean loss for this epoch: 1.15444041945
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 12.9519591331 secs
+Training accuracy for this epoch: 0.33506
+Mean loss for this epoch: 1.15586808011
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 16.7843549252 secs
+Training accuracy for this epoch: 0.33922
+Mean loss for this epoch: 1.15457566193
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.332351148141
+Average Loss: 1.11134986521
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	103.00       	3226.00      	0.00         
+neutral      	67.00        	3168.00      	0.00         
+contradiction	73.00        	3205.00      	0.00         
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.66         	0.42         	0.03         	0.06         
+neutral      	0.34         	0.33         	0.98         	0.49         
+contradiction	0.00         	0.00         	0.00         	0.00         
+micro        	0.55         	0.33         	0.33         	0.33         
+macro        	0.33         	0.25         	0.34         	0.18         
+not-O        	0.50         	0.33         	0.50         	0.40         
+
+############################
+TRIAL RESULTS:  	lr: 1e-08 	dropout: 0.2 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.33922 	test: 0.332351148141
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-07 	dropout: 0.2 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.156706 secs)
+
+Epoch 1
+Amount of time to run this epoch: 12.8665060997 secs
+Training accuracy for this epoch: 0.3308
+Mean loss for this epoch: 1.16325233111
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 12.7501871586 secs
+Training accuracy for this epoch: 0.33744
+Mean loss for this epoch: 1.1595012073
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 14.9141309261 secs
+Training accuracy for this epoch: 0.33324
+Mean loss for this epoch: 1.16030368994
+
+EVALUATING
+Accuracy: 0.333265596423
+Average Loss: 1.11800587487
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	0.00         	24.00        	3305.00      
+neutral      	0.00         	25.00        	3210.00      
+contradiction	1.00         	22.00        	3255.00      
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.00         	0.00         	0.00         	0.00         
+neutral      	0.67         	0.35         	0.01         	0.02         
+contradiction	0.34         	0.33         	0.99         	0.50         
+micro        	0.56         	0.33         	0.33         	0.33         
+macro        	0.33         	0.23         	0.33         	0.17         
+not-O        	0.67         	0.35         	0.00         	0.01         
+
+############################
+TRIAL RESULTS:  	lr: 1e-07 	dropout: 0.2 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.33744 	test: 0.333265596423
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-06 	dropout: 0.2 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.136670 secs)
+
+Epoch 1
+Amount of time to run this epoch: 12.9374601841 secs
+Training accuracy for this epoch: 0.3329
+Mean loss for this epoch: 1.15302963589
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 13.0513019562 secs
+Training accuracy for this epoch: 0.33608
+Mean loss for this epoch: 1.14490303085
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 15.0326387882 secs
+Training accuracy for this epoch: 0.33728
+Mean loss for this epoch: 1.1398105039
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.357041251778
+Average Loss: 1.11041102007
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	1374.00      	820.00       	1135.00      
+neutral      	1194.00      	846.00       	1195.00      
+contradiction	1180.00      	804.00       	1294.00      
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.56         	0.37         	0.41         	0.39         
+neutral      	0.59         	0.34         	0.26         	0.30         
+contradiction	0.56         	0.36         	0.39         	0.37         
+micro        	0.57         	0.36         	0.36         	0.36         
+macro        	0.57         	0.36         	0.36         	0.35         
+not-O        	0.58         	0.36         	0.34         	0.35         
+
+############################
+TRIAL RESULTS:  	lr: 1e-06 	dropout: 0.2 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.33728 	test: 0.357041251778
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-05 	dropout: 0.2 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.149054 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.1576988697 secs
+Training accuracy for this epoch: 0.33488
+Mean loss for this epoch: 1.12857428597
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 13.3494420052 secs
+Training accuracy for this epoch: 0.33492
+Mean loss for this epoch: 1.11707683796
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 14.8056387901 secs
+Training accuracy for this epoch: 0.34146
+Mean loss for this epoch: 1.11338536377
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.398394635237
+Average Loss: 1.10928292089
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	2644.00      	673.00       	12.00        
+neutral      	1973.00      	1251.00      	11.00        
+contradiction	2492.00      	760.00       	26.00        
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.48         	0.37         	0.79         	0.51         
+neutral      	0.65         	0.47         	0.39         	0.42         
+contradiction	0.67         	0.53         	0.01         	0.02         
+micro        	0.60         	0.40         	0.40         	0.40         
+macro        	0.60         	0.46         	0.40         	0.31         
+not-O        	0.56         	0.40         	0.59         	0.48         
+
+############################
+TRIAL RESULTS:  	lr: 1e-05 	dropout: 0.2 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.34146 	test: 0.398394635237
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 0.0001 	dropout: 0.2 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.142095 secs)
+
+Epoch 1
+Amount of time to run this epoch: 12.9997169971 secs
+Training accuracy for this epoch: 0.34974
+Mean loss for this epoch: 1.11277986289
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 13.1468689442 secs
+Training accuracy for this epoch: 0.37008
+Mean loss for this epoch: 1.10418168312
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 15.5458190441 secs
+Training accuracy for this epoch: 0.39536
+Mean loss for this epoch: 1.09557953927
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.464844543792
+Average Loss: 1.07384023109
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	2172.00      	986.00       	171.00       
+neutral      	1051.00      	2036.00      	148.00       
+contradiction	1704.00      	1207.00      	367.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.60         	0.44         	0.65         	0.53         
+neutral      	0.66         	0.48         	0.63         	0.55         
+contradiction	0.67         	0.53         	0.11         	0.19         
+micro        	0.64         	0.46         	0.46         	0.46         
+macro        	0.64         	0.49         	0.46         	0.42         
+not-O        	0.63         	0.46         	0.64         	0.54         
+
+############################
+TRIAL RESULTS:  	lr: 0.0001 	dropout: 0.2 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.39536 	test: 0.464844543792
+		New best TRAIN
+		New best TEST
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 0.001 	dropout: 0.2 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.136740 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.3164231777 secs
+Training accuracy for this epoch: 0.36506
+Mean loss for this epoch: 1.10344597507
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 13.0554461479 secs
+Training accuracy for this epoch: 0.50946
+Mean loss for this epoch: 1.01592542616
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 13.0032038689 secs
+Training accuracy for this epoch: 0.59768
+Mean loss for this epoch: 0.917637621045
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 13.1663031578 secs
+Training accuracy for this epoch: 0.63198
+Mean loss for this epoch: 0.861081599884
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 13.0654370785 secs
+Training accuracy for this epoch: 0.65202
+Mean loss for this epoch: 0.822966394293
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 13.1761331558 secs
+Training accuracy for this epoch: 0.66542
+Mean loss for this epoch: 0.791793059396
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 13.0494329929 secs
+Training accuracy for this epoch: 0.67878
+Mean loss for this epoch: 0.770402750167
+	NEW BEST
+
+Epoch 8
+Amount of time to run this epoch: 13.0678789616 secs
+Training accuracy for this epoch: 0.68526
+Mean loss for this epoch: 0.754938449168
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.627108311319
+Average Loss: 0.898545176952
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	2451.00      	463.00       	415.00       
+neutral      	793.00       	1898.00      	544.00       
+contradiction	830.00       	625.00       	1823.00      
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.75         	0.60         	0.74         	0.66         
+neutral      	0.75         	0.64         	0.59         	0.61         
+contradiction	0.75         	0.66         	0.56         	0.60         
+micro        	0.75         	0.63         	0.63         	0.63         
+macro        	0.75         	0.63         	0.63         	0.62         
+not-O        	0.75         	0.62         	0.66         	0.64         
+
+############################
+TRIAL RESULTS:  	lr: 0.001 	dropout: 0.2 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.68526 	test: 0.627108311319
+		New best TRAIN
+		New best TEST
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-08 	dropout: 0.3 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.134653 secs)
+
+Epoch 1
+Amount of time to run this epoch: 12.8873739243 secs
+Training accuracy for this epoch: 0.33306
+Mean loss for this epoch: 1.13063739389
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 12.8180251122 secs
+Training accuracy for this epoch: 0.33436
+Mean loss for this epoch: 1.12828255188
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 12.7673640251 secs
+Training accuracy for this epoch: 0.333
+Mean loss for this epoch: 1.12966880286
+
+EVALUATING
+Accuracy: 0.338244259297
+Average Loss: 1.11514845452
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	3323.00      	0.00         	6.00         
+neutral      	3235.00      	0.00         	0.00         
+contradiction	3272.00      	0.00         	6.00         
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.34         	0.34         	1.00         	0.51         
+neutral      	0.00         	0.00         	0.00         	0.00         
+contradiction	0.67         	0.50         	0.00         	0.00         
+micro        	0.56         	0.34         	0.34         	0.34         
+macro        	0.34         	0.28         	0.33         	0.17         
+not-O        	0.50         	0.34         	0.51         	0.41         
+
+############################
+TRIAL RESULTS:  	lr: 1e-08 	dropout: 0.3 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.33436 	test: 0.338244259297
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-07 	dropout: 0.3 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.146891 secs)
+
+Epoch 1
+Amount of time to run this epoch: 12.8584029675 secs
+Training accuracy for this epoch: 0.32844
+Mean loss for this epoch: 1.12158319316
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 13.0070741177 secs
+Training accuracy for this epoch: 0.33586
+Mean loss for this epoch: 1.1199888866
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 13.76998806 secs
+Training accuracy for this epoch: 0.33634
+Mean loss for this epoch: 1.11868765729
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.332859174964
+Average Loss: 1.11152907161
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	1206.00      	2101.00      	22.00        
+neutral      	1175.00      	2040.00      	20.00        
+contradiction	1062.00      	2186.00      	30.00        
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.56         	0.35         	0.36         	0.36         
+neutral      	0.44         	0.32         	0.63         	0.43         
+contradiction	0.67         	0.42         	0.01         	0.02         
+micro        	0.56         	0.33         	0.33         	0.33         
+macro        	0.56         	0.36         	0.33         	0.27         
+not-O        	0.50         	0.33         	0.49         	0.40         
+
+############################
+TRIAL RESULTS:  	lr: 1e-07 	dropout: 0.3 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.33634 	test: 0.332859174964
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-06 	dropout: 0.3 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.142754 secs)
+
+Epoch 1
+Amount of time to run this epoch: 12.9974229336 secs
+Training accuracy for this epoch: 0.33706
+Mean loss for this epoch: 1.11921435595
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 12.7189559937 secs
+Training accuracy for this epoch: 0.33592
+Mean loss for this epoch: 1.11857157
+
+Epoch 3
+Amount of time to run this epoch: 12.9144020081 secs
+Training accuracy for this epoch: 0.3369
+Mean loss for this epoch: 1.11789559159
+
+EVALUATING
+Accuracy: 0.356634830319
+Average Loss: 1.11033366872
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	1862.00      	1462.00      	5.00         
+neutral      	1583.00      	1647.00      	5.00         
+contradiction	1672.00      	1605.00      	1.00         
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.52         	0.36         	0.56         	0.44         
+neutral      	0.53         	0.35         	0.51         	0.41         
+contradiction	0.67         	0.09         	0.00         	0.00         
+micro        	0.57         	0.36         	0.36         	0.36         
+macro        	0.57         	0.27         	0.36         	0.29         
+not-O        	0.52         	0.36         	0.53         	0.43         
+
+############################
+TRIAL RESULTS:  	lr: 1e-06 	dropout: 0.3 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.33706 	test: 0.356634830319
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-05 	dropout: 0.3 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.137547 secs)
+
+Epoch 1
+Amount of time to run this epoch: 12.90310812 secs
+Training accuracy for this epoch: 0.33138
+Mean loss for this epoch: 1.12151793232
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 12.8678398132 secs
+Training accuracy for this epoch: 0.34074
+Mean loss for this epoch: 1.11344485743
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 14.7356929779 secs
+Training accuracy for this epoch: 0.34434
+Mean loss for this epoch: 1.11090608616
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.395752895753
+Average Loss: 1.10844117635
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	1963.00      	1313.00      	53.00        
+neutral      	1344.00      	1828.00      	63.00        
+contradiction	1661.00      	1513.00      	104.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.56         	0.40         	0.59         	0.47         
+neutral      	0.57         	0.39         	0.57         	0.46         
+contradiction	0.67         	0.47         	0.03         	0.06         
+micro        	0.60         	0.40         	0.40         	0.40         
+macro        	0.60         	0.42         	0.40         	0.33         
+not-O        	0.56         	0.39         	0.58         	0.47         
+
+############################
+TRIAL RESULTS:  	lr: 1e-05 	dropout: 0.3 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.34434 	test: 0.395752895753
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 0.0001 	dropout: 0.3 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.133963 secs)
+
+Epoch 1
+Amount of time to run this epoch: 12.9614338875 secs
+Training accuracy for this epoch: 0.34532
+Mean loss for this epoch: 1.11194112889
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 12.8831419945 secs
+Training accuracy for this epoch: 0.37686
+Mean loss for this epoch: 1.100552172
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 13.1763968468 secs
+Training accuracy for this epoch: 0.44086
+Mean loss for this epoch: 1.07299043867
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.524080471449
+Average Loss: 1.02257274769
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	1843.00      	835.00       	651.00       
+neutral      	667.00       	1970.00      	598.00       
+contradiction	829.00       	1104.00      	1345.00      
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.70         	0.55         	0.55         	0.55         
+neutral      	0.67         	0.50         	0.61         	0.55         
+contradiction	0.68         	0.52         	0.41         	0.46         
+micro        	0.68         	0.52         	0.52         	0.52         
+macro        	0.68         	0.52         	0.52         	0.52         
+not-O        	0.69         	0.53         	0.58         	0.55         
+
+############################
+TRIAL RESULTS:  	lr: 0.0001 	dropout: 0.3 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.44086 	test: 0.524080471449
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 0.001 	dropout: 0.3 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.132428 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.0443918705 secs
+Training accuracy for this epoch: 0.421
+Mean loss for this epoch: 1.06895423736
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 12.8231739998 secs
+Training accuracy for this epoch: 0.58934
+Mean loss for this epoch: 0.925684511128
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 14.4135239124 secs
+Training accuracy for this epoch: 0.63264
+Mean loss for this epoch: 0.851059500061
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 13.1191420555 secs
+Training accuracy for this epoch: 0.65782
+Mean loss for this epoch: 0.803108777232
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 12.7277889252 secs
+Training accuracy for this epoch: 0.6759
+Mean loss for this epoch: 0.768948128233
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 12.9470350742 secs
+Training accuracy for this epoch: 0.69176
+Mean loss for this epoch: 0.737335605466
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 12.9063961506 secs
+Training accuracy for this epoch: 0.69922
+Mean loss for this epoch: 0.715805528109
+	NEW BEST
+
+Epoch 8
+Amount of time to run this epoch: 12.8682379723 secs
+Training accuracy for this epoch: 0.70504
+Mean loss for this epoch: 0.697087710433
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.629038813249
+Average Loss: 0.907005846113
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	2381.00      	448.00       	500.00       
+neutral      	711.00       	1854.00      	670.00       
+contradiction	735.00       	587.00       	1956.00      
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.76         	0.62         	0.72         	0.67         
+neutral      	0.75         	0.64         	0.57         	0.61         
+contradiction	0.75         	0.63         	0.60         	0.61         
+micro        	0.75         	0.63         	0.63         	0.63         
+macro        	0.75         	0.63         	0.63         	0.63         
+not-O        	0.76         	0.63         	0.65         	0.64         
+
+############################
+TRIAL RESULTS:  	lr: 0.001 	dropout: 0.3 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.70504 	test: 0.629038813249
+		New best TRAIN
+		New best TEST
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-08 	dropout: 0.4 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.133590 secs)
+
+Epoch 1
+Amount of time to run this epoch: 12.8892941475 secs
+Training accuracy for this epoch: 0.33286
+Mean loss for this epoch: 1.12189115542
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 12.8765158653 secs
+Training accuracy for this epoch: 0.33272
+Mean loss for this epoch: 1.12284346508
+
+Epoch 3
+Amount of time to run this epoch: 14.6608011723 secs
+Training accuracy for this epoch: 0.33212
+Mean loss for this epoch: 1.12303145904
+
+EVALUATING
+Accuracy: 0.339768339768
+Average Loss: 1.11441069145
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	2980.00      	137.00       	212.00       
+neutral      	2922.00      	97.00        	216.00       
+contradiction	2898.00      	113.00       	267.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.37         	0.34         	0.90         	0.49         
+neutral      	0.66         	0.28         	0.03         	0.05         
+contradiction	0.65         	0.38         	0.08         	0.13         
+micro        	0.56         	0.34         	0.34         	0.34         
+macro        	0.56         	0.33         	0.34         	0.23         
+not-O        	0.51         	0.34         	0.47         	0.39         
+
+############################
+TRIAL RESULTS:  	lr: 1e-08 	dropout: 0.4 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.33286 	test: 0.339768339768
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-07 	dropout: 0.4 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.134369 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.4802930355 secs
+Training accuracy for this epoch: 0.3366
+Mean loss for this epoch: 1.12392415994
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 13.1011879444 secs
+Training accuracy for this epoch: 0.33592
+Mean loss for this epoch: 1.12472218946
+
+Epoch 3
+Amount of time to run this epoch: 17.1342661381 secs
+Training accuracy for this epoch: 0.33176
+Mean loss for this epoch: 1.1247950928
+
+EVALUATING
+Accuracy: 0.333570412518
+Average Loss: 1.11186082023
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	432.00       	578.00       	2319.00      
+neutral      	435.00       	730.00       	2070.00      
+contradiction	505.00       	652.00       	2121.00      
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.61         	0.31         	0.13         	0.18         
+neutral      	0.62         	0.37         	0.23         	0.28         
+contradiction	0.44         	0.33         	0.65         	0.43         
+micro        	0.56         	0.33         	0.33         	0.33         
+macro        	0.56         	0.34         	0.33         	0.30         
+not-O        	0.62         	0.35         	0.18         	0.23         
+
+############################
+TRIAL RESULTS:  	lr: 1e-07 	dropout: 0.4 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.3366 	test: 0.333570412518
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-06 	dropout: 0.4 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.135341 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.1738381386 secs
+Training accuracy for this epoch: 0.33264
+Mean loss for this epoch: 1.12812512762
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 12.9791681767 secs
+Training accuracy for this epoch: 0.3311
+Mean loss for this epoch: 1.12452006416
+
+Epoch 3
+Amount of time to run this epoch: 17.2191610336 secs
+Training accuracy for this epoch: 0.33078
+Mean loss for this epoch: 1.12218146906
+
+EVALUATING
+Accuracy: 0.32615322089
+Average Loss: 1.11240330764
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	2482.00      	113.00       	734.00       
+neutral      	2553.00      	156.00       	526.00       
+contradiction	2557.00      	149.00       	572.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.39         	0.33         	0.75         	0.45         
+neutral      	0.66         	0.37         	0.05         	0.09         
+contradiction	0.60         	0.31         	0.17         	0.22         
+micro        	0.55         	0.33         	0.33         	0.33         
+macro        	0.55         	0.34         	0.32         	0.25         
+not-O        	0.53         	0.33         	0.40         	0.36         
+
+############################
+TRIAL RESULTS:  	lr: 1e-06 	dropout: 0.4 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.33264 	test: 0.32615322089
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-05 	dropout: 0.4 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.134882 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.1136598587 secs
+Training accuracy for this epoch: 0.33298
+Mean loss for this epoch: 1.11351506972
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 12.9787209034 secs
+Training accuracy for this epoch: 0.34082
+Mean loss for this epoch: 1.11120655713
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 17.6827070713 secs
+Training accuracy for this epoch: 0.34456
+Mean loss for this epoch: 1.11089545443
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.34322292217
+Average Loss: 1.11088521837
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	3314.00      	15.00        	0.00         
+neutral      	3171.00      	64.00        	0.00         
+contradiction	3247.00      	31.00        	0.00         
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.35         	0.34         	1.00         	0.51         
+neutral      	0.67         	0.58         	0.02         	0.04         
+contradiction	0.00         	0.00         	0.00         	0.00         
+micro        	0.56         	0.34         	0.34         	0.34         
+macro        	0.34         	0.31         	0.34         	0.18         
+not-O        	0.51         	0.34         	0.51         	0.41         
+
+############################
+TRIAL RESULTS:  	lr: 1e-05 	dropout: 0.4 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.34456 	test: 0.34322292217
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 0.0001 	dropout: 0.4 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.134369 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.077573061 secs
+Training accuracy for this epoch: 0.37662
+Mean loss for this epoch: 1.10306676391
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 12.8635070324 secs
+Training accuracy for this epoch: 0.44062
+Mean loss for this epoch: 1.07089020293
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 13.3452589512 secs
+Training accuracy for this epoch: 0.50426
+Mean loss for this epoch: 1.02041746809
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 12.9687571526 secs
+Training accuracy for this epoch: 0.5542
+Mean loss for this epoch: 0.970692812787
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 12.820348978 secs
+Training accuracy for this epoch: 0.58364
+Mean loss for this epoch: 0.93126544646
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 13.1240739822 secs
+Training accuracy for this epoch: 0.60848
+Mean loss for this epoch: 0.897993542502
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 12.9595220089 secs
+Training accuracy for this epoch: 0.62306
+Mean loss for this epoch: 0.873557881931
+	NEW BEST
+
+Epoch 8
+Amount of time to run this epoch: 13.0881948471 secs
+Training accuracy for this epoch: 0.63464
+Mean loss for this epoch: 0.853080165356
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.621723226986
+Average Loss: 0.852345108212
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	2255.00      	617.00       	457.00       
+neutral      	656.00       	2075.00      	504.00       
+contradiction	731.00       	758.00       	1789.00      
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.75         	0.62         	0.68         	0.65         
+neutral      	0.74         	0.60         	0.64         	0.62         
+contradiction	0.75         	0.65         	0.55         	0.59         
+micro        	0.75         	0.62         	0.62         	0.62         
+macro        	0.75         	0.62         	0.62         	0.62         
+not-O        	0.75         	0.61         	0.66         	0.63         
+
+############################
+TRIAL RESULTS:  	lr: 0.0001 	dropout: 0.4 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.63464 	test: 0.621723226986
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 0.001 	dropout: 0.4 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.137493 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.1924550533 secs
+Training accuracy for this epoch: 0.49886
+Mean loss for this epoch: 1.01224449925
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 13.0773808956 secs
+Training accuracy for this epoch: 0.61508
+Mean loss for this epoch: 0.874446295335
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 16.7918300629 secs
+Training accuracy for this epoch: 0.6512
+Mean loss for this epoch: 0.809588922793
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 13.182199955 secs
+Training accuracy for this epoch: 0.67446
+Mean loss for this epoch: 0.765902896519
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 13.2115929127 secs
+Training accuracy for this epoch: 0.69456
+Mean loss for this epoch: 0.725874896359
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 13.041246891 secs
+Training accuracy for this epoch: 0.70838
+Mean loss for this epoch: 0.696973033345
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 12.9420070648 secs
+Training accuracy for this epoch: 0.7227
+Mean loss for this epoch: 0.669234454899
+	NEW BEST
+
+Epoch 8
+Amount of time to run this epoch: 13.2166330814 secs
+Training accuracy for this epoch: 0.73522
+Mean loss for this epoch: 0.642341919072
+	NEW BEST
+
+Epoch 9
+Amount of time to run this epoch: 13.1431210041 secs
+Training accuracy for this epoch: 0.74566
+Mean loss for this epoch: 0.619883667058
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.64143466775
+Average Loss: 0.916135611472
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	2644.00      	298.00       	387.00       
+neutral      	985.00       	1650.00      	600.00       
+contradiction	811.00       	448.00       	2019.00      
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.75         	0.60         	0.79         	0.68         
+neutral      	0.76         	0.69         	0.51         	0.59         
+contradiction	0.77         	0.67         	0.62         	0.64         
+micro        	0.76         	0.64         	0.64         	0.64         
+macro        	0.76         	0.65         	0.64         	0.64         
+not-O        	0.76         	0.63         	0.65         	0.64         
+
+############################
+TRIAL RESULTS:  	lr: 0.001 	dropout: 0.4 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.74566 	test: 0.64143466775
+		New best TRAIN
+		New best TEST
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-08 	dropout: 0.5 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.130678 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.2975580692 secs
+Training accuracy for this epoch: 0.32872
+Mean loss for this epoch: 1.11433409562
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 12.9812688828 secs
+Training accuracy for this epoch: 0.32956
+Mean loss for this epoch: 1.11421010317
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 15.0944168568 secs
+Training accuracy for this epoch: 0.33176
+Mean loss for this epoch: 1.11363098414
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.335297703719
+Average Loss: 1.11161440379
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	1058.00      	2234.00      	37.00        
+neutral      	995.00       	2209.00      	31.00        
+contradiction	1027.00      	2218.00      	33.00        
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.56         	0.34         	0.32         	0.33         
+neutral      	0.44         	0.33         	0.68         	0.45         
+contradiction	0.66         	0.33         	0.01         	0.02         
+micro        	0.56         	0.34         	0.34         	0.34         
+macro        	0.56         	0.33         	0.34         	0.27         
+not-O        	0.50         	0.34         	0.50         	0.40         
+
+############################
+TRIAL RESULTS:  	lr: 1e-08 	dropout: 0.5 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.33176 	test: 0.335297703719
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-07 	dropout: 0.5 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.130732 secs)
+
+Epoch 1
+Amount of time to run this epoch: 12.6358938217 secs
+Training accuracy for this epoch: 0.33856
+Mean loss for this epoch: 1.11635653229
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 12.7744138241 secs
+Training accuracy for this epoch: 0.33676
+Mean loss for this epoch: 1.11637501018
+
+Epoch 3
+Amount of time to run this epoch: 17.0744099617 secs
+Training accuracy for this epoch: 0.33948
+Mean loss for this epoch: 1.11685232723
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.362527941475
+Average Loss: 1.10913305546
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	809.00       	606.00       	1914.00      
+neutral      	815.00       	781.00       	1639.00      
+contradiction	698.00       	602.00       	1978.00      
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.59         	0.35         	0.24         	0.29         
+neutral      	0.63         	0.39         	0.24         	0.30         
+contradiction	0.51         	0.36         	0.60         	0.45         
+micro        	0.58         	0.36         	0.36         	0.36         
+macro        	0.58         	0.37         	0.36         	0.34         
+not-O        	0.61         	0.37         	0.24         	0.29         
+
+############################
+TRIAL RESULTS:  	lr: 1e-07 	dropout: 0.5 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.33948 	test: 0.362527941475
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-06 	dropout: 0.5 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.130489 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.0392830372 secs
+Training accuracy for this epoch: 0.33908
+Mean loss for this epoch: 1.11658781111
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 13.1540830135 secs
+Training accuracy for this epoch: 0.33788
+Mean loss for this epoch: 1.11508639191
+
+Epoch 3
+Amount of time to run this epoch: 16.8664038181 secs
+Training accuracy for this epoch: 0.3415
+Mean loss for this epoch: 1.11370239691
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.344238975818
+Average Loss: 1.10840643304
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	13.00        	2669.00      	647.00       
+neutral      	5.00         	2820.00      	410.00       
+contradiction	7.00         	2716.00      	555.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.66         	0.52         	0.00         	0.01         
+neutral      	0.41         	0.34         	0.87         	0.49         
+contradiction	0.62         	0.34         	0.17         	0.23         
+micro        	0.56         	0.34         	0.34         	0.34         
+macro        	0.56         	0.40         	0.35         	0.24         
+not-O        	0.54         	0.34         	0.43         	0.38         
+
+############################
+TRIAL RESULTS:  	lr: 1e-06 	dropout: 0.5 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.3415 	test: 0.344238975818
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-05 	dropout: 0.5 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.134127 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.0614728928 secs
+Training accuracy for this epoch: 0.34476
+Mean loss for this epoch: 1.11210030348
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 13.1587328911 secs
+Training accuracy for this epoch: 0.3557
+Mean loss for this epoch: 1.10917887236
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 14.4502420425 secs
+Training accuracy for this epoch: 0.3719
+Mean loss for this epoch: 1.10540652336
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.404998983946
+Average Loss: 1.10001969415
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	961.00       	1874.00      	494.00       
+neutral      	523.00       	2419.00      	293.00       
+contradiction	740.00       	1932.00      	606.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.63         	0.43         	0.29         	0.35         
+neutral      	0.53         	0.39         	0.75         	0.51         
+contradiction	0.65         	0.44         	0.18         	0.26         
+micro        	0.60         	0.40         	0.40         	0.40         
+macro        	0.60         	0.42         	0.41         	0.37         
+not-O        	0.58         	0.40         	0.51         	0.45         
+
+############################
+TRIAL RESULTS:  	lr: 1e-05 	dropout: 0.5 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.3719 	test: 0.404998983946
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 0.0001 	dropout: 0.5 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.129459 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.0143630505 secs
+Training accuracy for this epoch: 0.38982
+Mean loss for this epoch: 1.09611123511
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 12.8020269871 secs
+Training accuracy for this epoch: 0.49248
+Mean loss for this epoch: 1.0343571226
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 13.1258511543 secs
+Training accuracy for this epoch: 0.55208
+Mean loss for this epoch: 0.972866619335
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 12.6870479584 secs
+Training accuracy for this epoch: 0.58486
+Mean loss for this epoch: 0.9277996882
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 13.0442159176 secs
+Training accuracy for this epoch: 0.60938
+Mean loss for this epoch: 0.894494835526
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 12.9492928982 secs
+Training accuracy for this epoch: 0.62384
+Mean loss for this epoch: 0.866708680187
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 12.9101750851 secs
+Training accuracy for this epoch: 0.64034
+Mean loss for this epoch: 0.843143835092
+	NEW BEST
+
+Epoch 8
+Amount of time to run this epoch: 12.9479701519 secs
+Training accuracy for this epoch: 0.65046
+Mean loss for this epoch: 0.824126192142
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.62670188986
+Average Loss: 0.843590408564
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	2173.00      	563.00       	593.00       
+neutral      	653.00       	2008.00      	574.00       
+contradiction	651.00       	640.00       	1987.00      
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.75         	0.62         	0.65         	0.64         
+neutral      	0.75         	0.63         	0.62         	0.62         
+contradiction	0.75         	0.63         	0.61         	0.62         
+micro        	0.75         	0.63         	0.63         	0.63         
+macro        	0.75         	0.63         	0.63         	0.63         
+not-O        	0.75         	0.63         	0.64         	0.63         
+
+############################
+TRIAL RESULTS:  	lr: 0.0001 	dropout: 0.5 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.65046 	test: 0.62670188986
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 0.001 	dropout: 0.5 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.131103 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.1465499401 secs
+Training accuracy for this epoch: 0.51746
+Mean loss for this epoch: 0.990137924928
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 12.9360721111 secs
+Training accuracy for this epoch: 0.62604
+Mean loss for this epoch: 0.853516530045
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 14.4468009472 secs
+Training accuracy for this epoch: 0.66122
+Mean loss for this epoch: 0.790078194474
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 12.9772398472 secs
+Training accuracy for this epoch: 0.68536
+Mean loss for this epoch: 0.744451263562
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 12.6938610077 secs
+Training accuracy for this epoch: 0.70684
+Mean loss for this epoch: 0.70182493592
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 13.167855978 secs
+Training accuracy for this epoch: 0.7254
+Mean loss for this epoch: 0.66783926535
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 12.9966840744 secs
+Training accuracy for this epoch: 0.7378
+Mean loss for this epoch: 0.639797601935
+	NEW BEST
+
+Epoch 8
+Amount of time to run this epoch: 13.1180789471 secs
+Training accuracy for this epoch: 0.75386
+Mean loss for this epoch: 0.609885755517
+	NEW BEST
+
+Epoch 9
+Amount of time to run this epoch: 12.9112870693 secs
+Training accuracy for this epoch: 0.76448
+Mean loss for this epoch: 0.586324827026
+	NEW BEST
+
+Epoch 10
+Amount of time to run this epoch: 12.9080479145 secs
+Training accuracy for this epoch: 0.774
+Mean loss for this epoch: 0.561680726574
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.628327575696
+Average Loss: 0.981399147154
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	2810.00      	235.00       	284.00       
+neutral      	1172.00      	1496.00      	567.00       
+contradiction	1058.00      	342.00       	1878.00      
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.72         	0.56         	0.84         	0.67         
+neutral      	0.76         	0.72         	0.46         	0.56         
+contradiction	0.77         	0.69         	0.57         	0.63         
+micro        	0.75         	0.63         	0.63         	0.63         
+macro        	0.75         	0.66         	0.63         	0.62         
+not-O        	0.74         	0.61         	0.66         	0.63         
+
+############################
+TRIAL RESULTS:  	lr: 0.001 	dropout: 0.5 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.774 	test: 0.628327575696
+		New best TRAIN
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-08 	dropout: 0.6 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.238816 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.0474829674 secs
+Training accuracy for this epoch: 0.33822
+Mean loss for this epoch: 1.11659290815
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 13.248789072 secs
+Training accuracy for this epoch: 0.3387
+Mean loss for this epoch: 1.11638889608
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 13.9249689579 secs
+Training accuracy for this epoch: 0.3407
+Mean loss for this epoch: 1.11619290809
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.350640113798
+Average Loss: 1.11288625699
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	2794.00      	4.00         	531.00       
+neutral      	2670.00      	2.00         	563.00       
+contradiction	2621.00      	2.00         	655.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.41         	0.35         	0.84         	0.49         
+neutral      	0.67         	0.25         	0.00         	0.00         
+contradiction	0.62         	0.37         	0.20         	0.26         
+micro        	0.57         	0.35         	0.35         	0.35         
+macro        	0.57         	0.32         	0.35         	0.25         
+not-O        	0.54         	0.35         	0.43         	0.38         
+
+############################
+TRIAL RESULTS:  	lr: 1e-08 	dropout: 0.6 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.3407 	test: 0.350640113798
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-07 	dropout: 0.6 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.134573 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.1278860569 secs
+Training accuracy for this epoch: 0.34154
+Mean loss for this epoch: 1.11492423526
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 12.7266111374 secs
+Training accuracy for this epoch: 0.33928
+Mean loss for this epoch: 1.11522204553
+
+Epoch 3
+Amount of time to run this epoch: 15.4312560558 secs
+Training accuracy for this epoch: 0.33868
+Mean loss for this epoch: 1.11527613758
+
+EVALUATING
+Accuracy: 0.343730948994
+Average Loss: 1.11202260581
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	3215.00      	109.00       	5.00         
+neutral      	3065.00      	165.00       	5.00         
+contradiction	3136.00      	139.00       	3.00         
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.36         	0.34         	0.97         	0.50         
+neutral      	0.66         	0.40         	0.05         	0.09         
+contradiction	0.67         	0.23         	0.00         	0.00         
+micro        	0.56         	0.34         	0.34         	0.34         
+macro        	0.56         	0.32         	0.34         	0.20         
+not-O        	0.51         	0.34         	0.51         	0.41         
+
+############################
+TRIAL RESULTS:  	lr: 1e-07 	dropout: 0.6 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.34154 	test: 0.343730948994
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-06 	dropout: 0.6 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.139946 secs)
+
+Epoch 1
+Amount of time to run this epoch: 12.7084479332 secs
+Training accuracy for this epoch: 0.3404
+Mean loss for this epoch: 1.11308905276
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 12.8428790569 secs
+Training accuracy for this epoch: 0.34496
+Mean loss for this epoch: 1.11189787543
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 13.1876718998 secs
+Training accuracy for this epoch: 0.3507
+Mean loss for this epoch: 1.11005374218
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.369538711644
+Average Loss: 1.10691580447
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	797.00       	2225.00      	307.00       
+neutral      	490.00       	2541.00      	204.00       
+contradiction	639.00       	2340.00      	299.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.63         	0.41         	0.24         	0.30         
+neutral      	0.47         	0.36         	0.79         	0.49         
+contradiction	0.65         	0.37         	0.09         	0.15         
+micro        	0.58         	0.37         	0.37         	0.37         
+macro        	0.58         	0.38         	0.37         	0.31         
+not-O        	0.55         	0.37         	0.51         	0.43         
+
+############################
+TRIAL RESULTS:  	lr: 1e-06 	dropout: 0.6 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.3507 	test: 0.369538711644
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-05 	dropout: 0.6 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.130735 secs)
+
+Epoch 1
+Amount of time to run this epoch: 12.8794238567 secs
+Training accuracy for this epoch: 0.3495
+Mean loss for this epoch: 1.11100696313
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 12.8937799931 secs
+Training accuracy for this epoch: 0.37486
+Mean loss for this epoch: 1.1050888649
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 15.2992460728 secs
+Training accuracy for this epoch: 0.39932
+Mean loss for this epoch: 1.09746980713
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.434870961187
+Average Loss: 1.08560191192
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	2105.00      	991.00       	233.00       
+neutral      	1245.00      	1791.00      	199.00       
+contradiction	1638.00      	1256.00      	384.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.58         	0.42         	0.63         	0.51         
+neutral      	0.62         	0.44         	0.55         	0.49         
+contradiction	0.66         	0.47         	0.12         	0.19         
+micro        	0.62         	0.43         	0.43         	0.43         
+macro        	0.62         	0.45         	0.43         	0.40         
+not-O        	0.60         	0.43         	0.59         	0.50         
+
+############################
+TRIAL RESULTS:  	lr: 1e-05 	dropout: 0.6 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.39932 	test: 0.434870961187
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 0.0001 	dropout: 0.6 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.131289 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.2092690468 secs
+Training accuracy for this epoch: 0.40762
+Mean loss for this epoch: 1.08726806028
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 13.3249750137 secs
+Training accuracy for this epoch: 0.515
+Mean loss for this epoch: 1.00805885491
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 13.0662209988 secs
+Training accuracy for this epoch: 0.56922
+Mean loss for this epoch: 0.939740692868
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 13.1387369633 secs
+Training accuracy for this epoch: 0.60044
+Mean loss for this epoch: 0.895655869675
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 13.0790438652 secs
+Training accuracy for this epoch: 0.6247
+Mean loss for this epoch: 0.863623933262
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 13.2022089958 secs
+Training accuracy for this epoch: 0.63564
+Mean loss for this epoch: 0.840373004108
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 13.2732191086 secs
+Training accuracy for this epoch: 0.65192
+Mean loss for this epoch: 0.820166377384
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.625584230847
+Average Loss: 0.843401658458
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	2121.00      	646.00       	562.00       
+neutral      	558.00       	2098.00      	579.00       
+contradiction	599.00       	741.00       	1938.00      
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.76         	0.65         	0.64         	0.64         
+neutral      	0.74         	0.60         	0.65         	0.62         
+contradiction	0.75         	0.63         	0.59         	0.61         
+micro        	0.75         	0.63         	0.63         	0.63         
+macro        	0.75         	0.63         	0.63         	0.63         
+not-O        	0.75         	0.62         	0.64         	0.63         
+
+############################
+TRIAL RESULTS:  	lr: 0.0001 	dropout: 0.6 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.65192 	test: 0.625584230847
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 0.001 	dropout: 0.6 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.132487 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.1844980717 secs
+Training accuracy for this epoch: 0.51874
+Mean loss for this epoch: 0.981679808987
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 12.8272640705 secs
+Training accuracy for this epoch: 0.62894
+Mean loss for this epoch: 0.840163925953
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 14.4619600773 secs
+Training accuracy for this epoch: 0.67046
+Mean loss for this epoch: 0.775841848777
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 12.8115818501 secs
+Training accuracy for this epoch: 0.69838
+Mean loss for this epoch: 0.719252779851
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 12.8717899323 secs
+Training accuracy for this epoch: 0.72432
+Mean loss for this epoch: 0.67526876149
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 12.8565459251 secs
+Training accuracy for this epoch: 0.7379
+Mean loss for this epoch: 0.642035319258
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 12.9014592171 secs
+Training accuracy for this epoch: 0.75548
+Mean loss for this epoch: 0.603835471336
+	NEW BEST
+
+Epoch 8
+Amount of time to run this epoch: 13.1123452187 secs
+Training accuracy for this epoch: 0.76736
+Mean loss for this epoch: 0.57874943316
+	NEW BEST
+
+Epoch 9
+Amount of time to run this epoch: 13.0216839314 secs
+Training accuracy for this epoch: 0.77988
+Mean loss for this epoch: 0.553613760359
+	NEW BEST
+
+Epoch 10
+Amount of time to run this epoch: 12.8561530113 secs
+Training accuracy for this epoch: 0.7888
+Mean loss for this epoch: 0.532414267168
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.645295671611
+Average Loss: 0.938107726636
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	2489.00      	401.00       	439.00       
+neutral      	823.00       	1749.00      	663.00       
+contradiction	704.00       	461.00       	2113.00      
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.76         	0.62         	0.75         	0.68         
+neutral      	0.76         	0.67         	0.54         	0.60         
+contradiction	0.77         	0.66         	0.64         	0.65         
+micro        	0.76         	0.65         	0.65         	0.65         
+macro        	0.76         	0.65         	0.64         	0.64         
+not-O        	0.76         	0.64         	0.65         	0.64         
+
+############################
+TRIAL RESULTS:  	lr: 0.001 	dropout: 0.6 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.7888 	test: 0.645295671611
+		New best TRAIN
+		New best TEST
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-08 	dropout: 0.7 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.133904 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.1418950558 secs
+Training accuracy for this epoch: 0.33454
+Mean loss for this epoch: 1.11320254047
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 13.188904047 secs
+Training accuracy for this epoch: 0.33216
+Mean loss for this epoch: 1.1132881027
+
+Epoch 3
+Amount of time to run this epoch: 13.260643959 secs
+Training accuracy for this epoch: 0.33486
+Mean loss for this epoch: 1.11323038757
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.333875228612
+Average Loss: 1.11183367147
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	428.00       	0.00         	2901.00      
+neutral      	372.00       	2.00         	2861.00      
+contradiction	421.00       	1.00         	2856.00      
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.62         	0.35         	0.13         	0.19         
+neutral      	0.67         	0.67         	0.00         	0.00         
+contradiction	0.37         	0.33         	0.87         	0.48         
+micro        	0.56         	0.33         	0.33         	0.33         
+macro        	0.56         	0.45         	0.33         	0.22         
+not-O        	0.65         	0.35         	0.07         	0.11         
+
+############################
+TRIAL RESULTS:  	lr: 1e-08 	dropout: 0.7 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.33486 	test: 0.333875228612
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-07 	dropout: 0.7 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.133491 secs)
+
+Epoch 1
+Amount of time to run this epoch: 12.8779358864 secs
+Training accuracy for this epoch: 0.32648
+Mean loss for this epoch: 1.11676901701
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 12.9620850086 secs
+Training accuracy for this epoch: 0.32368
+Mean loss for this epoch: 1.11692351926
+
+Epoch 3
+Amount of time to run this epoch: 17.9344129562 secs
+Training accuracy for this epoch: 0.32446
+Mean loss for this epoch: 1.11649453777
+
+EVALUATING
+Accuracy: 0.305628937208
+Average Loss: 1.11486571408
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	10.00        	1343.00      	1976.00      
+neutral      	15.00        	936.00       	2284.00      
+contradiction	7.00         	1209.00      	2062.00      
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.66         	0.31         	0.00         	0.01         
+neutral      	0.51         	0.27         	0.29         	0.28         
+contradiction	0.44         	0.33         	0.63         	0.43         
+micro        	0.54         	0.31         	0.31         	0.31         
+macro        	0.54         	0.30         	0.31         	0.24         
+not-O        	0.58         	0.27         	0.14         	0.19         
+
+############################
+TRIAL RESULTS:  	lr: 1e-07 	dropout: 0.7 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.32648 	test: 0.305628937208
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-06 	dropout: 0.7 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.147054 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.0000498295 secs
+Training accuracy for this epoch: 0.32604
+Mean loss for this epoch: 1.11225419459
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 12.8620860577 secs
+Training accuracy for this epoch: 0.33084
+Mean loss for this epoch: 1.11165839235
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 13.0160839558 secs
+Training accuracy for this epoch: 0.3355
+Mean loss for this epoch: 1.11148003864
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.339057102215
+Average Loss: 1.11137498431
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	2887.00      	442.00       	0.00         
+neutral      	2784.00      	450.00       	1.00         
+contradiction	2759.00      	519.00       	0.00         
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.39         	0.34         	0.87         	0.49         
+neutral      	0.62         	0.32         	0.14         	0.19         
+contradiction	0.00         	0.00         	0.00         	0.00         
+micro        	0.56         	0.34         	0.34         	0.34         
+macro        	0.34         	0.22         	0.34         	0.23         
+not-O        	0.51         	0.34         	0.51         	0.41         
+
+############################
+TRIAL RESULTS:  	lr: 1e-06 	dropout: 0.7 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.3355 	test: 0.339057102215
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-05 	dropout: 0.7 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.137844 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.3842530251 secs
+Training accuracy for this epoch: 0.34198
+Mean loss for this epoch: 1.11181587362
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 13.0737171173 secs
+Training accuracy for this epoch: 0.36782
+Mean loss for this epoch: 1.10610510626
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 17.1278700829 secs
+Training accuracy for this epoch: 0.38186
+Mean loss for this epoch: 1.10005861429
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.411196911197
+Average Loss: 1.09228528475
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	180.00       	1220.00      	1929.00      
+neutral      	123.00       	1957.00      	1155.00      
+contradiction	79.00        	1289.00      	1910.00      
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.66         	0.47         	0.05         	0.10         
+neutral      	0.62         	0.44         	0.60         	0.51         
+contradiction	0.55         	0.38         	0.58         	0.46         
+micro        	0.61         	0.41         	0.41         	0.41         
+macro        	0.61         	0.43         	0.41         	0.36         
+not-O        	0.64         	0.44         	0.33         	0.37         
+
+############################
+TRIAL RESULTS:  	lr: 1e-05 	dropout: 0.7 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.38186 	test: 0.411196911197
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 0.0001 	dropout: 0.7 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.164098 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.1481268406 secs
+Training accuracy for this epoch: 0.44218
+Mean loss for this epoch: 1.06708456732
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 13.0404148102 secs
+Training accuracy for this epoch: 0.54526
+Mean loss for this epoch: 0.976107530887
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 13.1324808598 secs
+Training accuracy for this epoch: 0.58624
+Mean loss for this epoch: 0.918398612067
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 13.4741771221 secs
+Training accuracy for this epoch: 0.6105
+Mean loss for this epoch: 0.879898956212
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 13.0911169052 secs
+Training accuracy for this epoch: 0.62748
+Mean loss for this epoch: 0.852361152849
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 13.1162722111 secs
+Training accuracy for this epoch: 0.64262
+Mean loss for this epoch: 0.827926232992
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 13.0582988262 secs
+Training accuracy for this epoch: 0.65436
+Mean loss for this epoch: 0.805694989231
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.628022759602
+Average Loss: 0.840314073222
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	2434.00      	484.00       	411.00       
+neutral      	801.00       	1953.00      	481.00       
+contradiction	845.00       	639.00       	1794.00      
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.74         	0.60         	0.73         	0.66         
+neutral      	0.76         	0.63         	0.60         	0.62         
+contradiction	0.76         	0.67         	0.55         	0.60         
+micro        	0.75         	0.63         	0.63         	0.63         
+macro        	0.75         	0.63         	0.63         	0.63         
+not-O        	0.75         	0.61         	0.67         	0.64         
+
+############################
+TRIAL RESULTS:  	lr: 0.0001 	dropout: 0.7 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.65436 	test: 0.628022759602
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 0.001 	dropout: 0.7 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.129714 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.2388148308 secs
+Training accuracy for this epoch: 0.54172
+Mean loss for this epoch: 0.963587785316
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 12.9894299507 secs
+Training accuracy for this epoch: 0.63706
+Mean loss for this epoch: 0.828561762638
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 16.9227459431 secs
+Training accuracy for this epoch: 0.67398
+Mean loss for this epoch: 0.760607763401
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 12.9219191074 secs
+Training accuracy for this epoch: 0.70634
+Mean loss for this epoch: 0.702760601059
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 13.0218801498 secs
+Training accuracy for this epoch: 0.72992
+Mean loss for this epoch: 0.658605221516
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 12.9522051811 secs
+Training accuracy for this epoch: 0.74854
+Mean loss for this epoch: 0.621125541075
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 13.1340630054 secs
+Training accuracy for this epoch: 0.76508
+Mean loss for this epoch: 0.587284725722
+	NEW BEST
+
+Epoch 8
+Amount of time to run this epoch: 13.2739369869 secs
+Training accuracy for this epoch: 0.77934
+Mean loss for this epoch: 0.554081384598
+	NEW BEST
+
+Epoch 9
+Amount of time to run this epoch: 13.0400269032 secs
+Training accuracy for this epoch: 0.78982
+Mean loss for this epoch: 0.529805439322
+	NEW BEST
+
+Epoch 10
+Amount of time to run this epoch: 13.1166329384 secs
+Training accuracy for this epoch: 0.79998
+Mean loss for this epoch: 0.50520098922
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.649156675472
+Average Loss: 0.915101175184
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	2435.00      	424.00       	470.00       
+neutral      	807.00       	1846.00      	582.00       
+contradiction	588.00       	582.00       	2108.00      
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.77         	0.64         	0.73         	0.68         
+neutral      	0.76         	0.65         	0.57         	0.61         
+contradiction	0.77         	0.67         	0.64         	0.65         
+micro        	0.77         	0.65         	0.65         	0.65         
+macro        	0.77         	0.65         	0.65         	0.65         
+not-O        	0.76         	0.64         	0.65         	0.65         
+
+############################
+TRIAL RESULTS:  	lr: 0.001 	dropout: 0.7 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.79998 	test: 0.649156675472
+		New best TRAIN
+		New best TEST
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-08 	dropout: 0.8 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.132338 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.2683057785 secs
+Training accuracy for this epoch: 0.32814
+Mean loss for this epoch: 1.11286076255
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 13.1786999702 secs
+Training accuracy for this epoch: 0.32964
+Mean loss for this epoch: 1.11281311009
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 16.6470410824 secs
+Training accuracy for this epoch: 0.3298
+Mean loss for this epoch: 1.11257839127
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.324730745783
+Average Loss: 1.11161603943
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	178.00       	3086.00      	65.00        
+neutral      	224.00       	2956.00      	55.00        
+contradiction	217.00       	2999.00      	62.00        
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.64         	0.29         	0.05         	0.09         
+neutral      	0.35         	0.33         	0.91         	0.48         
+contradiction	0.66         	0.34         	0.02         	0.04         
+micro        	0.55         	0.32         	0.32         	0.32         
+macro        	0.55         	0.32         	0.33         	0.20         
+not-O        	0.49         	0.32         	0.48         	0.39         
+
+############################
+TRIAL RESULTS:  	lr: 1e-08 	dropout: 0.8 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.3298 	test: 0.324730745783
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-07 	dropout: 0.8 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.131133 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.1997430325 secs
+Training accuracy for this epoch: 0.33614
+Mean loss for this epoch: 1.11691976112
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 13.0740759373 secs
+Training accuracy for this epoch: 0.33522
+Mean loss for this epoch: 1.116751469
+
+Epoch 3
+Amount of time to run this epoch: 16.3916070461 secs
+Training accuracy for this epoch: 0.33426
+Mean loss for this epoch: 1.11632897482
+
+EVALUATING
+Accuracy: 0.337228205649
+Average Loss: 1.11359225852
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	3259.00      	0.00         	70.00        
+neutral      	3104.00      	0.00         	131.00       
+contradiction	3218.00      	0.00         	60.00        
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.35         	0.34         	0.98         	0.50         
+neutral      	0.00         	0.00         	0.00         	0.00         
+contradiction	0.65         	0.23         	0.02         	0.03         
+micro        	0.56         	0.34         	0.34         	0.34         
+macro        	0.33         	0.19         	0.33         	0.18         
+not-O        	0.51         	0.34         	0.50         	0.40         
+
+############################
+TRIAL RESULTS:  	lr: 1e-07 	dropout: 0.8 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.33614 	test: 0.337228205649
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-06 	dropout: 0.8 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.134362 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.2633059025 secs
+Training accuracy for this epoch: 0.33344
+Mean loss for this epoch: 1.11190020184
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 13.0080220699 secs
+Training accuracy for this epoch: 0.34092
+Mean loss for this epoch: 1.11032380442
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 15.3080790043 secs
+Training accuracy for this epoch: 0.34746
+Mean loss for this epoch: 1.10923181684
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.34322292217
+Average Loss: 1.10669704614
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	394.00       	2861.00      	74.00        
+neutral      	267.00       	2931.00      	37.00        
+contradiction	365.00       	2860.00      	53.00        
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.64         	0.38         	0.12         	0.18         
+neutral      	0.39         	0.34         	0.91         	0.49         
+contradiction	0.66         	0.32         	0.02         	0.03         
+micro        	0.56         	0.34         	0.34         	0.34         
+macro        	0.56         	0.35         	0.35         	0.23         
+not-O        	0.51         	0.34         	0.51         	0.41         
+
+############################
+TRIAL RESULTS:  	lr: 1e-06 	dropout: 0.8 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.34746 	test: 0.34322292217
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-05 	dropout: 0.8 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.132359 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.2252838612 secs
+Training accuracy for this epoch: 0.34194
+Mean loss for this epoch: 1.11035299072
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 13.1162378788 secs
+Training accuracy for this epoch: 0.36564
+Mean loss for this epoch: 1.10464990612
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 13.4060060978 secs
+Training accuracy for this epoch: 0.38318
+Mean loss for this epoch: 1.09760318052
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.408047144889
+Average Loss: 1.09072815443
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	2440.00      	0.00         	889.00       
+neutral      	1936.00      	0.00         	1299.00      
+contradiction	1702.00      	0.00         	1576.00      
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.54         	0.40         	0.73         	0.52         
+neutral      	0.00         	0.00         	0.00         	0.00         
+contradiction	0.60         	0.42         	0.48         	0.45         
+micro        	0.61         	0.41         	0.41         	0.41         
+macro        	0.38         	0.27         	0.40         	0.32         
+not-O        	0.61         	0.40         	0.37         	0.39         
+
+############################
+TRIAL RESULTS:  	lr: 1e-05 	dropout: 0.8 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.38318 	test: 0.408047144889
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 0.0001 	dropout: 0.8 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.131288 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.397495985 secs
+Training accuracy for this epoch: 0.45678
+Mean loss for this epoch: 1.05539421604
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 13.1959738731 secs
+Training accuracy for this epoch: 0.5502
+Mean loss for this epoch: 0.963711270743
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 13.3344368935 secs
+Training accuracy for this epoch: 0.59032
+Mean loss for this epoch: 0.906117937601
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 13.2498550415 secs
+Training accuracy for this epoch: 0.61806
+Mean loss for this epoch: 0.866585547967
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 13.4004831314 secs
+Training accuracy for this epoch: 0.63448
+Mean loss for this epoch: 0.838453094215
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 13.4194500446 secs
+Training accuracy for this epoch: 0.64662
+Mean loss for this epoch: 0.81552001994
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 13.7931849957 secs
+Training accuracy for this epoch: 0.65976
+Mean loss for this epoch: 0.793200084849
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.630156472262
+Average Loss: 0.841406694867
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	2324.00      	619.00       	386.00       
+neutral      	673.00       	2133.00      	429.00       
+contradiction	788.00       	745.00       	1745.00      
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.75         	0.61         	0.70         	0.65         
+neutral      	0.75         	0.61         	0.66         	0.63         
+contradiction	0.76         	0.68         	0.53         	0.60         
+micro        	0.75         	0.63         	0.63         	0.63         
+macro        	0.75         	0.64         	0.63         	0.63         
+not-O        	0.75         	0.61         	0.68         	0.64         
+
+############################
+TRIAL RESULTS:  	lr: 0.0001 	dropout: 0.8 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.65976 	test: 0.630156472262
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 0.001 	dropout: 0.8 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.139940 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.0005300045 secs
+Training accuracy for this epoch: 0.54546
+Mean loss for this epoch: 0.947705529992
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 12.8970489502 secs
+Training accuracy for this epoch: 0.6404
+Mean loss for this epoch: 0.817403088979
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 18.0183341503 secs
+Training accuracy for this epoch: 0.67836
+Mean loss for this epoch: 0.750293907302
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 12.9011061192 secs
+Training accuracy for this epoch: 0.71258
+Mean loss for this epoch: 0.692366717569
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 12.9659030437 secs
+Training accuracy for this epoch: 0.73778
+Mean loss for this epoch: 0.644263427504
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 13.0776729584 secs
+Training accuracy for this epoch: 0.75706
+Mean loss for this epoch: 0.601358625095
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 12.9596369267 secs
+Training accuracy for this epoch: 0.77494
+Mean loss for this epoch: 0.566936291087
+	NEW BEST
+
+Epoch 8
+Amount of time to run this epoch: 13.0700838566 secs
+Training accuracy for this epoch: 0.79146
+Mean loss for this epoch: 0.532166914829
+	NEW BEST
+
+Epoch 9
+Amount of time to run this epoch: 12.9962630272 secs
+Training accuracy for this epoch: 0.79892
+Mean loss for this epoch: 0.513423241389
+	NEW BEST
+
+Epoch 10
+Amount of time to run this epoch: 13.1174139977 secs
+Training accuracy for this epoch: 0.81428
+Mean loss for this epoch: 0.481252947122
+	NEW BEST
+
+Epoch 11
+Amount of time to run this epoch: 13.004625082 secs
+Training accuracy for this epoch: 0.82348
+Mean loss for this epoch: 0.455604920378
+	NEW BEST
+
+Epoch 12
+Amount of time to run this epoch: 12.9841969013 secs
+Training accuracy for this epoch: 0.8337
+Mean loss for this epoch: 0.437677435863
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.656370656371
+Average Loss: 1.01407052054
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	2398.00      	424.00       	507.00       
+neutral      	741.00       	1794.00      	700.00       
+contradiction	537.00       	473.00       	2268.00      
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.78         	0.65         	0.72         	0.68         
+neutral      	0.76         	0.67         	0.55         	0.61         
+contradiction	0.77         	0.65         	0.69         	0.67         
+micro        	0.77         	0.66         	0.66         	0.66         
+macro        	0.77         	0.66         	0.66         	0.65         
+not-O        	0.77         	0.66         	0.64         	0.65         
+
+############################
+TRIAL RESULTS:  	lr: 0.001 	dropout: 0.8 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.8337 	test: 0.656370656371
+		New best TRAIN
+		New best TEST
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-08 	dropout: 0.9 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.137828 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.0576221943 secs
+Training accuracy for this epoch: 0.32288
+Mean loss for this epoch: 1.11447433803
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 12.927544117 secs
+Training accuracy for this epoch: 0.32026
+Mean loss for this epoch: 1.11470686139
+
+Epoch 3
+Amount of time to run this epoch: 16.6002650261 secs
+Training accuracy for this epoch: 0.3246
+Mean loss for this epoch: 1.11442726058
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.328693355009
+Average Loss: 1.11442317436
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	88.00        	272.00       	2969.00      
+neutral      	105.00       	234.00       	2896.00      
+contradiction	99.00        	266.00       	2913.00      
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.65         	0.30         	0.03         	0.05         
+neutral      	0.64         	0.30         	0.07         	0.12         
+contradiction	0.37         	0.33         	0.89         	0.48         
+micro        	0.55         	0.33         	0.33         	0.33         
+macro        	0.55         	0.31         	0.33         	0.22         
+not-O        	0.65         	0.30         	0.05         	0.08         
+
+############################
+TRIAL RESULTS:  	lr: 1e-08 	dropout: 0.9 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.3246 	test: 0.328693355009
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-07 	dropout: 0.9 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.136020 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.3263390064 secs
+Training accuracy for this epoch: 0.3388
+Mean loss for this epoch: 1.11111485562
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 13.2949681282 secs
+Training accuracy for this epoch: 0.33744
+Mean loss for this epoch: 1.11108953462
+
+Epoch 3
+Amount of time to run this epoch: 13.1443548203 secs
+Training accuracy for this epoch: 0.33964
+Mean loss for this epoch: 1.11093164009
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.342613289982
+Average Loss: 1.11089931138
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	22.00        	1399.00      	1908.00      
+neutral      	29.00        	1507.00      	1699.00      
+contradiction	15.00        	1420.00      	1843.00      
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.66         	0.33         	0.01         	0.01         
+neutral      	0.54         	0.35         	0.47         	0.40         
+contradiction	0.49         	0.34         	0.56         	0.42         
+micro        	0.56         	0.34         	0.34         	0.34         
+macro        	0.56         	0.34         	0.34         	0.28         
+not-O        	0.60         	0.35         	0.23         	0.28         
+
+############################
+TRIAL RESULTS:  	lr: 1e-07 	dropout: 0.9 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.33964 	test: 0.342613289982
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-06 	dropout: 0.9 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.132044 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.0983119011 secs
+Training accuracy for this epoch: 0.34356
+Mean loss for this epoch: 1.11397995196
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 13.0886991024 secs
+Training accuracy for this epoch: 0.34872
+Mean loss for this epoch: 1.1112816474
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 17.4134571552 secs
+Training accuracy for this epoch: 0.3544
+Mean loss for this epoch: 1.10922491154
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.368014631173
+Average Loss: 1.10679208923
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	1554.00      	390.00       	1385.00      
+neutral      	1011.00      	450.00       	1774.00      
+contradiction	1190.00      	470.00       	1618.00      
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.60         	0.41         	0.47         	0.44         
+neutral      	0.63         	0.34         	0.14         	0.20         
+contradiction	0.51         	0.34         	0.49         	0.40         
+micro        	0.58         	0.37         	0.37         	0.37         
+macro        	0.58         	0.37         	0.37         	0.35         
+not-O        	0.61         	0.40         	0.31         	0.34         
+
+############################
+TRIAL RESULTS:  	lr: 1e-06 	dropout: 0.9 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.3544 	test: 0.368014631173
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-05 	dropout: 0.9 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.136933 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.2214920521 secs
+Training accuracy for this epoch: 0.36162
+Mean loss for this epoch: 1.10667862642
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 12.93572402 secs
+Training accuracy for this epoch: 0.38956
+Mean loss for this epoch: 1.09685121564
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 16.7939879894 secs
+Training accuracy for this epoch: 0.40924
+Mean loss for this epoch: 1.0872973911
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.419020524284
+Average Loss: 1.08093142045
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	33.00        	1175.00      	2121.00      
+neutral      	9.00         	1967.00      	1259.00      
+contradiction	7.00         	1147.00      	2124.00      
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.66         	0.67         	0.01         	0.02         
+neutral      	0.64         	0.46         	0.61         	0.52         
+contradiction	0.54         	0.39         	0.65         	0.48         
+micro        	0.61         	0.42         	0.42         	0.42         
+macro        	0.61         	0.51         	0.42         	0.34         
+not-O        	0.65         	0.46         	0.30         	0.37         
+
+############################
+TRIAL RESULTS:  	lr: 1e-05 	dropout: 0.9 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.40924 	test: 0.419020524284
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 0.0001 	dropout: 0.9 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.131347 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.0826070309 secs
+Training accuracy for this epoch: 0.42306
+Mean loss for this epoch: 1.07572115992
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 12.9161450863 secs
+Training accuracy for this epoch: 0.51708
+Mean loss for this epoch: 1.01254556338
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 13.0586278439 secs
+Training accuracy for this epoch: 0.58316
+Mean loss for this epoch: 0.922323950264
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 12.8336398602 secs
+Training accuracy for this epoch: 0.61672
+Mean loss for this epoch: 0.866174833473
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 12.9989321232 secs
+Training accuracy for this epoch: 0.63198
+Mean loss for this epoch: 0.836049204973
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 12.9699728489 secs
+Training accuracy for this epoch: 0.64936
+Mean loss for this epoch: 0.811238586674
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 13.0929129124 secs
+Training accuracy for this epoch: 0.66288
+Mean loss for this epoch: 0.789807568807
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.628530786426
+Average Loss: 0.835822663911
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	2387.00      	495.00       	447.00       
+neutral      	794.00       	1917.00      	524.00       
+contradiction	801.00       	595.00       	1882.00      
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.74         	0.60         	0.72         	0.65         
+neutral      	0.76         	0.64         	0.59         	0.61         
+contradiction	0.76         	0.66         	0.57         	0.61         
+micro        	0.75         	0.63         	0.63         	0.63         
+macro        	0.75         	0.63         	0.63         	0.63         
+not-O        	0.75         	0.62         	0.66         	0.64         
+
+############################
+TRIAL RESULTS:  	lr: 0.0001 	dropout: 0.9 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.66288 	test: 0.628530786426
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 0.001 	dropout: 0.9 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.130198 secs)
+
+Epoch 1
+Amount of time to run this epoch: 12.9939568043 secs
+Training accuracy for this epoch: 0.4484
+Mean loss for this epoch: 1.02614466537
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 13.0028848648 secs
+Training accuracy for this epoch: 0.58166
+Mean loss for this epoch: 0.879879497125
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 13.0248799324 secs
+Training accuracy for this epoch: 0.66472
+Mean loss for this epoch: 0.77149067903
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 13.023496151 secs
+Training accuracy for this epoch: 0.701
+Mean loss for this epoch: 0.704260348168
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 12.9341328144 secs
+Training accuracy for this epoch: 0.73262
+Mean loss for this epoch: 0.644777202278
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 14.372781992 secs
+Training accuracy for this epoch: 0.75646
+Mean loss for this epoch: 0.600557141482
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 13.096765995 secs
+Training accuracy for this epoch: 0.77382
+Mean loss for this epoch: 0.557876946524
+	NEW BEST
+
+Epoch 8
+Amount of time to run this epoch: 13.0543181896 secs
+Training accuracy for this epoch: 0.792
+Mean loss for this epoch: 0.524703405016
+	NEW BEST
+
+Epoch 9
+Amount of time to run this epoch: 13.1881830692 secs
+Training accuracy for this epoch: 0.80642
+Mean loss for this epoch: 0.492076162068
+	NEW BEST
+
+Epoch 10
+Amount of time to run this epoch: 13.035943985 secs
+Training accuracy for this epoch: 0.81878
+Mean loss for this epoch: 0.464511063436
+	NEW BEST
+
+Epoch 11
+Amount of time to run this epoch: 13.0860729218 secs
+Training accuracy for this epoch: 0.8318
+Mean loss for this epoch: 0.436584196184
+	NEW BEST
+
+Epoch 12
+Amount of time to run this epoch: 13.0688350201 secs
+Training accuracy for this epoch: 0.84002
+Mean loss for this epoch: 0.415737485318
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.655557813453
+Average Loss: 1.03466706771
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	2568.00      	421.00       	340.00       
+neutral      	815.00       	1831.00      	589.00       
+contradiction	707.00       	518.00       	2053.00      
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.77         	0.63         	0.77         	0.69         
+neutral      	0.76         	0.66         	0.57         	0.61         
+contradiction	0.78         	0.69         	0.63         	0.66         
+micro        	0.77         	0.66         	0.66         	0.66         
+macro        	0.77         	0.66         	0.65         	0.65         
+not-O        	0.76         	0.64         	0.67         	0.66         
+
+############################
+TRIAL RESULTS:  	lr: 0.001 	dropout: 0.9 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.84002 	test: 0.655557813453
+		New best TRAIN
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-08 	dropout: 1.0 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.145848 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.0794751644 secs
+Training accuracy for this epoch: 0.33356
+Mean loss for this epoch: 1.12381947132
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 13.1619470119 secs
+Training accuracy for this epoch: 0.33302
+Mean loss for this epoch: 1.12383331743
+
+Epoch 3
+Amount of time to run this epoch: 17.2846870422 secs
+Training accuracy for this epoch: 0.33286
+Mean loss for this epoch: 1.12356607277
+
+EVALUATING
+Accuracy: 0.33682178419
+Average Loss: 1.12132602001
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	3280.00      	0.00         	49.00        
+neutral      	3189.00      	0.00         	46.00        
+contradiction	3243.00      	0.00         	35.00        
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.34         	0.34         	0.99         	0.50         
+neutral      	0.00         	0.00         	0.00         	0.00         
+contradiction	0.66         	0.27         	0.01         	0.02         
+micro        	0.56         	0.34         	0.34         	0.34         
+macro        	0.33         	0.20         	0.33         	0.17         
+not-O        	0.51         	0.34         	0.50         	0.40         
+
+############################
+TRIAL RESULTS:  	lr: 1e-08 	dropout: 1.0 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.33356 	test: 0.33682178419
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-07 	dropout: 1.0 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.151228 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.1599769592 secs
+Training accuracy for this epoch: 0.33376
+Mean loss for this epoch: 1.11201631672
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 13.2472169399 secs
+Training accuracy for this epoch: 0.3347
+Mean loss for this epoch: 1.11189180887
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 14.1961519718 secs
+Training accuracy for this epoch: 0.33502
+Mean loss for this epoch: 1.1117493367
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.333468807153
+Average Loss: 1.11199242883
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	1464.00      	417.00       	1448.00      
+neutral      	1470.00      	430.00       	1335.00      
+contradiction	1431.00      	459.00       	1388.00      
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.52         	0.34         	0.44         	0.38         
+neutral      	0.63         	0.33         	0.13         	0.19         
+contradiction	0.53         	0.33         	0.42         	0.37         
+micro        	0.56         	0.33         	0.33         	0.33         
+macro        	0.56         	0.33         	0.33         	0.31         
+not-O        	0.57         	0.33         	0.29         	0.31         
+
+############################
+TRIAL RESULTS:  	lr: 1e-07 	dropout: 1.0 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.33502 	test: 0.333468807153
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-06 	dropout: 1.0 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.129668 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.0532000065 secs
+Training accuracy for this epoch: 0.33166
+Mean loss for this epoch: 1.11270580709
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 13.2612409592 secs
+Training accuracy for this epoch: 0.3366
+Mean loss for this epoch: 1.11191841007
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 17.7584760189 secs
+Training accuracy for this epoch: 0.34102
+Mean loss for this epoch: 1.11159166808
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.338752286121
+Average Loss: 1.11158902692
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	1916.00      	3.00         	1410.00      
+neutral      	1859.00      	0.00         	1376.00      
+contradiction	1860.00      	0.00         	1418.00      
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.48         	0.34         	0.58         	0.43         
+neutral      	0.00         	0.00         	0.00         	0.00         
+contradiction	0.53         	0.34         	0.43         	0.38         
+micro        	0.56         	0.34         	0.34         	0.34         
+macro        	0.34         	0.23         	0.34         	0.27         
+not-O        	0.57         	0.34         	0.29         	0.31         
+
+############################
+TRIAL RESULTS:  	lr: 1e-06 	dropout: 1.0 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.34102 	test: 0.338752286121
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-05 	dropout: 1.0 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.132961 secs)
+
+Epoch 1
+Amount of time to run this epoch: 12.9691288471 secs
+Training accuracy for this epoch: 0.38396
+Mean loss for this epoch: 1.10282960999
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 12.8752028942 secs
+Training accuracy for this epoch: 0.45
+Mean loss for this epoch: 1.07941853505
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 14.2104678154 secs
+Training accuracy for this epoch: 0.473
+Mean loss for this epoch: 1.05891772228
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.483438325544
+Average Loss: 1.04946465887
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	2281.00      	551.00       	497.00       
+neutral      	1271.00      	1455.00      	509.00       
+contradiction	1566.00      	690.00       	1022.00      
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.61         	0.45         	0.69         	0.54         
+neutral      	0.69         	0.54         	0.45         	0.49         
+contradiction	0.67         	0.50         	0.31         	0.39         
+micro        	0.66         	0.48         	0.48         	0.48         
+macro        	0.66         	0.50         	0.48         	0.47         
+not-O        	0.65         	0.48         	0.57         	0.52         
+
+############################
+TRIAL RESULTS:  	lr: 1e-05 	dropout: 1.0 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.473 	test: 0.483438325544
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 0.0001 	dropout: 1.0 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.136417 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.538918972 secs
+Training accuracy for this epoch: 0.49018
+Mean loss for this epoch: 1.02732080869
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 13.1722579002 secs
+Training accuracy for this epoch: 0.57534
+Mean loss for this epoch: 0.929566442662
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 13.2384309769 secs
+Training accuracy for this epoch: 0.605
+Mean loss for this epoch: 0.879468090928
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 13.3833441734 secs
+Training accuracy for this epoch: 0.62798
+Mean loss for this epoch: 0.845248699036
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 13.3011600971 secs
+Training accuracy for this epoch: 0.64394
+Mean loss for this epoch: 0.816301644992
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 13.2246189117 secs
+Training accuracy for this epoch: 0.66094
+Mean loss for this epoch: 0.79206523787
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 13.1635899544 secs
+Training accuracy for this epoch: 0.67096
+Mean loss for this epoch: 0.771399970783
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.628124364966
+Average Loss: 0.836757886719
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	2546.00      	313.00       	470.00       
+neutral      	905.00       	1691.00      	639.00       
+contradiction	905.00       	428.00       	1945.00      
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.74         	0.58         	0.76         	0.66         
+neutral      	0.77         	0.70         	0.52         	0.60         
+contradiction	0.75         	0.64         	0.59         	0.61         
+micro        	0.75         	0.63         	0.63         	0.63         
+macro        	0.75         	0.64         	0.63         	0.62         
+not-O        	0.75         	0.62         	0.65         	0.63         
+
+############################
+TRIAL RESULTS:  	lr: 0.0001 	dropout: 1.0 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.67096 	test: 0.628124364966
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 0.001 	dropout: 1.0 	reg_lambda: 0.0001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.152936 secs)
+
+Epoch 1
+Amount of time to run this epoch: 13.2531249523 secs
+Training accuracy for this epoch: 0.54588
+Mean loss for this epoch: 0.943495686402
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 13.4693109989 secs
+Training accuracy for this epoch: 0.6506
+Mean loss for this epoch: 0.79471587121
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 17.2060449123 secs
+Training accuracy for this epoch: 0.69876
+Mean loss for this epoch: 0.710547190722
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 13.4402589798 secs
+Training accuracy for this epoch: 0.72886
+Mean loss for this epoch: 0.652954078125
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 13.3726940155 secs
+Training accuracy for this epoch: 0.75572
+Mean loss for this epoch: 0.60153523621
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 15.6862261295 secs
+Training accuracy for this epoch: 0.77576
+Mean loss for this epoch: 0.55717649831
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 13.325619936 secs
+Training accuracy for this epoch: 0.7972
+Mean loss for this epoch: 0.515192530154
+	NEW BEST
+
+Epoch 8
+Amount of time to run this epoch: 13.4272289276 secs
+Training accuracy for this epoch: 0.81472
+Mean loss for this epoch: 0.476184626846
+	NEW BEST
+
+Epoch 9
+Amount of time to run this epoch: 13.2330620289 secs
+Training accuracy for this epoch: 0.82568
+Mean loss for this epoch: 0.447346982196
+	NEW BEST
+
+Epoch 10
+Amount of time to run this epoch: 13.3369789124 secs
+Training accuracy for this epoch: 0.83942
+Mean loss for this epoch: 0.416930813962
+	NEW BEST
+
+Epoch 11
+Amount of time to run this epoch: 13.509663105 secs
+Training accuracy for this epoch: 0.84944
+Mean loss for this epoch: 0.392382933984
+	NEW BEST
+
+Epoch 12
+Amount of time to run this epoch: 13.2373249531 secs
+Training accuracy for this epoch: 0.86222
+Mean loss for this epoch: 0.365843039549
+	NEW BEST
+
+Epoch 13
+Amount of time to run this epoch: 13.3794670105 secs
+Training accuracy for this epoch: 0.86956
+Mean loss for this epoch: 0.345079394443
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.656370656371
+Average Loss: 1.1441603094
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	2375.00      	533.00       	421.00       
+neutral      	696.00       	1971.00      	568.00       
+contradiction	589.00       	575.00       	2114.00      
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.77         	0.65         	0.71         	0.68         
+neutral      	0.76         	0.64         	0.61         	0.62         
+contradiction	0.78         	0.68         	0.64         	0.66         
+micro        	0.77         	0.66         	0.66         	0.66         
+macro        	0.77         	0.66         	0.66         	0.66         
+not-O        	0.77         	0.64         	0.66         	0.65         
+
+############################
+TRIAL RESULTS:  	lr: 0.001 	dropout: 1.0 	reg_lambda: 0.0001 
+
+	ACCURACY: 	train: 0.86956 	test: 0.656370656371
+		New best TRAIN
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-08 	dropout: 0.1 	reg_lambda: 0.001 
+
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: 8dec:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 11456103
+INFO:Number of params: 11456103 (retreival took 0.137825 secs)
+Traceback (most recent call last):
+  File "code/train.py", line 181, in <module>
+    tf.app.run()
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/platform/app.py", line 43, in run
+    sys.exit(main(sys.argv[:1] + flags_passthrough))
+  File "code/train.py", line 167, in main
+    results_map[idx_tup] = run_model(lr, dropout_keep, reg_lambda)
+  File "code/train.py", line 143, in run_model
+    epoch_number, train_accuracy, train_loss = nli.train(sess, train_dataset, rev_vocab, FLAGS.train_dir, FLAGS.batch_size)
+  File "/home/colinman/cs224n/code/nli_model.py", line 277, in train
+    self.summary_writer = tf.summary.FileWriter('%s/%s' % (Config.logpath, time.time()), graph=session.graph)
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/summary/writer/writer.py", line 308, in __init__
+    event_writer = EventFileWriter(logdir, max_queue, flush_secs)
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/summary/writer/event_file_writer.py", line 69, in __init__
+    gfile.MakeDirs(self._logdir)
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/lib/io/file_io.py", line 299, in recursive_create_dir
+    pywrap_tensorflow.RecursivelyCreateDir(compat.as_bytes(dirname), status)
+  File "/usr/lib/python2.7/contextlib.py", line 24, in __exit__
+    self.gen.next()
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/framework/errors_impl.py", line 469, in raise_exception_on_not_ok_status
+    pywrap_tensorflow.TF_GetCod

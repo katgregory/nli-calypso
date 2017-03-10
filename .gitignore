@@ -92,3 +92,8 @@ ENV/
 data/dwr/
 data/snli/snli_1.0_*
 
+# Mac Temp Files
+.DS_Store
+
+# Tensorboard logs
+logs/

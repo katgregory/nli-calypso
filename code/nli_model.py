@@ -20,6 +20,7 @@ class Config:
   num_classes = 3
   n_epochs = 10
   logpath = './logs'
+  summarize = False
   verbose = False
   LBLS = ['entailment', 'neutral', 'contradiction']
 
@@ -214,15 +215,22 @@ class NLISystem(object):
       self.output_placeholder: train_y,
       self.dropout_placeholder: self.dropout_keep
     }
-    output_feed = [self.summary_op, self.train_op, self.mean_loss, self.probs]
-    summary, _, mean_loss, probs = session.run(output_feed, input_feed)
+
+    if Config.summarize:
+      output_feed = [self.summary_op, self.train_op, self.mean_loss, self.probs]
+
+      summary, _, mean_loss, probs = session.run(output_feed, input_feed)
+      if not hasattr(self, "iteration"): self.iteration = 0
+      self.summary_writer.add_summary(summary, self.iteration)
+      self.iteration += 1
+
+    else:
+      output_feed = [self.train_op, self.mean_loss, self.probs]
+      _, mean_loss, probs = session.run(output_feed, input_feed)
 
     # if hasattr(self, "iteration") and self.iteration % 100 == 0 and Config.verbose:
     #   print(premise_embeddings)
 
-    if not hasattr(self, "iteration"): self.iteration = 0
-    self.summary_writer.add_summary(summary, self.iteration)
-    self.iteration += 1
     return mean_loss, probs
 
   def run_epoch(self, session, dataset, rev_vocab, train_dir, batch_size):
