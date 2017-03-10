@@ -272,8 +272,9 @@ class NLISystem(object):
       print("\nEpoch", epoch + 1, "out of", Config.n_epochs)
       curr_accuracy, curr_loss = self.run_epoch(session, dataset, rev_vocab, train_dir, batch_size)
       if curr_accuracy > best_epoch[1]:
+        print("\tNEW BEST")
         best_epoch = (epoch, curr_accuracy)
-      losses[epoch] = curr_loss
+      losses.append(curr_loss)
     return (best_epoch[0], best_epoch[1], losses)
 
   #############################
@@ -335,7 +336,7 @@ class NLISystem(object):
     return np.argmax(goldlabel), np.argmax(output), mean_loss
 
   def evaluate_prediction(self, session, dataset):
-    print("EVALUATING")
+    print("\nEVALUATING")
 
     cm = ConfusionMatrix(labels=Config.LBLS)
     total_loss = 0

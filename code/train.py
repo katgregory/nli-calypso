@@ -12,6 +12,7 @@ from os.path import join as pjoin
 
 import numpy as np
 import logging
+import cPickle as pickle
 
 logging.basicConfig(level=logging.INFO)
 
@@ -38,6 +39,7 @@ tf.app.flags.DEFINE_string("vocab_path", "data/snli/vocab.dat", "Path to vocab f
 tf.app.flags.DEFINE_string("embed_path", "", "Path to the trimmed GLoVe embedding (default: ./data/snli/glove.trimmed.{embedding_size}.npz)")
 tf.app.flags.DEFINE_float("num_classes", 3, "Neutral, Entailment, Contradiction")
 tf.app.flags.DEFINE_float("optimize_hyperparameters", True, "Whether to optimize hyperparameters or not")
+tf.app.flags.DEFINE_string("hyperparameter_grid_search_file", "data/hyperparams/grid.p", "Stores pickle file of search results")
 
 FLAGS = tf.app.flags.FLAGS
 
@@ -145,11 +147,26 @@ def main(_):
         lr_range = np.array([10**lr_exp for lr_exp in range(-8, 0, 1)])
         dropout_range = np.arange(0.1, 1.1, 0.1) 
         reg_lambda_range = np.array([10**lr_exp for lr_exp in range(-4, 0, 1)]) 
-        results_grid = np.empty(shape=[len(lr_range), len(dropout_range), len(reg_lambda)])
+        results_grid = np.empty(shape=[len(lr_range), len(dropout_range), len(reg_lambda_range)])
+        best_train_accuracy = 0
+        best_test_accuracy = 0
         for x, lr in enumerate(lr_range):
           for y, dropout_keep in enumerate(dropout_range):
             for z, reg_lambda in enumerate(reg_lambda_range):
+              print("########################################################")
+              print("\nRUNNING TRIAL: ", "\tlr:", lr, "\tdropout:", dropout_keep, "\treg_lambda:", reg_lambda, "\n")
               results_grid[x, y, z] = run_model(lr, dropout_keep, reg_lambda)
+              pickle.dump(results_grid, open(FLAGS.hyperparameter_grid_search_file, "wb"))
+              print("############################")
+              print("TRIAL RESULTS: ", "\tlr:", lr, "\tdropout:", dropout_keep, "\treg_lambda:", reg_lambda, "\n")
+              print("\tACCURACY: \ttrain:", results_grid[x, y, z][1], "\ttest:", results_grid[x, y, z][3])
+              if results_grid[x, y, z][1] > best_train_accuracy:
+                best_train_accuracy = results_grid[x, y, z][1]
+                print("\t\tNew best TRAIN")
+              if results_grid[x, y, z][3] > best_test_accuracy:
+                best_test_accuracy = results_grid[x, y, z][3]
+                print("\t\tNew best TEST")
+              print("########################################################")
 
 if __name__ == "__main__":
   tf.app.run()
