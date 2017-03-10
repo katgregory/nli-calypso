@@ -282,7 +282,8 @@ class NLISystem(object):
     logging.info("Number of params: %d (retreival took %f secs)" % (num_params, toc - tic))
 
     self.summary_op = tf.summary.merge_all()
-    self.summary_writer = tf.summary.FileWriter('%s/%s' % (Config.logpath, time.time()), graph=session.graph)
+    if Config.summarize:
+      self.summary_writer = tf.summary.FileWriter('%s/%s' % (Config.logpath, time.time()), graph=session.graph)
     losses = []
     best_epoch = (-1, 0)
     epoch = 1
