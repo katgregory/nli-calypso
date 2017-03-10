@@ -18,20 +18,33 @@ class Config:
   ff_hidden_size = 100
   hidden_size = 100
   num_classes = 3
-  lr = 0.00005
+  n_epochs = 10
+  lr = 0.0001
+  dropout_keep = 0.8
+  logpath = './logs'
   verbose = False
   LBLS = ['entailment', 'neutral', 'contradiction']
-  n_epochs = 10
-  logpath = './logs'
 
 def get_optimizer(opt="adam"):
   if opt == "adam":
     optfn = tf.train.AdamOptimizer(Config.lr)
+  elif opt == "adadelta":
+    optfn = tf.train.AdadeltaOptimizer(Config.lr)
   elif opt == "sgd":
     optfn = tf.train.GradientDescentOptimizer(Config.lr)
   else:
     assert (False)
   return optfn
+
+# Given an array of probabilities across the three labels, 
+# returns string of the label with the highest probability
+# (For debugging purposes only)
+def label_to_name(label):
+  return {
+    '0': "entailment",
+    '1': 'neutral',
+    '2': 'contradiction'
+  }[str(np.argmax(label))]
 
 """
 Represent "Premise" or "Hypothesis" LSTM portion of model.
@@ -65,6 +78,8 @@ class NLISystem(object):
     vocab_size, embedding_size, num_classes = args
 
     # ==== set up placeholder tokens ========
+
+    self.dropout_placeholder = tf.placeholder(tf.float32, shape=(), name="Dropout-Placeholder")
 
     # Premise and Hypothesis should be input as matrix of sentence_len x batch_size
     self.premise_placeholder = tf.placeholder(tf.int32, shape=(None, None), name="Premise-Placeholder")
@@ -111,6 +126,7 @@ class NLISystem(object):
         W1 = tf.get_variable("W", shape=(merged_size, Config.ff_hidden_size), initializer=tf.contrib.layers.xavier_initializer())
         b1 = tf.Variable(tf.zeros([Config.ff_hidden_size,]), name="b")
         r1 = tf.nn.relu(tf.matmul(merged, W1) + b1, name="r")
+        r1_dropout = tf.nn.dropout(r1, self.dropout_placeholder)
 
         tf.summary.histogram("W", W1)
         tf.summary.histogram("b", b1)
@@ -120,7 +136,8 @@ class NLISystem(object):
       with tf.variable_scope("FF-Second-Layer"):
         W2 = tf.get_variable("W", shape=(Config.ff_hidden_size, Config.ff_hidden_size), initializer=tf.contrib.layers.xavier_initializer())
         b2 = tf.Variable(tf.zeros([Config.ff_hidden_size,]), name="b")
-        r2 = tf.nn.relu(tf.matmul(r1, W2) + b2, name="r")
+        r2 = tf.nn.relu(tf.matmul(r1_dropout, W2) + b2, name="r")
+        r2_dropout = tf.nn.dropout(r2, self.dropout_placeholder)
 
         tf.summary.histogram("W", W2)
         tf.summary.histogram("b", b2)
@@ -130,7 +147,8 @@ class NLISystem(object):
       with tf.variable_scope("FF-Third-Layer"):
         W3 = tf.get_variable("W", shape=(Config.ff_hidden_size, Config.num_classes), initializer=tf.contrib.layers.xavier_initializer())
         b3 = tf.Variable(tf.zeros([Config.num_classes,]), name="b")
-        self.preds = tf.nn.relu(tf.matmul(r2, W3) + b3, name="r")
+        r3 = tf.nn.relu(tf.matmul(r2_dropout, W3) + b3, name="r")
+        self.preds = r3
 
         tf.summary.histogram("W", W3)
         tf.summary.histogram("b", b3)
@@ -140,8 +158,8 @@ class NLISystem(object):
       with tf.variable_scope("FF-Softmax"):        
 
         # for logging purposes only
-        probs = tf.nn.softmax(self.preds)
-        tf.summary.histogram("probs", probs)
+        self.probs = tf.nn.softmax(self.preds)
+        tf.summary.histogram("probs", self.probs)
 
         loss = tf.nn.softmax_cross_entropy_with_logits(logits=self.preds, labels=self.output_placeholder, name="loss")
         self.mean_loss = tf.reduce_mean(loss)
@@ -177,12 +195,12 @@ class NLISystem(object):
     premise_arr = [[int(word_idx) for word_idx in premise.split()] for premise in train_premise]
     hypothesis_arr = [[int(word_idx) for word_idx in hypothesis.split()] for hypothesis in train_hypothesis]
 
-    if hasattr(self, "iteration") and self.iteration % 100 == 0:
-      premise_stmt = premise_arr[0]
-      hypothesis_stmt = hypothesis_arr[0]
-      print("Iteration: ", self.iteration)
-      print( " ".join([rev_vocab[i] for i in premise_stmt]))
-      print( " ".join([rev_vocab[i] for i in hypothesis_stmt]))
+    # if hasattr(self, "iteration") and self.iteration % 100 == 0:
+      # premise_stmt = premise_arr[0]
+      # hypothesis_stmt = hypothesis_arr[0]
+      # print("Iteration: ", self.iteration)
+      # print( " ".join([rev_vocab[i] for i in premise_stmt]))
+      # print( " ".join([rev_vocab[i] for i in hypothesis_stmt]))
 
     premise_max = len(max(train_premise, key=len).split())
     hypothesis_max = len(max(train_hypothesis, key=len).split())
@@ -193,24 +211,41 @@ class NLISystem(object):
     input_feed = {
       self.premise_placeholder: premise_arr.T,
       self.hypothesis_placeholder: hypothesis_arr.T,
-      self.output_placeholder: train_y
+      self.output_placeholder: train_y,
+      self.dropout_placeholder: Config.dropout_keep
     }
-    output_feed = [self.summary_op, self.train_op, self.premise_embeddings, self.hypothesis_embeddings]
-    summary, _, premise_embeddings, hypothesis_embeddings = session.run(output_feed, input_feed)
+    output_feed = [self.summary_op, self.train_op, self.mean_loss, self.probs]
+    summary, _, mean_loss, probs = session.run(output_feed, input_feed)
+
     # if hasattr(self, "iteration") and self.iteration % 100 == 0 and Config.verbose:
     #   print(premise_embeddings)
 
     if not hasattr(self, "iteration"): self.iteration = 0
     self.summary_writer.add_summary(summary, self.iteration)
     self.iteration += 1
+    return mean_loss, probs
 
   def run_epoch(self, session, dataset, rev_vocab, train_dir, batch_size):
     # prog = Progbar(target=1 + int(len(dataset[0]) / batch_size))
+    num_correct = 0
     for i, batch in enumerate(minibatches(dataset, batch_size)):
       if Config.verbose and (i % 10 == 0):
         sys.stdout.write(str(i) + "...")
         sys.stdout.flush()
-      self.optimize(session, rev_vocab, *batch)
+      premises, hypotheses, goldlabels = batch
+      mean_loss, probs = self.optimize(session, rev_vocab, premises, hypotheses, goldlabels)
+
+      # Record correctness of training predictions
+      for i in xrange(len(probs)):
+        if label_to_name(probs[i]) == label_to_name(goldlabels[i]):
+          num_correct += 1
+
+      # LOGGING CODE
+      if (i * batch_size) % 200 == 0:
+        print("Training Example: " + str(i * batch_size))
+        print("Loss: " + str(mean_loss))
+    print("Training accuracy for this epoch: " + str(num_correct / float(len(dataset[0]))))
+
 
   """
   Loop through dataset and call optimize() to train model
@@ -272,31 +307,22 @@ class NLISystem(object):
   # TEST
   #############################
 
-  # Given an array of probabilities across the three labels, 
-  # returns string of the label with the highest probability
-  # (For debugging purposes only)
-  def label_to_name(self, label):
-    return {
-      '0': "entailment",
-      '1': 'neutral',
-      '2': 'contradiction'
-    }[str(np.argmax(label))]
-
   def predict(self, session, premise, hypothesis, goldlabel):
     input_feed = {
       self.premise_placeholder: np.array([[int(x) for x in premise[0].split()]]).T,
       self.hypothesis_placeholder: np.array([[int(x) for x in hypothesis[0].split()]]).T,
-      self.output_placeholder: goldlabel
+      self.output_placeholder: goldlabel,
+      self.dropout_placeholder: 1
     }
 
-    output_feed = [tf.nn.softmax(self.preds), self.mean_loss]
+    output_feed = [self.probs, self.mean_loss]
     output, mean_loss = session.run(output_feed, input_feed)
 
     if Config.verbose:
-      print('predicts:', self.label_to_name(output))
+      print('predicts:', label_to_name(output))
       print('with probabilities: ', output)
       if (np.argmax(goldlabel) != np.argmax(output)):
-        print('\t\t\t\t correct:', self.label_to_name(goldlabel))
+        print('\t\t\t\t correct:', label_to_name(goldlabel))
   
     return np.argmax(goldlabel), np.argmax(output), mean_loss
 
@@ -311,7 +337,7 @@ class NLISystem(object):
       total_correct += 1 if predicted_idx == gold_idx else 0
       total_loss += loss
       cm.update(gold_idx, predicted_idx)
-    print(total_correct / float(len(dataset[0])))
-    print(total_loss / float(len(dataset[0])))
+    print("Accuracy: " + str(total_correct / float(len(dataset[0]))))
+    print("Average Loss: " + str(total_loss / float(len(dataset[0]))))
     print("Token-level confusion matrix:\n" + cm.as_table())
     print("Token-level scores:\n" + cm.summary())
