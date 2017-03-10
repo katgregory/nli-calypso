@@ -128,7 +128,6 @@ def main(_):
         nli.train(sess, train_dataset, rev_vocab, FLAGS.train_dir, FLAGS.batch_size)
 
         # Evaluate on the dev set
-
         nli.evaluate_prediction(sess, test_dataset)
 
 if __name__ == "__main__":
