@@ -19,20 +19,17 @@ class Config:
   hidden_size = 100
   num_classes = 3
   n_epochs = 10
-  lr = 0.0001
-  dropout_keep = 0.8
-  regularization_lambda = .01
   logpath = './logs'
   verbose = False
   LBLS = ['entailment', 'neutral', 'contradiction']
 
-def get_optimizer(opt="adam"):
+def get_optimizer(lr, opt="adam"):
   if opt == "adam":
-    optfn = tf.train.AdamOptimizer(Config.lr)
+    optfn = tf.train.AdamOptimizer(lr)
   elif opt == "adadelta":
-    optfn = tf.train.AdadeltaOptimizer(Config.lr)
+    optfn = tf.train.AdadeltaOptimizer(lr)
   elif opt == "sgd":
-    optfn = tf.train.GradientDescentOptimizer(Config.lr)
+    optfn = tf.train.GradientDescentOptimizer(lr)
   else:
     assert (False)
   return optfn
@@ -76,7 +73,7 @@ class Statement(object):
 class NLISystem(object):
   def __init__(self, pretrained_embeddings, premise, hypothesis, *args):
 
-    vocab_size, embedding_size, num_classes = args
+    vocab_size, embedding_size, num_classes, self.lr, self.dropout_keep, self.regularization_lambda = args
 
     # ==== set up placeholder tokens ========
 
@@ -163,12 +160,12 @@ class NLISystem(object):
         tf.summary.histogram("probs", self.probs)
 
         softmax_loss = tf.nn.softmax_cross_entropy_with_logits(logits=self.preds, labels=self.output_placeholder, name="loss")
-        regularization_loss = Config.regularization_lambda * (tf.nn.l2_loss(W1) + tf.nn.l2_loss(b1) + tf.nn.l2_loss(W2) + tf.nn.l2_loss(b2) + tf.nn.l2_loss(W3) + tf.nn.l2_loss(b3))
+        regularization_loss = self.regularization_lambda * (tf.nn.l2_loss(W1) + tf.nn.l2_loss(b1) + tf.nn.l2_loss(W2) + tf.nn.l2_loss(b2) + tf.nn.l2_loss(W3) + tf.nn.l2_loss(b3))
         loss = softmax_loss + regularization_loss
         self.mean_loss = tf.reduce_mean(loss)
 
     with tf.name_scope("Optimizer"):
-      self.train_op = get_optimizer().minimize(self.mean_loss)
+      self.train_op = get_optimizer(self.lr).minimize(self.mean_loss)
       tf.summary.scalar("mean_batch_loss", self.mean_loss)
 
     with tf.name_scope("Gradients"):
@@ -186,7 +183,7 @@ class NLISystem(object):
   #############################
   # TRAINING
   #############################
-
+  
   def pad_sequences(self, data, max_length):
     ret = []
     for sentence in data:
@@ -215,7 +212,7 @@ class NLISystem(object):
       self.premise_placeholder: premise_arr.T,
       self.hypothesis_placeholder: hypothesis_arr.T,
       self.output_placeholder: train_y,
-      self.dropout_placeholder: Config.dropout_keep
+      self.dropout_placeholder: self.dropout_keep
     }
     output_feed = [self.summary_op, self.train_op, self.mean_loss, self.probs]
     summary, _, mean_loss, probs = session.run(output_feed, input_feed)
@@ -247,7 +244,9 @@ class NLISystem(object):
       if (i * batch_size) % 200 == 0:
         print("Training Example: " + str(i * batch_size))
         print("Loss: " + str(mean_loss))
-    print("Training accuracy for this epoch: " + str(num_correct / float(len(dataset[0]))))
+    train_accuracy = num_correct / float(len(dataset[0]))
+    print("Training accuracy for this epoch: " + str(train_accuracy))
+    return train_accuracy, mean_loss
 
 
   """
@@ -267,9 +266,15 @@ class NLISystem(object):
 
     self.summary_op = tf.summary.merge_all()
     self.summary_writer = tf.summary.FileWriter('%s/%s' % (Config.logpath, time.time()), graph=session.graph)
+    losses = []
+    best_epoch = (-1, 0)
     for epoch in range(Config.n_epochs):
       print("\nEpoch", epoch + 1, "out of", Config.n_epochs)
-      self.run_epoch(session, dataset, rev_vocab, train_dir, batch_size)
+      curr_accuracy, curr_loss = self.run_epoch(session, dataset, rev_vocab, train_dir, batch_size)
+      if curr_accuracy > best_epoch[1]:
+        best_epoch = (epoch, curr_accuracy)
+      losses[epoch] = curr_loss
+    return (best_epoch[0], best_epoch[1], losses)
 
   #############################
   # VALIDATION
@@ -340,7 +345,10 @@ class NLISystem(object):
       total_correct += 1 if predicted_idx == gold_idx else 0
       total_loss += loss
       cm.update(gold_idx, predicted_idx)
-    print("Accuracy: " + str(total_correct / float(len(dataset[0]))))
-    print("Average Loss: " + str(total_loss / float(len(dataset[0]))))
+    accuracy = total_correct / float(len(dataset[0]))
+    print("Accuracy: " + str(accuracy))
+    average_loss = total_loss / float(len(dataset[0]))
+    print("Average Loss: " + str(average_loss))
     print("Token-level confusion matrix:\n" + cm.as_table())
     print("Token-level scores:\n" + cm.summary())
+    return (accuracy, average_loss, cm)

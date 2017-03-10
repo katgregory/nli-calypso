@@ -1,10 +1,11 @@
 TODO
-- Set up LSTMS
+- Set up LSTMs
 - Padding / Masking?
 - Paramter tuning
 - Checkpointing
 - Attention model
 - Run epochs to convergence
+- Batch sizes for validation
 
 DIFFERENCES FROM LITERATURE
 - We use Adam, not Adadelta. Slower but better accuracy.
