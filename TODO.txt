@@ -4,16 +4,20 @@ TODO
 - Paramter tuning
 - Checkpointing
 - Attention model
-- Regularization
 - Run epochs to convergence
 
 DIFFERENCES FROM LITERATURE
 - We use Adam, not Adadelta. Slower but better accuracy.
+- BOW: We concatonate average DWRs of both sentences with the difference between the averages.
 
 VALIDATION PARAMETERS
 - Dropout
 - LR
+- tanh vs relu
+- Regularization lambda
 
 DONE
 - Train accuracy
+- Actually run on dev set
 - Dropout
+- Regularization

@@ -21,6 +21,7 @@ class Config:
   n_epochs = 10
   lr = 0.0001
   dropout_keep = 0.8
+  regularization_lambda = .01
   logpath = './logs'
   verbose = False
   LBLS = ['entailment', 'neutral', 'contradiction']
@@ -161,7 +162,9 @@ class NLISystem(object):
         self.probs = tf.nn.softmax(self.preds)
         tf.summary.histogram("probs", self.probs)
 
-        loss = tf.nn.softmax_cross_entropy_with_logits(logits=self.preds, labels=self.output_placeholder, name="loss")
+        softmax_loss = tf.nn.softmax_cross_entropy_with_logits(logits=self.preds, labels=self.output_placeholder, name="loss")
+        regularization_loss = Config.regularization_lambda * (tf.nn.l2_loss(W1) + tf.nn.l2_loss(b1) + tf.nn.l2_loss(W2) + tf.nn.l2_loss(b2) + tf.nn.l2_loss(W3) + tf.nn.l2_loss(b3))
+        loss = softmax_loss + regularization_loss
         self.mean_loss = tf.reduce_mean(loss)
 
     with tf.name_scope("Optimizer"):

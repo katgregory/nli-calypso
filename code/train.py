@@ -151,8 +151,6 @@ def main(_):
             for z, reg_lambda in enumerate(reg_lambda_range):
               results_grid[x, y, z] = run_model(lr, dropout_keep, reg_lambda)
 
-
-
 if __name__ == "__main__":
   tf.app.run()
 
