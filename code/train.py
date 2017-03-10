@@ -70,7 +70,7 @@ def convert_to_one_hot(label):
   print ('failed to convert: ' + str(label))
   return 5/0
 
-def load_dataset(tier, num_samples=None): # tier: 'test', 'train', 'dev'
+def load_dataset(tier, num_samples=None): # tier: 'train', 'dev', 'test'
   premises = []
   hypotheses = []
   goldlabels = []
@@ -96,7 +96,7 @@ def main(_):
 
     # Do what you need to load datasets from FLAGS.data_dir
     train_dataset = load_dataset('train', 10000)
-    test_dataset = load_dataset('train', 100)
+    test_dataset = load_dataset('dev', 100)
 
     # Define paths
     embed_path = FLAGS.embed_path or pjoin("data", "snli", "glove.trimmed.{}.npz".format(FLAGS.embedding_size))
