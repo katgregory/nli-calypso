@@ -105,7 +105,7 @@ def main(_):
     np.random.seed(244)
 
     # Do what you need to load datasets from FLAGS.data_dir
-    train_dataset = load_dataset('train', 10000)
+    train_dataset = load_dataset('train', 50000)
     test_dataset = load_dataset('dev') 
 
     # Define paths
