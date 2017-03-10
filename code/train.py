@@ -118,6 +118,10 @@ def main(_):
       vocab, rev_vocab = initialize_vocab(vocab_path)
 
       def run_model(lr, dropout_keep, reg_lambda):
+
+        # Reset every time. TODO: we should be using the same graph
+        tf.reset_default_graph()
+
         # Initalize the NLI System
         premise = Statement()
         hypothesis = Statement()
