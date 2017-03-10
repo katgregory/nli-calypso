@@ -226,6 +226,7 @@ class NLISystem(object):
     return mean_loss, probs
 
   def run_epoch(self, session, dataset, rev_vocab, train_dir, batch_size):
+    tic = time.time()
     # prog = Progbar(target=1 + int(len(dataset[0]) / batch_size))
     num_correct = 0
     num_batches = 0
@@ -243,6 +244,7 @@ class NLISystem(object):
       for i in xrange(len(probs)):
         if label_to_name(probs[i]) == label_to_name(goldlabels[i]):
           num_correct += 1
+    toc = time.time()
 
       # LOGGING CODE
       # if (i * batch_size) % 1000 == 0:
@@ -250,6 +252,7 @@ class NLISystem(object):
         # print("Loss: " + str(mean_loss))
     train_accuracy = num_correct / float(len(dataset[0]))
     epoch_mean_loss = total_mean_loss / float(num_batches)
+    print("Amount of time to run this epoch: " + str(toc - tic) + " secs")
     print("Training accuracy for this epoch: " + str(train_accuracy))
     print("Mean loss for this epoch: " + str(epoch_mean_loss))
     return train_accuracy, epoch_mean_loss

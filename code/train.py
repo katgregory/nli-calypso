@@ -153,14 +153,14 @@ def main(_):
       else:
         lr_range = np.array([10**lr_exp for lr_exp in range(-8, -2, 1)])
         dropout_range = np.arange(0.1, 1.1, 0.1) 
-        reg_lambda_range = np.array([10**lr_exp for lr_exp in range(-4, -2, 1)]) 
+        reg_lambda_range = np.array([10**lr_exp for lr_exp in range(-4, -1, 1)]) 
         # results_grid = np.empty(shape=[len(lr_range), len(dropout_range), len(reg_lambda_range), 6]) # TODO: HARDCODED 6
         results_map = {}
         best_train_accuracy = 0
         best_test_accuracy = 0
-        for x, lr in enumerate(lr_range):
-          for y, dropout_keep in enumerate(dropout_range):
-            for z, reg_lambda in enumerate(reg_lambda_range):
+        for reg_lambda in reg_lambda_range:
+          for dropout_keep in dropout_range:
+            for lr in lr_range:
               print("########################################################")
               print("\nRUNNING TRIAL: ", "\tlr:", lr, "\tdropout:", dropout_keep, "\treg_lambda:", reg_lambda, "\n")
               idx_tup = (lr, dropout_keep, reg_lambda)
