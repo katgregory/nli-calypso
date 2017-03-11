@@ -3,29 +3,18 @@ from __future__ import division
 from __future__ import print_function
 
 import time, logging, shutil, sys, re
-
+from nli import NLI
 import numpy as np
 from six.moves import xrange  # pylint: disable=redefined-builtin
 import tensorflow as tf
 from tensorflow.python.ops import variable_scope as vs
 from util import Progbar, minibatches, ConfusionMatrix
 
-xavier = tf.contrib.layers.xavier_initializer
 ph = tf.placeholder
 
 # from evaluate import exact_match_score, f1_score
 
 logging.basicConfig(level=logging.INFO)
-
-class Config:
-  ff_hidden_size = 100
-  hidden_size = 100
-  num_classes = 3
-  n_epochs = 10
-  logpath = './logs'
-  summarize = False
-  verbose = False
-  LBLS = ['entailment', 'neutral', 'contradiction']
 
 def get_optimizer(lr, opt="adam"):
   if opt == "adam":
@@ -48,108 +37,23 @@ def label_to_name(label):
     '2': 'contradiction'
   }[str(np.argmax(label))]
 
-"""
-Represent "Premise" or "Hypothesis" LSTM portion of model.
-"""
-class Statement(object):
-  """
-  Run inputs through LSTM and output hidden state.
-
-  :param inputs: Inputs as embeddings tensor
-
-  :return: A hidden state representing the statement
-
-  @inputs is of dimensions batch_size x sentence_size x embedding_size
-  return value is of dimensions batch_size x hidden_size
-  """
-  # def __init__(self):
-
-  def __call__(self, inputs):
-    # batch_size = tf.shape(inputs)[1]
-    # initial_state = self.cell.zero_state(batch_size, tf.float32)
-    # output, state = tf.nn.dynamic_rnn(self.cell, inputs, initial_state=initial_state, time_major=True)
-    # return state[-1]
-    # self.cell = tf.nn.rnn_cell.BasicLSTMCell(Config.hidden_size)
-
-    # temp: just use bag of words
-    return tf.reduce_mean(inputs, 1)
-
-
-class NLI(object):
-  @staticmethod
-  def merge_statements(embeddings, premise_ph, hypothesis_ph, reg_list):
-    with tf.name_scope("Embeddings"):
-      # output is batch_size x sentence_len x embedding_size
-      premise_embeddings = tf.nn.embedding_lookup(embeddings, premise_ph)
-      hypothesis_embeddings = tf.nn.embedding_lookup(embeddings, hypothesis_ph)
-
-    statement = Statement()
-
-    with tf.variable_scope("LSTM-premise", initializer=xavier()):
-      hp = statement(premise_embeddings)
-      tf.summary.histogram("hidden", hp)
-
-    with tf.variable_scope("LSTM-hypothesis", initializer=xavier()):
-      hh = statement(hypothesis_embeddings)
-      tf.summary.histogram("hidden", hh)
-
-    embedding_size = embeddings.get_shape().as_list()[1]
-
-    # weight hidden layers before merging
-    with tf.variable_scope("Hidden-Weights"):
-      wp = tf.get_variable("Wp", shape=(embedding_size, Config.hidden_size), initializer=xavier())
-      whp = tf.matmul(hp, wp)
-      tf.summary.histogram("whp", whp)
-
-      wh = tf.get_variable("Wh", shape=(embedding_size, Config.hidden_size), initializer=xavier())
-      whh = tf.matmul(hh, wh)
-      tf.summary.histogram("whh", whh)
-
-    return tf.concat(1, [whp, whh], name="merged")
-
-  @staticmethod
-  def feed_forward(merged, dropout_ph, reg_list):
-    with tf.variable_scope("FF"):
-      # r1 = tanh(merged W1 + b1)
-      with tf.variable_scope("FF-First-Layer"):
-        merged_size = merged.get_shape().as_list()[1]
-        W1 = tf.get_variable("W", shape=(merged_size, Config.ff_hidden_size), initializer=xavier())
-        b1 = tf.Variable(tf.zeros([Config.ff_hidden_size,]), name="b")
-        r1 = tf.nn.relu(tf.matmul(merged, W1) + b1, name="r")
-        r1_dropout = tf.nn.dropout(r1, dropout_ph)
-
-        tf.summary.histogram("W", W1)
-        tf.summary.histogram("b", b1)
-        tf.summary.histogram("r1", r1)
-
-      # r2 = tanh(r1 W2 + b2)
-      with tf.variable_scope("FF-Second-Layer"):
-        W2 = tf.get_variable("W", shape=(Config.ff_hidden_size, Config.ff_hidden_size), initializer=xavier())
-        b2 = tf.Variable(tf.zeros([Config.ff_hidden_size,]), name="b")
-        r2 = tf.nn.relu(tf.matmul(r1_dropout, W2) + b2, name="r")
-        r2_dropout = tf.nn.dropout(r2, dropout_ph)
-
-        tf.summary.histogram("W", W2)
-        tf.summary.histogram("b", b2)
-        tf.summary.histogram("r2", r2)
-
-      # r3 = tanh(r2 W3 + b3)
-      with tf.variable_scope("FF-Third-Layer"):
-        W3 = tf.get_variable("W", shape=(Config.ff_hidden_size, Config.num_classes), initializer=xavier())
-        b3 = tf.Variable(tf.zeros([Config.num_classes,]), name="b")
-        r3 = tf.nn.relu(tf.matmul(r2_dropout, W3) + b3, name="r")
-        preds = r3
-
-        tf.summary.histogram("W", W3)
-        tf.summary.histogram("b", b3)
-        tf.summary.histogram("preds", preds)
-
-      reg_list.extend((W1, W2, W3))
-      return preds
   
 class NLISystem(object):
-  def __init__(self, pretrained_embeddings, *args):
-    num_classes, lr, self.dropout_keep, reg_lambda = args
+  def __init__(self, pretrained_embeddings,
+               lr,
+               reg_lambda,
+               ff_hidden_size,
+               stmt_hidden_size,
+               num_classes,
+               dropout_keep,
+               tboard_path = None,
+               verbose = False):
+
+    # Vars that need to be used globally
+    self.tboard_path = tboard_path
+    self.verbose = verbose
+    self.dropout_keep = dropout_keep
+    self.LBLS = ['entailment', 'neutral', 'contradiction']
 
     # Sizes
     batch_size = None
@@ -163,9 +67,11 @@ class NLISystem(object):
     embeddings = tf.Variable(pretrained_embeddings, name="Embeddings", dtype=tf.float32)
 
     # Build neural net
-    reg_list = []               # List of variables to regularize
-    merged = NLI.merge_statements(embeddings, self.premise_ph, self.hypothesis_ph, reg_list)
-    preds = NLI.feed_forward(merged, self.dropout_ph, reg_list)
+    reg_list = []               # List of variables to regularize    
+    premise = NLI.process_stmt(embeddings, self.premise_ph, reg_list)
+    hypothesis = NLI.process_stmt(embeddings, self.hypothesis_ph, reg_list)
+    merged = NLI.merge_processed_stmts(premise, hypothesis, stmt_hidden_size, reg_list)
+    preds = NLI.feed_forward(merged, self.dropout_ph, ff_hidden_size, num_classes, reg_list)
 
     # Loss, optimization
     with tf.variable_scope("FF-Softmax"):        
@@ -215,7 +121,7 @@ class NLISystem(object):
       self.dropout_ph: self.dropout_keep
     }
 
-    if Config.summarize:
+    if self.tboard_path is not None:
       output_feed = [self.summary_op, self.train_op, self.loss, self.probs]
 
       summary, _, loss, probs = session.run(output_feed, input_feed)
@@ -237,28 +143,28 @@ class NLISystem(object):
     # prog = Progbar(target=1 + int(len(dataset[0]) / batch_size))
     num_correct = 0
     num_batches = 0
-    total_mean_loss = 0
+    total_loss = 0
     for i, batch in enumerate(minibatches(dataset, batch_size)):
-      if Config.verbose and (i % 10 == 0):
+      if self.verbose and (i % 10 == 0):
         sys.stdout.write(str(i) + "...")
         sys.stdout.flush()
       premises, hypotheses, goldlabels = batch
-      mean_loss, probs = self.optimize(session, rev_vocab, premises, hypotheses, goldlabels)
-      total_mean_loss += mean_loss
+      loss, probs = self.optimize(session, rev_vocab, premises, hypotheses, goldlabels)
+      total_loss += loss
       num_batches += 1
 
       # Record correctness of training predictions
-      for i in xrange(len(probs)):
-        if label_to_name(probs[i]) == label_to_name(goldlabels[i]):
-          num_correct += 1
+      correct_predictions = np.equal(np.argmax(probs, axis=1), np.argmax(goldlabels, axis=1))
+      num_correct = np.sum(correct_predictions)
+      
     toc = time.time()
 
       # LOGGING CODE
       # if (i * batch_size) % 1000 == 0:
         # print("Training Example: " + str(i * batch_size))
-        # print("Loss: " + str(mean_loss))
+        # print("Loss: " + str(loss))
     train_accuracy = num_correct / float(len(dataset[0]))
-    epoch_mean_loss = total_mean_loss / float(num_batches)
+    epoch_mean_loss = total_loss / float(num_batches)
     print("Amount of time to run this epoch: " + str(toc - tic) + " secs")
     print("Training accuracy for this epoch: " + str(train_accuracy))
     print("Mean loss for this epoch: " + str(epoch_mean_loss))
@@ -281,8 +187,8 @@ class NLISystem(object):
     logging.info("Number of params: %d (retreival took %f secs)" % (num_params, toc - tic))
 
     self.summary_op = tf.summary.merge_all()
-    if Config.summarize:
-      self.summary_writer = tf.summary.FileWriter('%s/%s' % (Config.logpath, time.time()), graph=session.graph)
+    if self.tboard_path is not None:
+      self.summary_writer = tf.summary.FileWriter('%s/%s' % (self.tboard_path, time.time()), graph=session.graph)
     losses = []
     best_epoch = (-1, 0)
     epoch = 1
@@ -360,31 +266,16 @@ class NLISystem(object):
       self.dropout_ph: 1
     }
 
-    # (OLDER VERSION - NOT BATCHED)
-    # input_feed = {
-    #   self.premise_placeholder: np.array([[int(x) for x in premise[0].split()]]).T,
-    #   self.hypothesis_placeholder: np.array([[int(x) for x in hypothesis[0].split()]]).T,
-    #   self.output_placeholder: goldlabel,
-    #   self.dropout_placeholder: 1
-    # }
-
     output_feed = [self.probs, self.loss]
-    probs, mean_loss = session.run(output_feed, input_feed)
+    probs, loss = session.run(output_feed, input_feed)
 
-    # if Config.verbose:
-    #   print('predicts:', label_to_name(output))
-    #   print('with probabilities: ', output)
-    #   if (np.argmax(goldlabel) != np.argmax(output)):
-    #     print('\t\t\t\t correct:', label_to_name(goldlabel))
- 
-    # return np.argmax(goldlabel), np.argmax(output), mean_loss
-    return probs, mean_loss
+    return probs, loss
 
   # TODO: Actually use the parameter batch_size
   def evaluate_prediction(self, session, batch_size, dataset):
     print("\nEVALUATING")
 
-    cm = ConfusionMatrix(labels=Config.LBLS)
+    cm = ConfusionMatrix(labels=self.LBLS)
     total_loss = 0
     total_correct = 0
     num_batches = 0
@@ -406,17 +297,3 @@ class NLISystem(object):
     print("Token-level confusion matrix:\n" + cm.as_table())
     print("Token-level scores:\n" + cm.summary())
     return (accuracy, average_loss, cm)
-
-
-
-    # with tf.name_scope("Gradients"):
-    #   # summarize out gradients of loss w.r.t all trainable vars
-    #   # trainable_vars = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES)
-    #   trainable_vars = [W1, W2, W3, b1, b2, b3, r1, r2, self.preds, merged, self.loss] # manually specify for clarity
-    #   gradients = tf.gradients(self.mean_loss, trainable_vars)
-
-    #   for i, gradient in enumerate(gradients):
-    #     variable = trainable_vars[i]
-    #     variable_name = re.sub(r':', "_", variable.name)
-    #     tf.summary.histogram(variable_name + "/loss_gradients", gradient)
-    #     tf.summary.scalar(variable_name + "/loss_gradient_norms", tf.sqrt(tf.reduce_sum(tf.square(gradient))))

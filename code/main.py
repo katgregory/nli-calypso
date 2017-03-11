@@ -8,7 +8,7 @@ import json
 
 import tensorflow as tf
 
-from nli_model import Statement, NLISystem
+from nli_model import NLISystem
 from os.path import join as pjoin
 
 import numpy as np
@@ -26,7 +26,8 @@ tf.app.flags.DEFINE_integer("batch_size", 64, "Batch size to use during training
 tf.app.flags.DEFINE_integer("epochs", 10, "Number of epochs to train.")
 
 tf.app.flags.DEFINE_float("max_gradient_norm", 10.0, "Clip gradients to this norm.")
-tf.app.flags.DEFINE_integer("state_size", 200, "Size of each model layer.")
+tf.app.flags.DEFINE_integer("ff_hidden_size", 100, "Size of each model layer.")
+tf.app.flags.DEFINE_integer("stmt_hidden_size", 100, "Size of each model layer.")
 tf.app.flags.DEFINE_integer("output_size", 3, "The output size of your model.")
 tf.app.flags.DEFINE_integer("embedding_size", 300, "Size of the pretrained vocabulary.")
 tf.app.flags.DEFINE_string("data_dir", "data/snli", "snli directory (default ./data/snli)")
@@ -104,8 +105,14 @@ def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dro
   # Reset every time. TODO: we should be using the same graph
   tf.reset_default_graph()
 
-  # Initalize the NLI System
-  nli = NLISystem(embeddings, FLAGS.num_classes, lr, dropout_keep, reg_lambda)
+  nli = NLISystem(
+    pretrained_embeddings = embeddings,
+    lr = lr,
+    reg_lambda = reg_lambda,
+    ff_hidden_size = FLAGS.ff_hidden_size,
+    stmt_hidden_size = FLAGS.stmt_hidden_size,
+    num_classes = FLAGS.num_classes,
+    dropout_keep = dropout_keep)
 
   if not os.path.exists(FLAGS.log_dir):
     os.makedirs(FLAGS.log_dir)
@@ -124,9 +131,9 @@ def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dro
     return (epoch_number, train_accuracy, train_loss, test_accuracy, avg_test_loss, cm)
 
 def validate_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab):
-  lr_range = np.array([10**lr_exp for lr_exp in range(-8, -2, 1)])
-  dropout_range = np.arange(0.1, 1.1, 0.1) 
-  reg_lambda_range = np.array([10**lr_exp for lr_exp in range(-4, -1, 1)]) 
+  lr_range = np.array([10**lr_exp for lr_exp in range(-8, -1, 1)])
+  dropout_range = np.arange(0.5, 1.1, 0.1) 
+  reg_lambda_range = np.array([10**lr_exp for lr_exp in range(-4, 1, 1)]) 
 
   results_map = {}
   best_train_accuracy = 0
