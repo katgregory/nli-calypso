@@ -3,14 +3,13 @@ from __future__ import division
 from __future__ import print_function
 
 import time, logging, shutil, sys, re
-
+from nli import NLI
 import numpy as np
 from six.moves import xrange  # pylint: disable=redefined-builtin
 import tensorflow as tf
 from tensorflow.python.ops import variable_scope as vs
 from util import Progbar, minibatches, ConfusionMatrix
 
-xavier = tf.contrib.layers.xavier_initializer
 ph = tf.placeholder
 
 # from evaluate import exact_match_score, f1_score
@@ -48,104 +47,6 @@ def label_to_name(label):
     '2': 'contradiction'
   }[str(np.argmax(label))]
 
-"""
-Represent "Premise" or "Hypothesis" LSTM portion of model.
-"""
-class Statement(object):
-  """
-  Run inputs through LSTM and output hidden state.
-
-  :param inputs: Inputs as embeddings tensor
-
-  :return: A hidden state representing the statement
-
-  @inputs is of dimensions batch_size x sentence_size x embedding_size
-  return value is of dimensions batch_size x hidden_size
-  """
-  # def __init__(self):
-
-  def __call__(self, inputs):
-    # batch_size = tf.shape(inputs)[1]
-    # initial_state = self.cell.zero_state(batch_size, tf.float32)
-    # output, state = tf.nn.dynamic_rnn(self.cell, inputs, initial_state=initial_state, time_major=True)
-    # return state[-1]
-    # self.cell = tf.nn.rnn_cell.BasicLSTMCell(Config.hidden_size)
-
-    # temp: just use bag of words
-    return tf.reduce_mean(inputs, 1)
-
-
-class NLI(object):
-  @staticmethod
-  def merge_statements(embeddings, premise_ph, hypothesis_ph, reg_list):
-    with tf.name_scope("Embeddings"):
-      # output is batch_size x sentence_len x embedding_size
-      premise_embeddings = tf.nn.embedding_lookup(embeddings, premise_ph)
-      hypothesis_embeddings = tf.nn.embedding_lookup(embeddings, hypothesis_ph)
-
-    statement = Statement()
-
-    with tf.variable_scope("LSTM-premise", initializer=xavier()):
-      hp = statement(premise_embeddings)
-      tf.summary.histogram("hidden", hp)
-
-    with tf.variable_scope("LSTM-hypothesis", initializer=xavier()):
-      hh = statement(hypothesis_embeddings)
-      tf.summary.histogram("hidden", hh)
-
-    embedding_size = embeddings.get_shape().as_list()[1]
-
-    # weight hidden layers before merging
-    with tf.variable_scope("Hidden-Weights"):
-      wp = tf.get_variable("Wp", shape=(embedding_size, Config.hidden_size), initializer=xavier())
-      whp = tf.matmul(hp, wp)
-      tf.summary.histogram("whp", whp)
-
-      wh = tf.get_variable("Wh", shape=(embedding_size, Config.hidden_size), initializer=xavier())
-      whh = tf.matmul(hh, wh)
-      tf.summary.histogram("whh", whh)
-
-    return tf.concat(1, [whp, whh], name="merged")
-
-  @staticmethod
-  def feed_forward(merged, dropout_ph, reg_list):
-    with tf.variable_scope("FF"):
-      # r1 = tanh(merged W1 + b1)
-      with tf.variable_scope("FF-First-Layer"):
-        merged_size = merged.get_shape().as_list()[1]
-        W1 = tf.get_variable("W", shape=(merged_size, Config.ff_hidden_size), initializer=xavier())
-        b1 = tf.Variable(tf.zeros([Config.ff_hidden_size,]), name="b")
-        r1 = tf.nn.relu(tf.matmul(merged, W1) + b1, name="r")
-        r1_dropout = tf.nn.dropout(r1, dropout_ph)
-
-        tf.summary.histogram("W", W1)
-        tf.summary.histogram("b", b1)
-        tf.summary.histogram("r1", r1)
-
-      # r2 = tanh(r1 W2 + b2)
-      with tf.variable_scope("FF-Second-Layer"):
-        W2 = tf.get_variable("W", shape=(Config.ff_hidden_size, Config.ff_hidden_size), initializer=xavier())
-        b2 = tf.Variable(tf.zeros([Config.ff_hidden_size,]), name="b")
-        r2 = tf.nn.relu(tf.matmul(r1_dropout, W2) + b2, name="r")
-        r2_dropout = tf.nn.dropout(r2, dropout_ph)
-
-        tf.summary.histogram("W", W2)
-        tf.summary.histogram("b", b2)
-        tf.summary.histogram("r2", r2)
-
-      # r3 = tanh(r2 W3 + b3)
-      with tf.variable_scope("FF-Third-Layer"):
-        W3 = tf.get_variable("W", shape=(Config.ff_hidden_size, Config.num_classes), initializer=xavier())
-        b3 = tf.Variable(tf.zeros([Config.num_classes,]), name="b")
-        r3 = tf.nn.relu(tf.matmul(r2_dropout, W3) + b3, name="r")
-        preds = r3
-
-        tf.summary.histogram("W", W3)
-        tf.summary.histogram("b", b3)
-        tf.summary.histogram("preds", preds)
-
-      reg_list.extend((W1, W2, W3))
-      return preds
   
 class NLISystem(object):
   def __init__(self, pretrained_embeddings, *args):
@@ -163,9 +64,11 @@ class NLISystem(object):
     embeddings = tf.Variable(pretrained_embeddings, name="Embeddings", dtype=tf.float32)
 
     # Build neural net
-    reg_list = []               # List of variables to regularize
-    merged = NLI.merge_statements(embeddings, self.premise_ph, self.hypothesis_ph, reg_list)
-    preds = NLI.feed_forward(merged, self.dropout_ph, reg_list)
+    reg_list = []               # List of variables to regularize    
+    premise = NLI.process_stmt(embeddings, self.premise_ph, reg_list)
+    hypothesis = NLI.process_stmt(embeddings, self.hypothesis_ph, reg_list)
+    merged = NLI.merge_processed_stmts(premise, hypothesis, Config.hidden_size, reg_list)
+    preds = NLI.feed_forward(merged, self.dropout_ph, Config.ff_hidden_size, num_classes, reg_list)
 
     # Loss, optimization
     with tf.variable_scope("FF-Softmax"):        

@@ -8,7 +8,7 @@ import json
 
 import tensorflow as tf
 
-from nli_model import Statement, NLISystem
+from nli_model import NLISystem
 from os.path import join as pjoin
 
 import numpy as np
