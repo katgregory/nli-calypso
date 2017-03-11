@@ -105,9 +105,7 @@ def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dro
   tf.reset_default_graph()
 
   # Initalize the NLI System
-  premise = Statement()
-  hypothesis = Statement()
-  nli = NLISystem(embeddings, premise, hypothesis, len(vocab), FLAGS.embedding_size, FLAGS.num_classes, lr, dropout_keep, reg_lambda)
+  nli = NLISystem(embeddings, FLAGS.num_classes, lr, dropout_keep, reg_lambda)
 
   if not os.path.exists(FLAGS.log_dir):
     os.makedirs(FLAGS.log_dir)
