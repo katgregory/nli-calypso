@@ -46,14 +46,14 @@ class NLISystem(object):
                stmt_hidden_size,
                num_classes,
                dropout_keep,
-               tboard_path = None,
-               verbose = False,
-               LBLS = ['entailment', 'neutral', 'contradiction']):
+               tboard_path = "./logs",
+               verbose = False):
 
     # Vars that need to be used globally
     self.tboard_path = tboard_path
     self.verbose = verbose
     self.dropout_keep = dropout_keep
+    self.LBLS = ['entailment', 'neutral', 'contradiction']
 
     # Sizes
     batch_size = None
