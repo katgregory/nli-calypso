@@ -368,7 +368,7 @@ class NLISystem(object):
     #   self.dropout_placeholder: 1
     # }
 
-    output_feed = [self.probs, self.mean_loss]
+    output_feed = [self.probs, self.loss]
     probs, mean_loss = session.run(output_feed, input_feed)
 
     # if Config.verbose:
