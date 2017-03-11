@@ -46,7 +46,7 @@ class NLISystem(object):
                stmt_hidden_size,
                num_classes,
                dropout_keep,
-               tboard_path = "./logs",
+               tboard_path = None,
                verbose = False):
 
     # Vars that need to be used globally
