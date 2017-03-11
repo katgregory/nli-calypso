@@ -4,9 +4,11 @@ from matplotlib import cm
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
+import matplotlib.ticker as mticker
 
 
 file_path = 'gpu-runs/run2/grid.p'
+output_file_name = 'search'
 
 results_map = pickle.load(open(file_path, 'rb'))
 
@@ -40,24 +42,40 @@ print("Best training loss: " + str(best_train_loss[1]) + " achieved by: \n" + pr
 print("Best testing accuracy: " + str(best_test_accuracy[1]) + " achieved by: \n" + print_tuple(best_test_accuracy[0]) + "\n") 
 print("Best testing loss: " + str(best_test_loss[1]) + " achieved by: \n" + print_tuple(best_test_loss[0]) + "\n") 
 
-
-fig = plt.figure()
-ax = fig.gca(projection='3d')
+lr = []
+dropout_keep = []
+reg_lambda = []
+test_accuracy = []
 
 keys = results_map.keys()
-x = []
-y = []
-z = []
 for key in keys:
-  if key[2] == 0.01:
-    x.append(key[0])
-    y.append(key[1])
-    z.append(results_map[key][3])
+  lr.append(key[0])
+  dropout_keep.append(key[1])
+  reg_lambda.append(key[2])
+  test_accuracy.append(results_map[key][3])
 
-x, y = np.meshgrid(np.array(x), np.array(y))
+def log_tick_formatter(val, pos=None):
+    return "{:.2e}".format(10**val)
 
-surf = ax.plot_surface(x, y, z, cmap=cm.coolwarm, linewidth=0, antialiased=False)
-ax.set_zlim(0, 1)
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+sp = ax.scatter(np.log10(lr), dropout_keep, test_accuracy, c=reg_lambda, cmap=cm.coolwarm)
 
-fig.colorbar(surf, shrink=0.5, aspect=5)
+ax.set_xlabel('lr')
+# lr is on a log scale
+ax.xaxis.set_major_formatter(mticker.FuncFormatter(log_tick_formatter))
+ax.set_ylabel('dropout_keep')
+ax.set_zlabel('test_accuracy')
+# Color is reg_lambda
+fig.colorbar(sp, shrink=0.5, aspect=5)
+
+plt.title("Hyperparameter Grid Search")
+plt.savefig('./data/hyperparams/' + output_file_name + '.png')
 plt.show()
+
+# ax = fig.gca(projection='3d')
+# x, y = np.meshgrid(np.array(x), np.array(y))
+# surf = ax.plot_surface(x, y, z, cmap=cm.coolwarm, linewidth=0, antialiased=False)
+# ax.set_zlim(0, 1)
+# fig.colorbar(surf, shrink=0.5, aspect=5)
+# plt.show()
