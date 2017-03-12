@@ -97,7 +97,7 @@ def load_dataset(tier, num_samples=-1): # tier: 'train', 'dev', 'test'
       hypotheses.append(map(int, hypothesis_file.readline().strip().split()))
       goldlabels.append(convert_to_one_hot(goldlabel_file.readline().strip()))
 
-      return (premises, hypotheses, goldlabels)
+    return (premises, hypotheses, goldlabels)
 
 def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dropout_keep, reg_lambda):
 

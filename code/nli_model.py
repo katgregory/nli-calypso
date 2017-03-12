@@ -122,7 +122,7 @@ class NLISystem(object):
     premise_arr = np.array(self.pad_sequences(premise, premise_max))
     hypothesis_arr = np.array(self.pad_sequences(hypothesis, hypothesis_max))
 
-    batch_size = 1
+    batch_size = 64             # SUPER TEMPORARY
     prem_mask = np.ones((batch_size, premise_max))
     hypo_mask = np.ones((batch_size, hypothesis_max))
 
@@ -267,7 +267,7 @@ class NLISystem(object):
     premise_arr = np.array(self.pad_sequences(premise, premise_max))
     hypothesis_arr = np.array(self.pad_sequences(hypothesis, hypothesis_max))
 
-    batch_size = 1
+    batch_size = 64             # SUPER TEMPORARY
     prem_mask = np.ones((batch_size, premise_max))
     hypo_mask = np.ones((batch_size, hypothesis_max))
 
