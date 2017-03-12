@@ -16,6 +16,11 @@ class NLI(object):
       tf.summary.histogram("hidden", hidden)
       return hidden
 
+  @staticmethod
+  def process_stmt_LSTM_cell(hidden_size):
+    with tf.name_scope("Process_Stmt_LSTM_cell"):
+      return tf.nn.rnn_cell.BasicLSTMCell(hidden_size)
+
   """
   Run inputs through LSTM and output hidden state. Assumes that padding is with zeros.
 
@@ -28,7 +33,7 @@ class NLI(object):
   return value is of dimensions batch_size x hidden_size
   """
   @staticmethod
-  def process_stmt_LSTM(embeddings, statement, hidden_size, reg_list):
+  def process_stmt_LSTM(embeddings, statement, cell, reg_list):
     with tf.name_scope("Process_Stmt_LSTM"):
       # batch_size x sentence_size x embedding_size
       embeddings = tf.nn.embedding_lookup(embeddings, statement)
@@ -37,8 +42,6 @@ class NLI(object):
       batch_size = tf.shape(statement)[0]
       sen_size = tf.shape(statement)[1]
 
-      # run LSTM
-      cell = tf.nn.rnn_cell.BasicLSTMCell(hidden_size)
       initial_state = cell.zero_state(batch_size, tf.float32)
       statement_lens = tf.reduce_sum(tf.sign(statement), axis=1)
       # batch_size x sentence_size x hidden_size
