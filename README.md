@@ -5,7 +5,7 @@ CS224n final project
 INSTRUCTIONS FOR RUNNING MAIN.py
 
 ############ SINGLE RUN OVER VALIDATION OR TEST SET #################
-python code/main.py run [--num_train] [--dev or --test] [--num_dev or --num_test] [--lr] [--dropout_keep] [--reg_lambda]
+python code/main.py [--num_train] [--dev or --test] [--num_dev or --num_test] [--lr] [--dropout_keep] [--reg_lambda]
 
 ############# HYPERPARAMETER VALIDATION ##########
 python code/main.py validation [--num_train] [--num_dev]
