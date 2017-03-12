@@ -154,8 +154,8 @@ class NLISystem(object):
 
       # Record correctness of training predictions
       correct_predictions = np.equal(np.argmax(probs, axis=1), np.argmax(goldlabels, axis=1))
-      num_correct = np.sum(correct_predictions)
-
+      num_correct += np.sum(correct_predictions)
+      
     toc = time.time()
 
       # LOGGING CODE
