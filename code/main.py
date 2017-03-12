@@ -17,10 +17,19 @@ import cPickle as pickle
 
 logging.basicConfig(level=logging.INFO)
 
+# COMMAND LINE ARGUMENTS
+tf.app.flags.DEFINE_bool("validation", False, "")
+tf.app.flags.DEFINE_bool("dev", False, "")
+tf.app.flags.DEFINE_bool("test", False, "")
+tf.app.flags.DEFINE_integer("num_train", 10000, "")
+tf.app.flags.DEFINE_integer("num_dev", 1000, "")
+tf.app.flags.DEFINE_integer("num_test", 1000, "")
+
 # HYPERPARAMETERS
 tf.app.flags.DEFINE_float("lr", 0.0001, "Learning rate.")
 tf.app.flags.DEFINE_float("dropout_keep", 0.8, "Keep_prob")
 tf.app.flags.DEFINE_float("reg_lambda", 0.01, "Regularization")
+
 
 tf.app.flags.DEFINE_integer("batch_size", 64, "Batch size to use during training.")
 tf.app.flags.DEFINE_integer("epochs", 10, "Number of epochs to train.")
@@ -160,55 +169,37 @@ def validate_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab):
           print("\t\tNew best TEST")
         print("########################################################")
 
-def main(purpose, num_train, num_eval, **hyperparams):
+def main(_):
 
-    # SET RANDOM SEED
-    np.random.seed(244)
+  if not FLAGS.validation:
+    assert((FLAGS.dev and not FLAGS.test) or (FLAGS.test and not FLAGS.dev)), "When not validating, must set exaclty one of --dev or --test flag to specify evaluation dataset."
 
-    # Load the two pertinent datasets
-    train_dataset = load_dataset('train', num_train)
-    if purpose == 'test':
-      eval_dataset = load_dataset('test', num_eval)
-    else:
-      eval_dataset = load_dataset('dev', num_eval)
+  # SET RANDOM SEED
+  np.random.seed(244)
 
-    # Define paths
-    embed_path = FLAGS.embed_path or pjoin("data", "snli", "glove.trimmed.{}.npz".format(FLAGS.embedding_size))
-    vocab_path = FLAGS.vocab_path or pjoin(FLAGS.data_dir, "vocab.dat")
+  # Load the two pertinent datasets
+  train_dataset = load_dataset('train', FLAGS.num_train)
+  if FLAGS.test:
+    eval_dataset = load_dataset('test', FLAGS.num_test)
+  else:
+    eval_dataset = load_dataset('dev', FLAGS.num_dev)
 
-    # Get vocab and embeddings
-    with np.load(embed_path) as embeddings_dict:
-      embeddings = embeddings_dict['glove']
-      vocab, rev_vocab = initialize_vocab(vocab_path)
+  # Define paths
+  embed_path = FLAGS.embed_path or pjoin("data", "snli", "glove.trimmed.{}.npz".format(FLAGS.embedding_size))
+  vocab_path = FLAGS.vocab_path or pjoin(FLAGS.data_dir, "vocab.dat")
 
-      if purpose == 'dev' or purpose == 'test':
-        run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, hyperparams.get('lr'), 
-                                                                 hyperparams.get('dropout_keep'), 
-                                                                 hyperparams.get('reg_lambda')) 
-      else: # purpose = 'validate'
-        validate_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab)
+  # Get vocab and embeddings
+  with np.load(embed_path) as embeddings_dict:
+    embeddings = embeddings_dict['glove']
+    vocab, rev_vocab = initialize_vocab(vocab_path)
+
+    if not FLAGS.validation:
+      run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, FLAGS.lr, FLAGS.dropout_keep, FLAGS.reg_lambda)
+    else: # purpose = 'validate'
+      validate_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab)
 
 ################### ARGUMENT PARSER ##########################################
-parser = argparse.ArgumentParser()
-parser.add_argument('command', choices=['run', 'validation'])
-parser.add_argument('--num_train', default=10000)
-parser.add_argument('--dev', action='store_true')
-parser.add_argument('--num_dev', default=1000)
-parser.add_argument('--test', action='store_true')
-parser.add_argument('--num_test', default=1000)
-parser.add_argument('--lr', default=FLAGS.lr)
-parser.add_argument('--dropout_keep', default=FLAGS.dropout_keep)
-parser.add_argument('--reg_lambda', default=FLAGS.reg_lambda)
-args = parser.parse_args()
-if args.command == 'run':
-  if (args.dev and args.test) or (not args.dev and not args.test):
-    parser.error('Must set exactly one of: --dev or --test')
+
 
 if __name__ == "__main__":
-  if args.command == 'run' and args.dev:
-    main('dev', int(args.num_train), int(args.num_dev), lr=float(args.lr), dropout_keep=float(args.dropout_keep), reg_lambda=float(args.reg_lambda))
-  elif args.command == 'run' and args.test:
-    main('test', int(args.num_train), int(args.num_test), lr=float(args.lr), dropout_keep=float(args.dropout_keep), reg_lambda=float(args.reg_lambda))
-  elif args.command == 'validation':
-    main('validate', int(args.num_train), int(args.num_dev))
-  assert("Somehow flags are mismatched")
+  tf.app.run()
