@@ -1,12 +1,7 @@
 TODO
-- Set up LSTMs
-- Padding / Masking?
-- Paramter tuning <==
-- Checkpointing
+- Paramter tuning for LSTMs
+- Stack LSTMs?
 - Attention model
-- Run epochs to convergence <== (DONE)
-- Batch sizes for validation <== (DONE)
-- Set the random seed <== ?
 
 DIFFERENCES FROM LITERATURE
 - We use Adam, not Adadelta. Slower but better accuracy.
@@ -23,6 +18,12 @@ DONE
 - Actually run on dev set
 - Dropout
 - Regularization
+- Run epochs to convergence
+- Batch sizes for validation
+- Set the random seed
+- Set up LSTMs
+- Set up BiLSTMs
+- Pad/Mask LSTMs
 
 
 BEST HYPERPARAMETERS FOR:
