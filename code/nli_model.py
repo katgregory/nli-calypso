@@ -44,6 +44,7 @@ class NLISystem(object):
                reg_lambda,
                ff_hidden_size,
                stmt_hidden_size,
+               lstm_hidden_size,
                num_classes,
                dropout_keep,
                tboard_path = None,
@@ -68,8 +69,8 @@ class NLISystem(object):
 
     # Build neural net
     reg_list = []               # List of variables to regularize    
-    premise = NLI.process_stmt(embeddings, self.premise_ph, reg_list)
-    hypothesis = NLI.process_stmt(embeddings, self.hypothesis_ph, reg_list)
+    premise = NLI.process_stmt(embeddings, self.premise_ph, reg_list, lstm_hidden_size)
+    hypothesis = NLI.process_stmt(embeddings, self.hypothesis_ph, reg_list, lstm_hidden_size)
     merged = NLI.merge_processed_stmts(premise, hypothesis, stmt_hidden_size, reg_list)
     preds = NLI.feed_forward(merged, self.dropout_ph, ff_hidden_size, num_classes, reg_list)
 

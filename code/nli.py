@@ -14,19 +14,40 @@ class NLI(object):
   return value is of dimensions batch_size x hidden_size
   """
   @staticmethod
-  def process_stmt(embeddings, statement, reg_list):
-    # batch_size = tf.shape(inputs)[1]
-    # initial_state = self.cell.zero_state(batch_size, tf.float32)
-    # output, state = tf.nn.dynamic_rnn(self.cell, inputs, initial_state=initial_state, time_major=True)
-    # return state[-1]
-    # self.cell = tf.nn.rnn_cell.BasicLSTMCell(Config.hidden_size)
+  def process_stmt(embeddings, statement, hidden_size, reg_list, bow=False):
 
-    # temp: just use bag of words
-    with tf.name_scope("Embeddings"):
-      embeddings = tf.nn.embedding_lookup(embeddings, statement)
-      hidden =  tf.reduce_mean(embeddings, 1)
-      tf.summary.histogram("hidden", hidden)
-      return hidden
+      with tf.name_scope("Embeddings"):
+        embeddings = tf.nn.embedding_lookup(embeddings, statement)
+        # If using bag of words, simply average embeddings
+        if (bow):
+          hidden =  tf.reduce_mean(embeddings, 1)
+          tf.summary.histogram("hidden", hidden)
+          return hidden
+      return embeddings
+      # If using LSTMs, continue:
+      with tf.name_scope("LSTM"):
+        batch_size = 1 #` Until we implement padding & masking, at which point will use tf.shape(inputs)[1]
+        cell = tf.nn.rnn_cell.BasicLSTMCell(hidden_size)
+        initial_state = cell.zero_state(batch_size, tf.float32)
+        output, states = tf.nn.dynamic_rnn(cell, embeddings, initial_state=initial_state, time_major=True)
+        return states[-1]
+
+# Scratch work:
+  #   lstm = tf.contrib.rnn.BasicLSTMCell(lstm_size, )
+  #   stacked_lstm = tf.contrib.rnn.MultiRNNCell([lstm] * number_of_layers,
+  #     state_is_tuple=False)
+
+  # initial_state = state = stacked_lstm.zero_state(batch_size, tf.float32)
+  # for i in range(num_steps):
+  #     # The value of state is updated after processing each batch of words.
+  #     output, state = stacked_lstm(words[:, i], state)
+
+  #   # The rest of the code.
+  #   # ...
+
+  # final_state = state
+
+
 
   @staticmethod
   def merge_processed_stmts(stmt1, stmt2, hidden_size, reg_list):

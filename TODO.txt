@@ -1,12 +1,16 @@
 TODO
-- Set up LSTMs
-- Padding / Masking?
-- Paramter tuning <==
-- Checkpointing
-- Attention model
+- Train accuracy <== (DONE)
+- Actually run on dev set <== (DONE)
+- Dropout <== (DONE)
+- Regularization <== (DONE)
 - Run epochs to convergence <== (DONE)
 - Batch sizes for validation <== (DONE)
 - Set the random seed <== (DONE)
+- Paramter tuning <==
+- Set up LSTMs
+- Batching with LSTMs: Padding + Masking
+- Add attention
+- Checkpointing
 
 DIFFERENCES FROM LITERATURE
 - We use Adam, not Adadelta. Slower but better accuracy.
@@ -17,9 +21,3 @@ VALIDATION PARAMETERS
 - LR
 - tanh vs relu
 - Regularization lambda
-
-DONE
-- Train accuracy
-- Actually run on dev set
-- Dropout
-- Regularization
