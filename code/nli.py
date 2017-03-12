@@ -43,7 +43,7 @@ class NLI(object):
                                               sequence_length=stmt_lens,
                                               initial_state=initial_state)
       last_rnn_output = tf.gather_nd(rnn_outputs,
-                                     tf.pack([tf.range(batch_size), statement_lens-1], axis=1))
+                                     tf.pack([tf.range(batch_size), stmt_lens-1], axis=1))
     return last_rnn_output
 
   """
@@ -68,12 +68,13 @@ class NLI(object):
       initial_state_fw = cell_fw.zero_state(batch_size, tf.float32)
       initial_state_bw = cell_bw.zero_state(batch_size, tf.float32)
 
-      rnn_outputs, fin_state_fw, fin_state_bw = tf.nn.bidirectional_rnn(cell_fw, cell_bw, statement,
+      rnn_outputs, fin_state = tf.nn.bidirectional_dynamic_rnn(cell_fw, cell_bw, statement,
                                               sequence_length=stmt_lens,
                                               initial_state_fw=initial_state_fw,
                                               initial_state_bw=initial_state_bw)
+      rnn_outputs = tf.concat(2, rnn_outputs)
       last_rnn_output = tf.gather_nd(rnn_outputs,
-                                     tf.pack([tf.range(batch_size), statement_lens-1], axis=1))
+                                     tf.pack([tf.range(batch_size), stmt_lens-1], axis=1))
     return last_rnn_output
 
   @staticmethod
