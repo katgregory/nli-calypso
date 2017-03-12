@@ -71,10 +71,17 @@ class NLISystem(object):
     reg_list = []               # List of variables to regularize
 
     lstm_cell = NLI.process_stmt_LSTM_cell(lstm_hidden_size)
+
+    def process_stmt(stmt):
+      stmt_embed = tf.nn.embedding_lookup(embeddings, stmt)
+      stmt_lens = tf.reduce_sum(tf.sign(stmt), axis=1)
+      return NLI.process_stmt_LSTM(stmt_embed, stmt_lens, lstm_cell, reg_list)
+
     with tf.variable_scope("Process-Premise"):
-      premise = NLI.process_stmt_LSTM(embeddings, self.premise_ph, lstm_cell, reg_list)
+      premise = process_stmt(self.premise_ph)
     with tf.variable_scope("Process-Hypothesis"):
-      hypothesis = NLI.process_stmt_LSTM(embeddings, self.hypothesis_ph, lstm_cell, reg_list)
+      hypothesis = process_stmt(self.hypothesis_ph)
+
     merged = NLI.merge_processed_stmts(premise, hypothesis, stmt_hidden_size, reg_list)
     preds = NLI.feed_forward(merged, self.dropout_ph, ff_hidden_size, num_classes, reg_list)
 

@@ -4,15 +4,13 @@ xavier = tf.contrib.layers.xavier_initializer
 
 class NLI(object):
   """
-  @statement is of dimensions batch_size x sentence_size
+  @statement is of dimensions batch_size x sentence_size x embedding_size
   """
   # batch_size x sentence_size x embedding_size
-  def process_stmt_bow(embeddings, statement, hidden_size, reg_list):
+  def process_stmt_bow(statement, hidden_size, reg_list):
     with tf.name_scope("Process_Stmt_BOW"):
-      # batch_size x sentence_size x embedding_size
-      embeddings = tf.nn.embedding_lookup(embeddings, statement)
       # batch_size x embedding_size
-      hidden = tf.reduce_mean(embeddings, 1)
+      hidden = tf.reduce_mean(statement, 1)
       tf.summary.histogram("hidden", hidden)
       return hidden
 
@@ -28,24 +26,21 @@ class NLI(object):
 
   :return: A hidden state representing the statement
 
-  @statement is of dimensions batch_size x sentence_size
+  @statement is of dimensions batch_size x sentence_size x embedding_size
   @mask is of dimensions batch_size x sentence_size
   return value is of dimensions batch_size x hidden_size
   """
   @staticmethod
-  def process_stmt_LSTM(embeddings, statement, cell, reg_list):
+  def process_stmt_LSTM(statement, statement_lens, cell, reg_list):
     with tf.name_scope("Process_Stmt_LSTM"):
-      # batch_size x sentence_size x embedding_size
-      embeddings = tf.nn.embedding_lookup(embeddings, statement)
-
       # dimensions
       batch_size = tf.shape(statement)[0]
       sen_size = tf.shape(statement)[1]
 
       initial_state = cell.zero_state(batch_size, tf.float32)
-      statement_lens = tf.reduce_sum(tf.sign(statement), axis=1)
+
       # batch_size x sentence_size x hidden_size
-      rnn_outputs, fin_state = tf.nn.dynamic_rnn(cell, embeddings,
+      rnn_outputs, fin_state = tf.nn.dynamic_rnn(cell, statement,
                                               sequence_length=statement_lens,
                                               initial_state=initial_state)
       last_rnn_output = tf.gather_nd(rnn_outputs,
