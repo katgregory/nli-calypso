@@ -78,26 +78,24 @@ def convert_to_one_hot(label):
   print ('failed to convert: ' + str(label))
   return 5/0
 
+# Read entire file if num_samples is -1
 def load_dataset(tier, num_samples=-1): # tier: 'train', 'dev', 'test'
   premises = []
   hypotheses = []
   goldlabels = []
   with open(pjoin(FLAGS.data_dir, tier + '.ids.premise')) as premise_file, \
-      open(pjoin(FLAGS.data_dir, tier + '.ids.hypothesis')) as hypothesis_file, \
-      open(pjoin(FLAGS.data_dir, tier + '.goldlabel')) as goldlabel_file:
+       open(pjoin(FLAGS.data_dir, tier + '.ids.hypothesis')) as hypothesis_file, \
+       open(pjoin(FLAGS.data_dir, tier + '.goldlabel')) as goldlabel_file:
 
-      if num_samples >= 0:
-        for i in xrange(num_samples):
-          premises.append(premise_file.readline().strip())
-          hypotheses.append(hypothesis_file.readline().strip())
-          goldlabels.append(convert_to_one_hot(goldlabel_file.readline().strip()))
-      else:
-        for line in premise_file:  
-          premises.append(line.strip()) 
-        for line in hypothesis_file:
-          hypotheses.append(line.strip())
-        for line in goldlabel_file:
-          goldlabels.append(convert_to_one_hot(line.strip()))
+    # assumes that premise, hypothesis, goldlabel all have same # of lines
+    for i, premise_line in enumerate(premise_file):
+      if i == num_samples: break
+
+      # line as list of int indices
+      premises.append(map(int, premise_line.strip().split()))
+      hypotheses.append(map(int, hypothesis_file.readline().strip().split()))
+      goldlabels.append(convert_to_one_hot(goldlabel_file.readline().strip()))
+
       return (premises, hypotheses, goldlabels)
 
 def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dropout_keep, reg_lambda):
