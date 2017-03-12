@@ -29,8 +29,7 @@ class NLI(object):
 
       # If using LSTMs, continue:
       else:
-        # temp: 1 for now
-        batch_size = 1
+        batch_size = tf.shape(statement)[0]
 
         # run LSTM
         cell = tf.nn.rnn_cell.BasicLSTMCell(hidden_size)
