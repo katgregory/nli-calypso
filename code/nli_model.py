@@ -55,7 +55,7 @@ class NLISystem(object):
     self.dropout_keep = dropout_keep
     self.LBLS = ['entailment', 'neutral', 'contradiction']
 
-    # Sizes
+    # Dimensions
     batch_size = None
     sen_len = None
 
@@ -97,27 +97,26 @@ class NLISystem(object):
       ret.append(new_sentence)
     return ret
 
-  def optimize(self, session, rev_vocab, train_premise, train_hypothesis, train_y):
-    premise_arr = [[int(word_idx) for word_idx in premise.split()] for premise in train_premise]
-    hypothesis_arr = [[int(word_idx) for word_idx in hypothesis.split()] for hypothesis in train_hypothesis]
+  # premise, hypothesis, label are all lists of ints
+  def optimize(self, session, rev_vocab, premise, hypothesis, label):
 
-    # if hasattr(self, "iteration") and self.iteration % 100 == 0:
-      # premise_stmt = premise_arr[0]
-      # hypothesis_stmt = hypothesis_arr[0]
-      # print("Iteration: ", self.iteration)
-      # print( " ".join([rev_vocab[i] for i in premise_stmt]))
-      # print( " ".join([rev_vocab[i] for i in hypothesis_stmt]))
+    if self.verbose and hasattr(self, "iteration") and self.iteration % 100 == 0:
+      premise_stmt = premise_arr[0]
+      hypothesis_stmt = hypothesis_arr[0]
+      print("Iteration: ", self.iteration)
+      print( " ".join([rev_vocab[i] for i in premise_stmt]))
+      print( " ".join([rev_vocab[i] for i in hypothesis_stmt]))
 
-    premise_max = len(max(train_premise, key=len).split())
-    hypothesis_max = len(max(train_hypothesis, key=len).split())
+    premise_max = len(max(premise, key=len))
+    hypothesis_max = len(max(hypothesis, key=len))
 
-    premise_arr = np.array(self.pad_sequences(premise_arr, premise_max))
-    hypothesis_arr = np.array(self.pad_sequences(hypothesis_arr, hypothesis_max))
+    premise_arr = np.array(self.pad_sequences(premise, premise_max))
+    hypothesis_arr = np.array(self.pad_sequences(hypothesis, hypothesis_max))
 
     input_feed = {
       self.premise_ph: premise_arr,
       self.hypothesis_ph: hypothesis_arr,
-      self.output_ph: train_y,
+      self.output_ph: label,
       self.dropout_ph: self.dropout_keep
     }
 
@@ -132,9 +131,6 @@ class NLISystem(object):
     else:
       output_feed = [self.train_op, self.loss, self.probs]
       _, loss, probs = session.run(output_feed, input_feed)
-
-    # if hasattr(self, "iteration") and self.iteration % 100 == 0 and Config.verbose:
-    #   print(premise_embeddings)
 
     return loss, probs
 
@@ -249,20 +245,17 @@ class NLISystem(object):
   # TEST
   #############################
 
-  def predict(self, session, batch_size, test_premise, test_hypothesis, test_goldlabel):
-    premise_arr = [[int(word_idx) for word_idx in premise.split()] for premise in test_premise]
-    hypothesis_arr = [[int(word_idx) for word_idx in hypothesis.split()] for hypothesis in test_hypothesis]
+  def predict(self, session, batch_size, premise, hypothesis, goldlabel):
+    premise_max = len(max(premise, key=len))
+    hypothesis_max = len(max(hypothesis, key=len))
 
-    premise_max = len(max(test_premise, key=len).split())
-    hypothesis_max = len(max(test_hypothesis, key=len).split())
-
-    premise_arr = np.array(self.pad_sequences(premise_arr, premise_max))
-    hypothesis_arr = np.array(self.pad_sequences(hypothesis_arr, hypothesis_max))
+    premise_arr = np.array(self.pad_sequences(premise, premise_max))
+    hypothesis_arr = np.array(self.pad_sequences(hypothesis, hypothesis_max))
 
     input_feed = {
       self.premise_ph: premise_arr,
       self.hypothesis_ph: hypothesis_arr,
-      self.output_ph: test_goldlabel,
+      self.output_ph: goldlabel,
       self.dropout_ph: 1
     }
 
