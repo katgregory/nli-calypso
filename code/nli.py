@@ -38,7 +38,7 @@ class NLI(object):
         _, states = tf.nn.dynamic_rnn(cell, embeddings, initial_state=initial_state)
 
         # reshape to batch_size * hidden_size x sentence_size for masking
-        states = tf.reshape(tf.transpose(states, perm=[0, 2, 1]), [-1, sen_len])
+        states = tf.reshape(tf.transpose(states, perm=[0, 2, 1]), [batch_size * hidden_size, -1])
         return tf.reshape(tf.boolean_mask(states, mask), [-1, hidden_size])
 
 # Scratch work:
