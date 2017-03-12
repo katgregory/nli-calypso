@@ -27,7 +27,8 @@ tf.app.flags.DEFINE_integer("epochs", 10, "Number of epochs to train.")
 
 tf.app.flags.DEFINE_float("max_gradient_norm", 10.0, "Clip gradients to this norm.")
 tf.app.flags.DEFINE_integer("ff_hidden_size", 100, "Size of each model layer.")
-tf.app.flags.DEFINE_integer("stmt_hidden_size", 100, "Size of each model layer.")
+tf.app.flags.DEFINE_integer("stmt_hidden_size", 100, "Size of hidden layer between LSTMs and FF.")
+tf.app.flags.DEFINE_integer("lstm_hidden_size", 100, "Size of hidden layers in LSTM.")
 tf.app.flags.DEFINE_integer("output_size", 3, "The output size of your model.")
 tf.app.flags.DEFINE_integer("embedding_size", 300, "Size of the pretrained vocabulary.")
 tf.app.flags.DEFINE_string("data_dir", "data/snli", "snli directory (default ./data/snli)")
@@ -109,6 +110,7 @@ def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dro
     reg_lambda = reg_lambda,
     ff_hidden_size = FLAGS.ff_hidden_size,
     stmt_hidden_size = FLAGS.stmt_hidden_size,
+    lstm_hidden_size = FLAGS.lstm_hidden_size,
     num_classes = FLAGS.num_classes,
     dropout_keep = dropout_keep)
 
