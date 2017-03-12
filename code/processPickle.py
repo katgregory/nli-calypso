@@ -36,12 +36,15 @@ for key, value in results_map.items():
 # TODO: Visualization
 
 def print_tuple(tup):
-  return "Learning Rate: " + str(tup[0]) + "\tDropout Rate: " + str(tup[1]) + "\tRegularization lambda: " + str(tup[2])
+  return "Learning Rate: " + str(tup[0]) + "\tDropout Keep Rate: " + str(tup[1]) + "\tRegularization lambda: " + str(tup[2])
 
 print("Best training accuracy: " + str(best_train_accuracy[1]) + " achieved by: \n" + print_tuple(best_train_accuracy[0]) + "\n") 
 print("Best training loss: " + str(best_train_loss[1]) + " achieved by: \n" + print_tuple(best_train_loss[0]) + "\n") 
 print("Best testing accuracy: " + str(best_test_accuracy[1]) + " achieved by: \n" + print_tuple(best_test_accuracy[0]) + "\n") 
 print("Best testing loss: " + str(best_test_loss[1]) + " achieved by: \n" + print_tuple(best_test_loss[0]) + "\n") 
+
+
+GRAPH_LOSS = True
 
 lr = []
 dropout_keep = []
@@ -50,10 +53,17 @@ test_accuracy = []
 
 keys = results_map.keys()
 for key in keys:
+  if key[2] == 0.1: #REMOVE LATER: FILTERING
+    continue 
+
   lr.append(key[0])
   dropout_keep.append(key[1])
   reg_lambda.append(key[2])
-  test_accuracy.append(results_map[key][3])
+  if GRAPH_LOSS:
+    test_accuracy.append(results_map[key][4])
+  else:
+    test_accuracy.append(results_map[key][3])
+
 
 def log_tick_formatter(val, pos=None):
     return "{:.2e}".format(10**val)
