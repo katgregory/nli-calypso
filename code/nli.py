@@ -35,31 +35,10 @@ class NLI(object):
         # run LSTM
         cell = tf.nn.rnn_cell.BasicLSTMCell(hidden_size)
         initial_state = cell.zero_state(batch_size, tf.float32)
+        statement_lens = tf.reduce_sum(tf.sign(statement), axis=1)
         # batch_size x sentence_size x hidden_size
-        _, states = tf.nn.dynamic_rnn(cell, embeddings, initial_state=initial_state)
-
-        # reshape to batch_size * hidden_size x sentence_size for masking
-        mask = tf.reduce_mean(tf.sign(statement), axis=1)
-        mask = tf.cast(tf.sparse_to_dense(mask, [batch_size, sen_size], tf.sign(mask)), tf.bool)
-        states = tf.reshape(tf.transpose(states, perm=[0, 2, 1]), [batch_size * hidden_size, -1])
-        return tf.reshape(tf.boolean_mask(states, mask), [-1, hidden_size])
-
-# Scratch work:
-  #   lstm = tf.contrib.rnn.BasicLSTMCell(lstm_size, )
-  #   stacked_lstm = tf.contrib.rnn.MultiRNNCell([lstm] * number_of_layers,
-  #     state_is_tuple=False)
-
-  # initial_state = state = stacked_lstm.zero_state(batch_size, tf.float32)
-  # for i in range(num_steps):
-  #     # The value of state is updated after processing each batch of words.
-  #     output, state = stacked_lstm(words[:, i], state)
-
-  #   # The rest of the code.
-  #   # ...
-
-  # final_state = state
-
-
+        _, states = tf.nn.dynamic_rnn(cell, embeddings, sequence_length=statement_lens, initial_state=initial_state)
+        return states[0] # States is a tuple of (state, type)
 
   @staticmethod
   def merge_processed_stmts(stmt1, stmt2, hidden_size, reg_list):
