@@ -37,8 +37,9 @@ class NLI(object):
         initial_state = cell.zero_state(batch_size, tf.float32)
         statement_lens = tf.reduce_sum(tf.sign(statement), axis=1)
         # batch_size x sentence_size x hidden_size
-        _, states = tf.nn.dynamic_rnn(cell, embeddings, sequence_length=statement_lens, initial_state=initial_state)
-        return states[0] # States is a tuple of (state, type)
+        rnn_outputs, states = tf.nn.dynamic_rnn(cell, embeddings, sequence_length=statement_lens, initial_state=initial_state)
+        last_rnn_output = tf.gather_nd(rnn_outputs, tf.pack([tf.range(batch_size), statement_lens-1], axis=1))
+        return last_rnn_output
 
   @staticmethod
   def merge_processed_stmts(stmt1, stmt2, hidden_size, reg_list):
