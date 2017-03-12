@@ -35,6 +35,7 @@ tf.app.flags.DEFINE_string("data_dir", "data/snli", "snli directory (default ./d
 tf.app.flags.DEFINE_string("train_dir", "train", "Training directory to save the model parameters (default: ./train).")
 tf.app.flags.DEFINE_string("load_train_dir", "", "Training directory to load model parameters from to resume training (default: {train_dir}).")
 tf.app.flags.DEFINE_string("log_dir", "log", "Path to store log and flag files (default: ./log)")
+tf.app.flags.DEFINE_string("tboard_path", None, "Path to store tensorboard files (default: None)")
 tf.app.flags.DEFINE_string("optimizer", "adam", "adam / sgd")
 tf.app.flags.DEFINE_integer("print_every", 1, "How many iterations to do per print.")
 tf.app.flags.DEFINE_integer("keep", 0, "How many checkpoints to keep, 0 indicates keep all.")
@@ -112,6 +113,7 @@ def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dro
     stmt_hidden_size = FLAGS.stmt_hidden_size,
     lstm_hidden_size = FLAGS.lstm_hidden_size,
     num_classes = FLAGS.num_classes,
+    tboard_path = FLAGS.tboard_path,
     dropout_keep = dropout_keep)
 
   if not os.path.exists(FLAGS.log_dir):
@@ -210,10 +212,3 @@ if __name__ == "__main__":
   elif args.command == 'validation':
     main('validate', int(args.num_train), int(args.num_dev))
   assert("Somehow flags are mismatched")
-
-
-
-
-
-
-
