@@ -8,7 +8,7 @@ import matplotlib.ticker as mticker
 import matplotlib.patches as mpatches
 
 
-file_path = 'gpu-runs/run2/grid.p'
+file_path = 'gpu-runs/run3/grid.p'
 output_file_name = 'search'
 
 results_map = pickle.load(open(file_path, 'rb'))
@@ -24,8 +24,8 @@ for key, value in results_map.items():
   if train_accuracy > best_train_accuracy[1]:
     best_train_accuracy = (key, train_accuracy)
 
-  if train_loss < best_train_loss[1]:
-    best_train_loss = (key, train_loss)
+  if min(train_loss) < best_train_loss[1]:
+    best_train_loss = (key, min(train_loss))
 
   if test_accuracy > best_test_accuracy[1]:
     best_test_accuracy = (key, test_accuracy)
@@ -36,7 +36,7 @@ for key, value in results_map.items():
 # TODO: Visualization
 
 def print_tuple(tup):
-  return "Learning Rate: " + str(key[0]) + "\tDropout Rate: " + str(key[1]) + "\tRegularization lambda: " + str(key[2])
+  return "Learning Rate: " + str(tup[0]) + "\tDropout Rate: " + str(tup[1]) + "\tRegularization lambda: " + str(tup[2])
 
 print("Best training accuracy: " + str(best_train_accuracy[1]) + " achieved by: \n" + print_tuple(best_train_accuracy[0]) + "\n") 
 print("Best training loss: " + str(best_train_loss[1]) + " achieved by: \n" + print_tuple(best_train_loss[0]) + "\n") 
