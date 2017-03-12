@@ -4,18 +4,18 @@ xavier = tf.contrib.layers.xavier_initializer
 
 class NLI(object):
   """
-  Run inputs through LSTM and output hidden state.
+  Run inputs through LSTM and output hidden state. Assumes that padding is with zeros.
 
-  :param inputs: Inputs as embeddings tensor
+  :param statement: Statement as a list of indices
 
   :return: A hidden state representing the statement
 
-  @inputs is of dimensions batch_size x sentence_size
+  @statement is of dimensions batch_size x sentence_size
   @mask is of dimensions batch_size x sentence_size
   return value is of dimensions batch_size x hidden_size
   """
   @staticmethod
-  def process_stmt(embeddings, statement, hidden_size, mask, sen_len, reg_list, bow=False):
+  def process_stmt(embeddings, statement, hidden_size, reg_list, bow=False):
     with tf.name_scope("Process_Stmt"):
       # batch_size x sentence_size x embedding_size
       embeddings = tf.nn.embedding_lookup(embeddings, statement)
@@ -30,6 +30,7 @@ class NLI(object):
       # If using LSTMs, continue:
       else:
         batch_size = tf.shape(statement)[0]
+        sen_size = tf.shape(statement)[1]
 
         # run LSTM
         cell = tf.nn.rnn_cell.BasicLSTMCell(hidden_size)
@@ -38,6 +39,8 @@ class NLI(object):
         _, states = tf.nn.dynamic_rnn(cell, embeddings, initial_state=initial_state)
 
         # reshape to batch_size * hidden_size x sentence_size for masking
+        mask = tf.reduce_mean(tf.sign(statement), axis=1)
+        mask = tf.cast(tf.sparse_to_dense(mask, [batch_size, sen_size], tf.sign(mask)), tf.bool)
         states = tf.reshape(tf.transpose(states, perm=[0, 2, 1]), [batch_size * hidden_size, -1])
         return tf.reshape(tf.boolean_mask(states, mask), [-1, hidden_size])
 
