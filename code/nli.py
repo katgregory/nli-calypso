@@ -4,6 +4,19 @@ xavier = tf.contrib.layers.xavier_initializer
 
 class NLI(object):
   """
+  @statement is of dimensions batch_size x sentence_size
+  """
+  # batch_size x sentence_size x embedding_size
+  def process_stmt_bow(embeddings, statement, hidden_size, reg_list):
+    with tf.name_scope("Process_Stmt_BOW"):
+      # batch_size x sentence_size x embedding_size
+      embeddings = tf.nn.embedding_lookup(embeddings, statement)
+      # batch_size x embedding_size
+      hidden = tf.reduce_mean(embeddings, 1)
+      tf.summary.histogram("hidden", hidden)
+      return hidden
+
+  """
   Run inputs through LSTM and output hidden state. Assumes that padding is with zeros.
 
   :param statement: Statement as a list of indices
@@ -15,31 +28,26 @@ class NLI(object):
   return value is of dimensions batch_size x hidden_size
   """
   @staticmethod
-  def process_stmt(embeddings, statement, hidden_size, reg_list, bow=False):
-    with tf.name_scope("Process_Stmt"):
+  def process_stmt_LSTM(embeddings, statement, hidden_size, reg_list):
+    with tf.name_scope("Process_Stmt_LSTM"):
       # batch_size x sentence_size x embedding_size
       embeddings = tf.nn.embedding_lookup(embeddings, statement)
 
-      # If using bag of words, simply average embeddings
-      if (bow):
-        # batch_size x embedding_size
-        hidden = tf.reduce_mean(embeddings, 1)
-        tf.summary.histogram("hidden", hidden)
-        return hidden
+      # dimensions
+      batch_size = tf.shape(statement)[0]
+      sen_size = tf.shape(statement)[1]
 
-      # If using LSTMs, continue:
-      else:
-        batch_size = tf.shape(statement)[0]
-        sen_size = tf.shape(statement)[1]
-
-        # run LSTM
-        cell = tf.nn.rnn_cell.BasicLSTMCell(hidden_size)
-        initial_state = cell.zero_state(batch_size, tf.float32)
-        statement_lens = tf.reduce_sum(tf.sign(statement), axis=1)
-        # batch_size x sentence_size x hidden_size
-        rnn_outputs, states = tf.nn.dynamic_rnn(cell, embeddings, sequence_length=statement_lens, initial_state=initial_state)
-        last_rnn_output = tf.gather_nd(rnn_outputs, tf.pack([tf.range(batch_size), statement_lens-1], axis=1))
-        return last_rnn_output
+      # run LSTM
+      cell = tf.nn.rnn_cell.BasicLSTMCell(hidden_size)
+      initial_state = cell.zero_state(batch_size, tf.float32)
+      statement_lens = tf.reduce_sum(tf.sign(statement), axis=1)
+      # batch_size x sentence_size x hidden_size
+      rnn_outputs, fin_state = tf.nn.dynamic_rnn(cell, embeddings,
+                                              sequence_length=statement_lens,
+                                              initial_state=initial_state)
+      last_rnn_output = tf.gather_nd(rnn_outputs,
+                                     tf.pack([tf.range(batch_size), statement_lens-1], axis=1))
+    return last_rnn_output
 
   @staticmethod
   def merge_processed_stmts(stmt1, stmt2, hidden_size, reg_list):

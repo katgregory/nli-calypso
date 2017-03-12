@@ -70,9 +70,9 @@ class NLISystem(object):
     # Build neural net
     reg_list = []               # List of variables to regularize
     with tf.variable_scope("Premise"):
-      premise = NLI.process_stmt(embeddings, self.premise_ph, lstm_hidden_size, reg_list)
+      premise = NLI.process_stmt_LSTM(embeddings, self.premise_ph, lstm_hidden_size, reg_list)
     with tf.variable_scope("Hypothesis"):
-      hypothesis = NLI.process_stmt(embeddings, self.hypothesis_ph, lstm_hidden_size, reg_list)
+      hypothesis = NLI.process_stmt_LSTM(embeddings, self.hypothesis_ph, lstm_hidden_size, reg_list)
     merged = NLI.merge_processed_stmts(premise, hypothesis, stmt_hidden_size, reg_list)
     preds = NLI.feed_forward(merged, self.dropout_ph, ff_hidden_size, num_classes, reg_list)
 
