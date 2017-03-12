@@ -27,7 +27,7 @@ def get_optimizer(lr, opt="adam"):
     assert (False)
   return optfn
 
-# Given an array of probabilities across the three labels, 
+# Given an array of probabilities across the three labels,
 # returns string of the label with the highest probability
 # (For debugging purposes only)
 def label_to_name(label):
@@ -37,7 +37,7 @@ def label_to_name(label):
     '2': 'contradiction'
   }[str(np.argmax(label))]
 
-  
+
 class NLISystem(object):
   def __init__(self, pretrained_embeddings,
                lr,
@@ -64,26 +64,22 @@ class NLISystem(object):
     self.dropout_ph = ph(tf.float32, shape=(), name="Dropout-Placeholder")
     self.premise_ph = ph(tf.int32, shape=(batch_size, sen_len), name="Premise-Placeholder")
     self.hypothesis_ph = ph(tf.int32, shape=(batch_size, sen_len), name="Hypothesis-Placeholder")
-    self.output_ph = ph(tf.int32, shape=(batch_size, num_classes), name="Output-Placeholder")    
-    self.premise_mask_ph = ph(tf.bool, shape=(batch_size, sen_len),
-                              name="Premise-Mask-Placeholder")    
-    self.hypothesis_mask_ph = ph(tf.bool, shape=(batch_size, sen_len),
-                                 name="Hypothesis-Mask-Placeholder")    
+    self.output_ph = ph(tf.int32, shape=(batch_size, num_classes), name="Output-Placeholder")
     embeddings = tf.Variable(pretrained_embeddings, name="Embeddings", dtype=tf.float32)
 
     # Build neural net
     reg_list = []               # List of variables to regularize
-    with tf.variable_scope("Premise"):
-      premise = NLI.process_stmt(embeddings, self.premise_ph, lstm_hidden_size,
-                                 self.premise_mask_ph, sen_len, reg_list)
-    with tf.variable_scope("Hypothesis"):
-      hypothesis = NLI.process_stmt(embeddings, self.hypothesis_ph, lstm_hidden_size,
-                                    self.premise_mask_ph, sen_len, reg_list)
+
+    lstm_cell = NLI.process_stmt_LSTM_cell(lstm_hidden_size)
+    with tf.variable_scope("Process-Premise"):
+      premise = NLI.process_stmt_LSTM(embeddings, self.premise_ph, lstm_cell, reg_list)
+    with tf.variable_scope("Process-Hypothesis"):
+      hypothesis = NLI.process_stmt_LSTM(embeddings, self.hypothesis_ph, lstm_cell, reg_list)
     merged = NLI.merge_processed_stmts(premise, hypothesis, stmt_hidden_size, reg_list)
     preds = NLI.feed_forward(merged, self.dropout_ph, ff_hidden_size, num_classes, reg_list)
 
     # Loss, optimization
-    with tf.variable_scope("FF-Softmax"):        
+    with tf.variable_scope("FF-Softmax"):
       self.probs = tf.nn.softmax(preds)
       softmax_loss = tf.nn.softmax_cross_entropy_with_logits(logits=preds,
                                                              labels=self.output_ph, name="loss")
@@ -98,7 +94,7 @@ class NLISystem(object):
   #############################
   # TRAINING
   #############################
-  
+
   def pad_sequences(self, data, max_length):
     ret = []
     for sentence in data:
@@ -122,17 +118,11 @@ class NLISystem(object):
     premise_arr = np.array(self.pad_sequences(premise, premise_max))
     hypothesis_arr = np.array(self.pad_sequences(hypothesis, hypothesis_max))
 
-    batch_size = 64             # SUPER TEMPORARY
-    prem_mask = np.ones((batch_size, premise_max))
-    hypo_mask = np.ones((batch_size, hypothesis_max))
-
     input_feed = {
       self.premise_ph: premise_arr,
       self.hypothesis_ph: hypothesis_arr,
       self.output_ph: label,
-      self.dropout_ph: self.dropout_keep,
-      self.premise_mask_ph: prem_mask,
-      self.hypothesis_mask_ph: hypo_mask
+      self.dropout_ph: self.dropout_keep
     }
 
     if self.tboard_path is not None:
@@ -212,8 +202,8 @@ class NLISystem(object):
       losses.append(curr_loss)
       epoch += 1
 
-      # TEST FOR CONVERGENCE 
-      if len(losses) >= 5 and (max(losses[-3:]) - min(losses[-3:])) <= 0.05: 
+      # TEST FOR CONVERGENCE
+      if len(losses) >= 3 and (max(losses[-3:]) - min(losses[-3:])) <= 0.05:
         break # TODO: Replace everything with constants
 
       if epoch > 50: # HARD CUTOFF?
@@ -267,17 +257,11 @@ class NLISystem(object):
     premise_arr = np.array(self.pad_sequences(premise, premise_max))
     hypothesis_arr = np.array(self.pad_sequences(hypothesis, hypothesis_max))
 
-    batch_size = 64             # SUPER TEMPORARY
-    prem_mask = np.ones((batch_size, premise_max))
-    hypo_mask = np.ones((batch_size, hypothesis_max))
-
     input_feed = {
       self.premise_ph: premise_arr,
       self.hypothesis_ph: hypothesis_arr,
       self.output_ph: goldlabel,
-      self.dropout_ph: 1,
-      self.premise_mask_ph: prem_mask,
-      self.hypothesis_mask_ph: hypo_mask
+      self.dropout_ph: 1
     }
 
     output_feed = [self.probs, self.loss]
