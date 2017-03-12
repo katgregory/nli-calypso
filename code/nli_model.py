@@ -58,19 +58,27 @@ class NLISystem(object):
 
     # Dimensions
     batch_size = None
-    sen_len = None
+    sen_len = 100
 
     # Placeholders
     self.dropout_ph = ph(tf.float32, shape=(), name="Dropout-Placeholder")
     self.premise_ph = ph(tf.int32, shape=(batch_size, sen_len), name="Premise-Placeholder")
     self.hypothesis_ph = ph(tf.int32, shape=(batch_size, sen_len), name="Hypothesis-Placeholder")
     self.output_ph = ph(tf.int32, shape=(batch_size, num_classes), name="Output-Placeholder")    
+    self.premise_mask_ph = ph(tf.bool, shape=(batch_size, sen_len),
+                              name="Premise-Mask-Placeholder")    
+    self.hypothesis_mask_ph = ph(tf.bool, shape=(batch_size, sen_len),
+                                 name="Hypothesis-Mask-Placeholder")    
     embeddings = tf.Variable(pretrained_embeddings, name="Embeddings", dtype=tf.float32)
 
     # Build neural net
-    reg_list = []               # List of variables to regularize    
-    premise = NLI.process_stmt(embeddings, self.premise_ph, reg_list, lstm_hidden_size)
-    hypothesis = NLI.process_stmt(embeddings, self.hypothesis_ph, reg_list, lstm_hidden_size)
+    reg_list = []               # List of variables to regularize
+    with tf.variable_scope("Premise"):
+      premise = NLI.process_stmt(embeddings, self.premise_ph, lstm_hidden_size,
+                                 self.premise_mask_ph, sen_len, reg_list)
+    with tf.variable_scope("Hypothesis"):
+      hypothesis = NLI.process_stmt(embeddings, self.hypothesis_ph, lstm_hidden_size,
+                                    self.premise_mask_ph, sen_len, reg_list)
     merged = NLI.merge_processed_stmts(premise, hypothesis, stmt_hidden_size, reg_list)
     preds = NLI.feed_forward(merged, self.dropout_ph, ff_hidden_size, num_classes, reg_list)
 
@@ -108,17 +116,23 @@ class NLISystem(object):
       print( " ".join([rev_vocab[i] for i in premise_stmt]))
       print( " ".join([rev_vocab[i] for i in hypothesis_stmt]))
 
-    premise_max = len(max(premise, key=len))
-    hypothesis_max = len(max(hypothesis, key=len))
+    premise_max = 100# len(max(premise, key=len))
+    hypothesis_max = 100# len(max(hypothesis, key=len))
 
     premise_arr = np.array(self.pad_sequences(premise, premise_max))
     hypothesis_arr = np.array(self.pad_sequences(hypothesis, hypothesis_max))
+
+    batch_size = 1
+    prem_mask = np.ones((batch_size, premise_max))
+    hypo_mask = np.ones((batch_size, hypothesis_max))
 
     input_feed = {
       self.premise_ph: premise_arr,
       self.hypothesis_ph: hypothesis_arr,
       self.output_ph: label,
-      self.dropout_ph: self.dropout_keep
+      self.dropout_ph: self.dropout_keep,
+      self.premise_mask_ph: prem_mask,
+      self.hypothesis_mask_ph: hypo_mask
     }
 
     if self.tboard_path is not None:
@@ -247,17 +261,23 @@ class NLISystem(object):
   #############################
 
   def predict(self, session, batch_size, premise, hypothesis, goldlabel):
-    premise_max = len(max(premise, key=len))
-    hypothesis_max = len(max(hypothesis, key=len))
+    premise_max = 100# len(max(premise, key=len))
+    hypothesis_max = 100# len(max(hypothesis, key=len))
 
     premise_arr = np.array(self.pad_sequences(premise, premise_max))
     hypothesis_arr = np.array(self.pad_sequences(hypothesis, hypothesis_max))
+
+    batch_size = 1
+    prem_mask = np.ones((batch_size, premise_max))
+    hypo_mask = np.ones((batch_size, hypothesis_max))
 
     input_feed = {
       self.premise_ph: premise_arr,
       self.hypothesis_ph: hypothesis_arr,
       self.output_ph: goldlabel,
-      self.dropout_ph: 1
+      self.dropout_ph: 1,
+      self.premise_mask_ph: prem_mask,
+      self.hypothesis_mask_ph: hypo_mask
     }
 
     output_feed = [self.probs, self.loss]

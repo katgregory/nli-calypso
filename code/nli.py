@@ -10,27 +10,37 @@ class NLI(object):
 
   :return: A hidden state representing the statement
 
-  @inputs is of dimensions batch_size x sentence_size x embedding_size
+  @inputs is of dimensions batch_size x sentence_size
+  @mask is of dimensions batch_size x sentence_size
   return value is of dimensions batch_size x hidden_size
   """
   @staticmethod
-  def process_stmt(embeddings, statement, hidden_size, reg_list, bow=False):
+  def process_stmt(embeddings, statement, hidden_size, mask, sen_len, reg_list, bow=False):
+    with tf.name_scope("Process_Stmt"):
+      # batch_size x sentence_size x embedding_size
+      embeddings = tf.nn.embedding_lookup(embeddings, statement)
 
-      with tf.name_scope("Embeddings"):
-        embeddings = tf.nn.embedding_lookup(embeddings, statement)
-        # If using bag of words, simply average embeddings
-        if (bow):
-          hidden =  tf.reduce_mean(embeddings, 1)
-          tf.summary.histogram("hidden", hidden)
-          return hidden
-      return embeddings
+      # If using bag of words, simply average embeddings
+      if (bow):
+        # batch_size x embedding_size
+        hidden = tf.reduce_mean(embeddings, 1)
+        tf.summary.histogram("hidden", hidden)
+        return hidden
+
       # If using LSTMs, continue:
-      with tf.name_scope("LSTM"):
-        batch_size = 1 #` Until we implement padding & masking, at which point will use tf.shape(inputs)[1]
+      else:
+        # temp: 1 for now
+        batch_size = 1
+
+        # run LSTM
         cell = tf.nn.rnn_cell.BasicLSTMCell(hidden_size)
         initial_state = cell.zero_state(batch_size, tf.float32)
-        output, states = tf.nn.dynamic_rnn(cell, embeddings, initial_state=initial_state, time_major=True)
-        return states[-1]
+        # batch_size x sentence_size x hidden_size
+        _, states = tf.nn.dynamic_rnn(cell, embeddings, initial_state=initial_state)
+
+        # reshape to batch_size * hidden_size x sentence_size for masking
+        states = tf.reshape(tf.transpose(states, perm=[0, 2, 1]), [-1, sen_len])
+        return tf.reshape(tf.boolean_mask(states, mask), [-1, hidden_size])
 
 # Scratch work:
   #   lstm = tf.contrib.rnn.BasicLSTMCell(lstm_size, )
