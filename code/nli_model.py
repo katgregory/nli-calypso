@@ -48,7 +48,8 @@ class NLISystem(object):
                num_classes,
                dropout_keep,
                tboard_path = None,
-               verbose = False):
+               verbose = False,
+               statement_processor="bilstm"):
 
     # Vars that need to be used globally
     self.tboard_path = tboard_path
@@ -70,11 +71,19 @@ class NLISystem(object):
     # Build neural net
     reg_list = []               # List of variables to regularize
 
-    lstm_cell = NLI.process_stmt_LSTM_cell(lstm_hidden_size)
-    with tf.variable_scope("Process-Premise"):
-      premise = NLI.process_stmt_LSTM(embeddings, self.premise_ph, lstm_cell, reg_list)
-    with tf.variable_scope("Process-Hypothesis"):
-      hypothesis = NLI.process_stmt_LSTM(embeddings, self.hypothesis_ph, lstm_cell, reg_list)
+    if (statement_processor == "lstm"):
+      lstm_cell = NLI.process_stmt_LSTM_cell(lstm_hidden_size)
+      with tf.variable_scope("Process-Premise"):
+        premise = NLI.process_stmt_LSTM(embeddings, self.premise_ph, lstm_cell, reg_list)
+      with tf.variable_scope("Process-Hypothesis"):
+        hypothesis = NLI.process_stmt_LSTM(embeddings, self.hypothesis_ph, lstm_cell, reg_list)
+    elif (statement_processor == "bilstm"):
+      lstm_cell_fw = NLI.process_stmt_LSTM_cell(lstm_hidden_size)
+      lstm_cell_bw = NLI.process_stmt_LSTM_cell(lstm_hidden_size)
+      with tf.variable_scope("Process-Premise"):
+        premise = NLI.process_stmt_BiLSTM(embeddings, self.premise_ph, lstm_cell_fw, lstm_cell_bw, reg_list)
+      with tf.variable_scope("Process-Hypothesis"):
+        hypothesis = NLI.process_stmt_BiLSTM(embeddings, self.hypothesis_ph, lstm_cell_fw, lstm_cell_bw, reg_list)
     merged = NLI.merge_processed_stmts(premise, hypothesis, stmt_hidden_size, reg_list)
     preds = NLI.feed_forward(merged, self.dropout_ph, ff_hidden_size, num_classes, reg_list)
 

@@ -52,6 +52,41 @@ class NLI(object):
                                      tf.pack([tf.range(batch_size), statement_lens-1], axis=1))
     return last_rnn_output
 
+  """
+  Run inputs through Bi-LSTM and output concatonation of forward and backward
+  final hidden state. Assumes that padding is with zeros.
+
+  :param statement: Statement as a list of indices
+
+  :return: A hidden state representing the statement. Concatonation of final 
+  forward and backward hidden states.
+
+  @statement is of dimensions batch_size x sentence_size
+  @mask is of dimensions batch_size x sentence_size
+  return value is of dimensions batch_size x (2 x hidden_size)
+  """
+  @staticmethod
+  def process_stmt_BiLSTM(embeddings, statement, cell_fw, cell_bw, reg_list):
+    with tf.name_scope("Process_Stmt_Bi-LSTM"):
+      # batch_size x sentence_size x embedding_size
+      embeddings = tf.nn.embedding_lookup(embeddings, statement)
+
+      # dimensions
+      batch_size = tf.shape(statement)[0]
+      sen_size = tf.shape(statement)[1]
+
+      initial_state_fw = cell_fw.zero_state(batch_size, tf.float32)
+      initial_state_bw = cell_bw.zero_state(batch_size, tf.float32)
+
+      statement_lens = tf.reduce_sum(tf.sign(statement), axis=1)
+      rnn_outputs, fin_state_fw, fin_state_bw = tf.nn.bidirectional_rnn(cell_fw, cell_bw, embeddings,
+                                              sequence_length=statement_lens,
+                                              initial_state_fw=initial_state_fw,
+                                              initial_state_bw=initial_state_bw)
+      last_rnn_output = tf.gather_nd(rnn_outputs,
+                                     tf.pack([tf.range(batch_size), statement_lens-1], axis=1))
+    return last_rnn_output
+
   @staticmethod
   def merge_processed_stmts(stmt1, stmt2, hidden_size, reg_list):
     stmt1_size = stmt1.get_shape().as_list()[1]
