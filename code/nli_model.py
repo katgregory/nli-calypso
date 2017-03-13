@@ -75,28 +75,31 @@ class NLISystem(object):
     ##########################
     reg_list = []               # List of variables to regularize
 
+    # Embedding lookup
+    premise_embed = tf.nn.embedding_lookup(embeddings, self.premise_ph)
+    hypothesis_embed = tf.nn.embedding_lookup(embeddings, self.hypothesis_ph)
+
+    # Configure LSTM and process_stmt functions based on flags
     if stmt_processor == "lstm":
       lstm_cell = NLI.LSTM_cell(lstm_hidden_size)
-      lstm_process_stmt = partial(lambda c, d, a, b: NLI.LSTM(a, b, c, d), lstm_cell, reg_list)
-      process_stmt = lambda a, b: lstm_process_stmt(a, b)[1]
+      process_stmt = partial(lambda c, d, a, b: NLI.LSTM(a, b, c, d), lstm_cell, reg_list)
     elif stmt_processor == "bilstm":
       lstm_cell_fw = NLI.LSTM_cell(lstm_hidden_size)
       lstm_cell_bw = NLI.LSTM_cell(lstm_hidden_size)
-      lstm_process_stmt = partial(lambda c, d, e, a, b: NLI.biLSTM(a, b, c, d, e),
+      process_stmt = partial(lambda c, d, e, a, b: NLI.biLSTM(a, b, c, d, e),
                                   lstm_cell_fw, lstm_cell_bw, reg_list)
-      process_stmt = lambda a, b: lstm_process_stmt(a, b)[1]
-    else: process_stmt = partial(lambda c, a, b: NLI.BOW(a, b, c), reg_list)
+    elif stmt_processor == "bow": # artificially return (None, hidden_state)
+      process_stmt = partial(lambda c, a, b: NLI.BOW(a, b, c), reg_list)
+      process_stmt = lambda a, b: (None, process_stmt(a, b))
 
     # Process statements
     with tf.variable_scope("Process-Premise"):
-      premise_embed = tf.nn.embedding_lookup(embeddings, self.premise_ph)
-      premise = process_stmt(premise_embed, self.premise_len_ph)
+      p_states, p_last = process_stmt(premise_embed, self.premise_len_ph)
     with tf.variable_scope("Process-Hypothesis"):
-      hypothesis_embed = tf.nn.embedding_lookup(embeddings, self.hypothesis_ph)
-      hypothesis = process_stmt(hypothesis_embed, self.hypothesis_len_ph)
+      h_states, h_last = process_stmt(hypothesis_embed, self.hypothesis_len_ph)
 
     # Merge and feed-forward
-    merged = NLI.merge_states(premise, hypothesis, stmt_hidden_size, reg_list)
+    merged = NLI.merge_states(p_last, h_last, stmt_hidden_size, reg_list)
     preds = NLI.feed_forward(merged, self.dropout_ph, ff_hidden_size, num_classes,
                              ff_num_layers, reg_list)
 
