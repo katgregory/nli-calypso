@@ -84,11 +84,11 @@ class NLISystem(object):
     def process_stmt(stmt, stmt_len):
       stmt_embed = tf.nn.embedding_lookup(embeddings, stmt)
       stmt_lens = tf.reduce_sum(tf.sign(stmt), axis=1)
-      if (stmt_processor == "bow"):
+      if stmt_processor == "bow":
           return NLI.process_stmt_bow(stmt_embed, lstm_hidden_size, reg_list)
-      elif (stmt_processor == "lstm"):
+      elif stmt_processor == "lstm":
         return NLI.process_stmt_LSTM(stmt_embed, stmt_len, lstm_cell, reg_list)
-      elif (stmt_processor == "bilstm"):
+      elif stmt_processor == "bilstm":
         return NLI.process_stmt_BiLSTM(stmt_embed, stmt_len, lstm_cell_fw, lstm_cell_bw, reg_list)
       else:
         assert(False)
@@ -182,7 +182,7 @@ class NLISystem(object):
       # Record correctness of training predictions
       correct_predictions = np.equal(np.argmax(probs, axis=1), np.argmax(goldlabels, axis=1))
       num_correct += np.sum(correct_predictions)
-      
+
     toc = time.time()
 
       # LOGGING CODE
