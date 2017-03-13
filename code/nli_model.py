@@ -35,6 +35,33 @@ def label_to_name(label):
   }[str(np.argmax(label))]
 
 
+"""
+Binds processor function as specified by @processor to a function that takes in 2 arguments:
+a statements and the lengths of its sentences. Creates cells as needed such that every call
+to the returned function will use the same cells.
+
+:param processor: String, either "lstm", "bilstm", or "bow"
+:param reg_list: List of regularization varibles. Variables that need to be regularized 
+will be appended as needed to this list.
+
+:return: function that takes 2 arguments: statement, stmt_len where statement is
+of dimensions batch_size x statement_len x embedding_size and stmt_len is of dimensions 
+batch_size x 1
+"""
+def bind_processor(processor, lstm_hidden_size, reg_list):
+  if processor == "lstm":
+    lstm_cell = NLI.LSTM_cell(lstm_hidden_size)
+    process_stmt = partial(lambda c, d, a, b: NLI.LSTM(a, b, c, d), lstm_cell, reg_list)
+  elif processor == "bilstm":
+    lstm_cell_fw = NLI.LSTM_cell(lstm_hidden_size)
+    lstm_cell_bw = NLI.LSTM_cell(lstm_hidden_size)
+    process_stmt = partial(lambda c, d, e, a, b: NLI.biLSTM(a, b, c, d, e),
+                           lstm_cell_fw, lstm_cell_bw, reg_list)
+  elif processor == "bow": # artificially return (None, hidden_state)
+    process_stmt = partial(lambda c, a, b: NLI.BOW(a, b, c), reg_list)
+    process_stmt = lambda a, b: (None, process_stmt(a, b))
+  return process_stmt
+
 class NLISystem(object):
   def __init__(self, pretrained_embeddings,
                lr,
@@ -47,6 +74,7 @@ class NLISystem(object):
                dropout_keep,
                bucket,
                stmt_processor,
+               attention,
                tboard_path = None,
                verbose = False):
 
@@ -78,25 +106,28 @@ class NLISystem(object):
     # Embedding lookup
     premise_embed = tf.nn.embedding_lookup(embeddings, self.premise_ph)
     hypothesis_embed = tf.nn.embedding_lookup(embeddings, self.hypothesis_ph)
-
+    
     # Configure LSTM and process_stmt functions based on flags
-    if stmt_processor == "lstm":
-      lstm_cell = NLI.LSTM_cell(lstm_hidden_size)
-      process_stmt = partial(lambda c, d, a, b: NLI.LSTM(a, b, c, d), lstm_cell, reg_list)
-    elif stmt_processor == "bilstm":
-      lstm_cell_fw = NLI.LSTM_cell(lstm_hidden_size)
-      lstm_cell_bw = NLI.LSTM_cell(lstm_hidden_size)
-      process_stmt = partial(lambda c, d, e, a, b: NLI.biLSTM(a, b, c, d, e),
-                                  lstm_cell_fw, lstm_cell_bw, reg_list)
-    elif stmt_processor == "bow": # artificially return (None, hidden_state)
-      process_stmt = partial(lambda c, a, b: NLI.BOW(a, b, c), reg_list)
-      process_stmt = lambda a, b: (None, process_stmt(a, b))
+    process_stmt = bind_processor(stmt_processor, lstm_hidden_size, reg_list)
 
     # Process statements
     with tf.variable_scope("Process-Premise"):
       p_states, p_last = process_stmt(premise_embed, self.premise_len_ph)
     with tf.variable_scope("Process-Hypothesis"):
       h_states, h_last = process_stmt(hypothesis_embed, self.hypothesis_len_ph)
+
+    # Attention
+    if attention:
+      with tf.variable_scope("Context"):
+        p_context, h_context = NLI.context_tensors(p_states, h_states)
+        p_inferred = NLI.infer(p_context, p_states)
+        h_inferred = NLI.infer(h_context, h_states)
+
+      post_process_stmt = bind_processor(stmt_processor, lstm_hidden_size, reg_list)
+      with tf.variable_scope("Post-Process-Premise"):
+        _, p_last = post_process_stmt(p_inferred, self.premise_len_ph)
+      with tf.variable_scope("Post-Process-Hypothesis"):
+        _, h_last = post_process_stmt(h_inferred, self.hypothesis_len_ph)
 
     # Merge and feed-forward
     merged = NLI.merge_states(p_last, h_last, stmt_hidden_size, reg_list)

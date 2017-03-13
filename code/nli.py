@@ -6,12 +6,12 @@ class NLI(object):
   """
   Returns bag of words mean of input statement
 
-  :param statement: Statement as list of embeddings of dimensions batch_size x sentence_size 
+  :param statement: Statement as list of embeddings of dimensions batch_size x statement_len 
    x embedding_size
   :param reg_list: List of regularization varibles. Variables that need to be regularized 
   will be appended as needed to this list.
   """
-  # batch_size x sentence_size x embedding_size
+  # batch_size x statement_len x embedding_size
   @staticmethod
   def BOW(statement, hidden_size, reg_list):
     with tf.name_scope("Process_Stmt_BOW"):
@@ -32,15 +32,16 @@ class NLI(object):
   """
   Run inputs through LSTM. Assumes that input statements are padded with zeros.
 
-  :param statement: Statement as list of embeddings of dimensions batch_size x sentence_size 
+  :param statement: Statement as list of embeddings of dimensions batch_size x statement_len 
    x embedding_size
-  :param stmt_lens: Length of statements before padding as 1D list with dimension batch_size
+  :param stmt_lens: Length of statements before padding as 1D list with dimension batch_size.
+  Dimensions of batch_size x 1.
   :param cell: LSTM cell as returned from NLI.LSTM_cell
   :param reg_list: List of regularization varibles. Variables that need to be regularized 
   will be appended as needed to this list.
 
   :return: A tuple of (outputs, last_output) where outputs represents all LSTM outputs and is 
-  of dimensions batch_size x sentence_size x hidden_size; and last_output represents the last
+  of dimensions batch_size x statement_len x hidden_size; and last_output represents the last
   output for each statement in the batch, of dimensions batch_size x hidden_size
   """
   @staticmethod
@@ -48,11 +49,10 @@ class NLI(object):
     with tf.name_scope("Process_Stmt_LSTM"):
       # dimensions
       batch_size = tf.shape(statement)[0]
-      sen_size = tf.shape(statement)[1]
 
       initial_state = cell.zero_state(batch_size, tf.float32)
 
-      # batch_size x sentence_size x hidden_size
+      # batch_size x statement_len x hidden_size
       rnn_outputs, fin_state = tf.nn.dynamic_rnn(cell, statement,
                                               sequence_length=stmt_lens,
                                               initial_state=initial_state)
@@ -64,16 +64,17 @@ class NLI(object):
   Run inputs through Bi-LSTM and output concatonation of forward and backward
   final hidden state. Assumes that input statements are padded with zeros.
 
-  :param statement: Statement as list of embeddings of dimensions batch_size x sentence_size 
+  :param statement: Statement as list of embeddings of dimensions batch_size x statement_len 
    x embedding_size
-  :param stmt_lens: Length of statements before padding as 1D list with dimension batch_size
+  :param stmt_lens: Length of statements before padding as 1D list with dimension batch_size.
+  Dimensions of batch_size x 1.
   :param cell_fw: Forward LSTM cell as returned from NLI.LSTM_cell
   :param cell_bw: Backwards LSTM cell as returned from NLI.LSTM_cell
   :param reg_list: List of regularization varibles. Variables that need to be regularized 
   will be appended as needed to this list.
 
   :return: A tuple of (outputs, last_output) where outputs represents all biLSTM outputs and is 
-  of dimensions batch_size x sentence_size x (hidden_size * 2); and last_output represents the last
+  of dimensions batch_size x statement_len x (hidden_size * 2); and last_output represents the last
   hidden state for each statement in the batch, of dimensions batch_size x (hidden_size * 2). 
   Outputs are concatenations of forward and backward outputs.
   """
@@ -82,7 +83,6 @@ class NLI(object):
     with tf.name_scope("Process_Stmt_Bi-LSTM"):
       # dimensions
       batch_size = tf.shape(statement)[0]
-      sen_size = tf.shape(statement)[1]
 
       initial_state_fw = cell_fw.zero_state(batch_size, tf.float32)
       initial_state_bw = cell_bw.zero_state(batch_size, tf.float32)
@@ -95,6 +95,61 @@ class NLI(object):
       last_rnn_output = tf.gather_nd(rnn_outputs,
                                      tf.pack([tf.range(batch_size), stmt_lens-1], axis=1))
     return rnn_outputs, last_rnn_output
+
+  """
+  Calculates context vectors for two statements by using weighted similarity.
+
+  :param states1: States of statement 1 as output from an LSTM, biLSTM, etc. Dimensions are
+  batch_size x statement1_len x hidden_size
+  :param states2: States of statement 2 as output from an LSTM, biLSTM, etc. Dimensions are
+  batch_size x statement2_len x hidden_size
+
+  :return: A tuple of (context1, context2) of context vectors for each of the words in statement 1
+  and statement 2 respectively. context1 and context2 have the same dimensions as states1 and 
+  states2
+  """
+  @staticmethod
+  def context_tensors(states1, states2):
+    # dimensions
+    batch_size = tf.shape(states1)[0]
+
+    # e: batch_size x statement1_len x statement2_len
+    e = tf.matmul(states1, states2, transpose_b=True)
+    e_exp = tf.exp(e)    
+
+    # output of tf.reduce_sum has dimensions batch_size x statement2_len
+    # reshape to prepare for broadcast
+    # magnitude1 = tf.tile(tf.reduce_sum(e_exp, axis=1), hidden_size)
+    magnitude1 = tf.reshape(tf.reduce_sum(e_exp, axis=1), (batch_size, -1, 1))
+    e_norm1 = tf.div(e_exp, magnitude1)
+    context1 = tf.matmul(states2, e_norm1, transpose_a=True, transpose_b=True)
+    context1 = tf.transpose(context1, perm=[0, 2, 1])
+
+    # output of tf.reduce_sum has dimensions batch_size x statement1_len
+    # reshape to prepare for broadcast
+    # magnitude2 = tf.tile(tf.reduce_sum(e_exp, axis=0), hidden_size)
+    magnitude2 = tf.reshape(tf.reduce_sum(e_exp, axis=2), (batch_size, -1, 1))
+    e_norm2 = tf.div(e_exp, magnitude2)
+    context2 = tf.matmul(states1, e_norm2, transpose_a=True)
+    context2 = tf.transpose(context2, perm=[0, 2, 1])
+
+    return (context1, context2)
+
+  """
+  Return a new vector that embodies inferred information from context and state vectors
+  of a statement.
+
+  :param context: Context vector of statement as returned from NLI.context_tensors. Dimensions
+  are batch_size x statement_len x hidden_size
+  :param states: States vector of statement as output from an LSTM, biLSTM, etc. Dimensions are
+  are batch_size x statement_len x hidden_size
+
+  :return: A composed context/state inference vector of dimension batch_size x statement_len x 
+  (hidden_size * 4)
+  """
+  @staticmethod
+  def infer(context, states):
+    return tf.concat(2, [context, states, states - context, tf.mul(states, context)])
 
   """
   Merge two hidden states through concatenation after weighting.

@@ -26,7 +26,7 @@ tf.app.flags.DEFINE_integer("num_dev", 1000, "")
 tf.app.flags.DEFINE_integer("num_test", 1000, "")
 tf.app.flags.DEFINE_bool("bucket", True, "")
 tf.app.flags.DEFINE_string("stmt_processor", "bilstm", "How to process statements. Options: 'bow', 'lstm', 'bilstm'")
-
+tf.app.flags.DEFINE_bool("attention", True, "")
 # HYPERPARAMETERS
 tf.app.flags.DEFINE_float("lr", 0.0001, "Learning rate.")
 tf.app.flags.DEFINE_float("dropout_keep", 0.8, "Keep_prob")
@@ -135,7 +135,8 @@ def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dro
     tboard_path = FLAGS.tboard_path,
     dropout_keep = dropout_keep,
     bucket = FLAGS.bucket,
-    stmt_processor = FLAGS.stmt_processor)
+    stmt_processor = FLAGS.stmt_processor,
+    attention = FLAGS.attention)
 
   if not os.path.exists(FLAGS.log_dir):
     os.makedirs(FLAGS.log_dir)
@@ -183,9 +184,10 @@ def validate_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab):
 
 def main(_):
 
-  if not FLAGS.validation:
-    assert((FLAGS.dev and not FLAGS.test) or (FLAGS.test and not FLAGS.dev)), "When not validating, must set exaclty one of --dev or --test flag to specify evaluation dataset."
-
+  assert(FLAGS.validation or ((FLAGS.dev and not FLAGS.test) or (FLAGS.test and not FLAGS.dev))), "When not validating, must set exaclty one of --dev or --test flag to specify evaluation dataset."
+  assert FLAGS.stmt_processor in ["bow", "lstm", "bilstm"], "Statement processor must be one of bow, lstm, or bilstm."
+  assert not FLAGS.attention or FLAGS.stmt_processor in ["lstm", "bilstm"], "Statement processor must be lstm or bilstm if attention is used."
+    
   # SET RANDOM SEED
   np.random.seed(244)
 
