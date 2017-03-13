@@ -76,20 +76,20 @@ class NLISystem(object):
     reg_list = []               # List of variables to regularize
 
     if (stmt_processor == "lstm"):
-      lstm_cell = NLI.process_stmt_LSTM_cell(lstm_hidden_size)
+      lstm_cell = NLI.LSTM_cell(lstm_hidden_size)
     elif (stmt_processor == "bilstm"):
-      lstm_cell_fw = NLI.process_stmt_LSTM_cell(lstm_hidden_size)
-      lstm_cell_bw = NLI.process_stmt_LSTM_cell(lstm_hidden_size)
+      lstm_cell_fw = NLI.LSTM_cell(lstm_hidden_size)
+      lstm_cell_bw = NLI.LSTM_cell(lstm_hidden_size)
 
     def process_stmt(stmt, stmt_len):
       stmt_embed = tf.nn.embedding_lookup(embeddings, stmt)
       stmt_lens = tf.reduce_sum(tf.sign(stmt), axis=1)
       if stmt_processor == "bow":
-          return NLI.process_stmt_bow(stmt_embed, lstm_hidden_size, reg_list)
+          return NLI.BOW(stmt_embed, lstm_hidden_size, reg_list)
       elif stmt_processor == "lstm":
-        return NLI.process_stmt_LSTM(stmt_embed, stmt_len, lstm_cell, reg_list)
+        return NLI.LSTM(stmt_embed, stmt_len, lstm_cell, reg_list)
       elif stmt_processor == "bilstm":
-        return NLI.process_stmt_BiLSTM(stmt_embed, stmt_len, lstm_cell_fw, lstm_cell_bw, reg_list)
+        return NLI.biLSTM(stmt_embed, stmt_len, lstm_cell_fw, lstm_cell_bw, reg_list)
       else:
         assert(False)
 
@@ -98,7 +98,7 @@ class NLISystem(object):
     with tf.variable_scope("Process-Hypothesis"):
       hypothesis = process_stmt(self.hypothesis_ph, self.hypothesis_len_ph)
 
-    merged = NLI.merge_processed_stmts(premise, hypothesis, stmt_hidden_size, reg_list)
+    merged = NLI.merge_states(premise, hypothesis, stmt_hidden_size, reg_list)
     preds = NLI.feed_forward(merged, self.dropout_ph, ff_hidden_size, num_classes, reg_list)
 
     # Loss, optimization
