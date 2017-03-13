@@ -1,0 +1,2622 @@
+########################################################
+
+RUNNING TRIAL:  	lr: 0.001 	dropout: 0.6 	reg_lambda: 0.1 
+
+
+Epoch 1
+Amount of time to run this epoch: 83.4603748322 secs
+Training accuracy for this epoch: 0.38778
+Mean loss for this epoch: 1.79520259352
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 81.6084730625 secs
+Training accuracy for this epoch: 0.427
+Mean loss for this epoch: 1.04687127319
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 80.286233902 secs
+Training accuracy for this epoch: 0.4493
+Mean loss for this epoch: 0.996365244965
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 79.6423931122 secs
+Training accuracy for this epoch: 0.4641
+Mean loss for this epoch: 0.961331475879
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 79.6930589676 secs
+Training accuracy for this epoch: 0.46948
+Mean loss for this epoch: 0.931454942659
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 80.1237311363 secs
+Training accuracy for this epoch: 0.47936
+Mean loss for this epoch: 0.905810089367
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 79.9062170982 secs
+Training accuracy for this epoch: 0.4874
+Mean loss for this epoch: 0.878773341398
+	NEW BEST
+
+Epoch 8
+Amount of time to run this epoch: 79.6563661098 secs
+Training accuracy for this epoch: 0.49468
+Mean loss for this epoch: 0.855147227378
+	NEW BEST
+
+Epoch 9
+Amount of time to run this epoch: 79.4514269829 secs
+Training accuracy for this epoch: 0.49652
+Mean loss for this epoch: 0.841196514228
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.559
+Average Loss: 0.892971742898
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	300.00       	0.00         	31.00        
+neutral      	227.00       	0.00         	106.00       
+contradiction	77.00        	0.00         	259.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.67         	0.50         	0.91         	0.64         
+neutral      	0.00         	0.00         	0.00         	0.00         
+contradiction	0.79         	0.65         	0.77         	0.71         
+micro        	0.71         	0.56         	0.56         	0.56         
+macro        	0.48         	0.38         	0.56         	0.45         
+not-O        	0.67         	0.50         	0.45         	0.47         
+
+############################
+TRIAL RESULTS:  	lr: 0.001 	dropout: 0.6 	reg_lambda: 0.1 
+
+	ACCURACY: 	train: 0.49652 	test: 0.559
+		New best TRAIN
+		New best TEST
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 0.0001 	dropout: 0.6 	reg_lambda: 0.1 
+
+
+Epoch 1
+Amount of time to run this epoch: 79.5126390457 secs
+Training accuracy for this epoch: 0.40644
+Mean loss for this epoch: 7.06525130315
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 80.3835999966 secs
+Training accuracy for this epoch: 0.46312
+Mean loss for this epoch: 2.13765413453
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 78.4665238857 secs
+Training accuracy for this epoch: 0.4915
+Mean loss for this epoch: 1.17627018995
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 79.4836959839 secs
+Training accuracy for this epoch: 0.50752
+Mean loss for this epoch: 1.02540014238
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 80.0519580841 secs
+Training accuracy for this epoch: 0.51866
+Mean loss for this epoch: 0.990366129162
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 79.7185599804 secs
+Training accuracy for this epoch: 0.52828
+Mean loss for this epoch: 0.967827832379
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 79.9525899887 secs
+Training accuracy for this epoch: 0.53916
+Mean loss for this epoch: 0.948805241481
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.621
+Average Loss: 0.930217511952
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	161.00       	96.00        	74.00        
+neutral      	27.00        	246.00       	60.00        
+contradiction	38.00        	84.00        	214.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.77         	0.71         	0.49         	0.58         
+neutral      	0.73         	0.58         	0.74         	0.65         
+contradiction	0.74         	0.61         	0.64         	0.63         
+micro        	0.75         	0.62         	0.62         	0.62         
+macro        	0.75         	0.63         	0.62         	0.62         
+not-O        	0.75         	0.62         	0.61         	0.62         
+
+############################
+TRIAL RESULTS:  	lr: 0.0001 	dropout: 0.6 	reg_lambda: 0.1 
+
+	ACCURACY: 	train: 0.53916 	test: 0.621
+		New best TRAIN
+		New best TEST
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-05 	dropout: 0.6 	reg_lambda: 0.1 
+
+
+Epoch 1
+Amount of time to run this epoch: 80.1057620049 secs
+Training accuracy for this epoch: 0.34532
+Mean loss for this epoch: 12.1964333685
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 79.5415661335 secs
+Training accuracy for this epoch: 0.366
+Mean loss for this epoch: 10.6240684248
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 79.4108259678 secs
+Training accuracy for this epoch: 0.38524
+Mean loss for this epoch: 9.24305349116
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 79.6474080086 secs
+Training accuracy for this epoch: 0.39692
+Mean loss for this epoch: 8.02660825124
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 79.3844730854 secs
+Training accuracy for this epoch: 0.416
+Mean loss for this epoch: 6.95213696963
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 79.6287920475 secs
+Training accuracy for this epoch: 0.42898
+Mean loss for this epoch: 6.00689299637
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 79.5216639042 secs
+Training accuracy for this epoch: 0.44106
+Mean loss for this epoch: 5.18039429279
+	NEW BEST
+
+Epoch 8
+Amount of time to run this epoch: 78.5821499825 secs
+Training accuracy for this epoch: 0.45
+Mean loss for this epoch: 4.46078777801
+	NEW BEST
+
+Epoch 9
+Amount of time to run this epoch: 78.8610508442 secs
+Training accuracy for this epoch: 0.4558
+Mean loss for this epoch: 3.84174166646
+	NEW BEST
+
+Epoch 10
+Amount of time to run this epoch: 78.9283289909 secs
+Training accuracy for this epoch: 0.4632
+Mean loss for this epoch: 3.31236772068
+	NEW BEST
+
+Epoch 11
+Amount of time to run this epoch: 78.9513430595 secs
+Training accuracy for this epoch: 0.46994
+Mean loss for this epoch: 2.86172722368
+	NEW BEST
+
+Epoch 12
+Amount of time to run this epoch: 79.374423027 secs
+Training accuracy for this epoch: 0.47016
+Mean loss for this epoch: 2.48747394061
+	NEW BEST
+
+Epoch 13
+Amount of time to run this epoch: 79.9962501526 secs
+Training accuracy for this epoch: 0.47324
+Mean loss for this epoch: 2.17469760356
+	NEW BEST
+
+Epoch 14
+Amount of time to run this epoch: 79.7457609177 secs
+Training accuracy for this epoch: 0.47758
+Mean loss for this epoch: 1.91667109865
+	NEW BEST
+
+Epoch 15
+Amount of time to run this epoch: 79.2412028313 secs
+Training accuracy for this epoch: 0.47624
+Mean loss for this epoch: 1.71005995911
+
+Epoch 16
+Amount of time to run this epoch: 79.2429270744 secs
+Training accuracy for this epoch: 0.4829
+Mean loss for this epoch: 1.54235591898
+	NEW BEST
+
+Epoch 17
+Amount of time to run this epoch: 78.9555749893 secs
+Training accuracy for this epoch: 0.48832
+Mean loss for this epoch: 1.41006649059
+	NEW BEST
+
+Epoch 18
+Amount of time to run this epoch: 79.2539191246 secs
+Training accuracy for this epoch: 0.49412
+Mean loss for this epoch: 1.31099932608
+	NEW BEST
+
+Epoch 19
+Amount of time to run this epoch: 78.8181362152 secs
+Training accuracy for this epoch: 0.49202
+Mean loss for this epoch: 1.23660146931
+
+Epoch 20
+Amount of time to run this epoch: 79.2913789749 secs
+Training accuracy for this epoch: 0.49258
+Mean loss for this epoch: 1.18276245286
+
+Epoch 21
+Amount of time to run this epoch: 79.1144490242 secs
+Training accuracy for this epoch: 0.49932
+Mean loss for this epoch: 1.14004603615
+	NEW BEST
+
+Epoch 22
+Amount of time to run this epoch: 79.6838228703 secs
+Training accuracy for this epoch: 0.50242
+Mean loss for this epoch: 1.10655213485
+	NEW BEST
+
+Epoch 23
+Amount of time to run this epoch: 79.6405761242 secs
+Training accuracy for this epoch: 0.503
+Mean loss for this epoch: 1.08512399378
+	NEW BEST
+
+Epoch 24
+Amount of time to run this epoch: 79.1599841118 secs
+Training accuracy for this epoch: 0.50314
+Mean loss for this epoch: 1.06847682633
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.594
+Average Loss: 1.02622994408
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	193.00       	62.00        	76.00        
+neutral      	65.00        	202.00       	66.00        
+contradiction	57.00        	80.00        	199.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.74         	0.61         	0.58         	0.60         
+neutral      	0.73         	0.59         	0.61         	0.60         
+contradiction	0.72         	0.58         	0.59         	0.59         
+micro        	0.73         	0.59         	0.59         	0.59         
+macro        	0.73         	0.59         	0.59         	0.59         
+not-O        	0.73         	0.60         	0.59         	0.60         
+
+############################
+TRIAL RESULTS:  	lr: 1e-05 	dropout: 0.6 	reg_lambda: 0.1 
+
+	ACCURACY: 	train: 0.50314 	test: 0.594
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 0.001 	dropout: 0.8 	reg_lambda: 0.1 
+
+
+Epoch 1
+Amount of time to run this epoch: 80.3229651451 secs
+Training accuracy for this epoch: 0.5027
+Mean loss for this epoch: 1.73877479628
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 79.3402369022 secs
+Training accuracy for this epoch: 0.587
+Mean loss for this epoch: 0.907623026377
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 79.8971991539 secs
+Training accuracy for this epoch: 0.65044
+Mean loss for this epoch: 0.803491294689
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 79.3624958992 secs
+Training accuracy for this epoch: 0.69484
+Mean loss for this epoch: 0.716522219769
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 79.7702538967 secs
+Training accuracy for this epoch: 0.72586
+Mean loss for this epoch: 0.640619323077
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 79.9127650261 secs
+Training accuracy for this epoch: 0.75386
+Mean loss for this epoch: 0.580788013194
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 79.6124970913 secs
+Training accuracy for this epoch: 0.77638
+Mean loss for this epoch: 0.522947873263
+	NEW BEST
+
+Epoch 8
+Amount of time to run this epoch: 79.6102969646 secs
+Training accuracy for this epoch: 0.79348
+Mean loss for this epoch: 0.480827246633
+	NEW BEST
+
+Epoch 9
+Amount of time to run this epoch: 79.4746050835 secs
+Training accuracy for this epoch: 0.80274
+Mean loss for this epoch: 0.446223799015
+	NEW BEST
+
+Epoch 10
+Amount of time to run this epoch: 79.5815629959 secs
+Training accuracy for this epoch: 0.8153
+Mean loss for this epoch: 0.417975112453
+	NEW BEST
+
+Epoch 11
+Amount of time to run this epoch: 79.7033288479 secs
+Training accuracy for this epoch: 0.82362
+Mean loss for this epoch: 0.392209078345
+	NEW BEST
+
+Epoch 12
+Amount of time to run this epoch: 79.424612999 secs
+Training accuracy for this epoch: 0.82706
+Mean loss for this epoch: 0.374766598615
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.702
+Average Loss: 1.01621210575
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	223.00       	70.00        	38.00        
+neutral      	31.00        	231.00       	71.00        
+contradiction	23.00        	65.00        	248.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.84         	0.81         	0.67         	0.73         
+neutral      	0.76         	0.63         	0.69         	0.66         
+contradiction	0.80         	0.69         	0.74         	0.72         
+micro        	0.80         	0.70         	0.70         	0.70         
+macro        	0.80         	0.71         	0.70         	0.70         
+not-O        	0.80         	0.71         	0.68         	0.69         
+
+############################
+TRIAL RESULTS:  	lr: 0.001 	dropout: 0.8 	reg_lambda: 0.1 
+
+	ACCURACY: 	train: 0.82706 	test: 0.702
+		New best TRAIN
+		New best TEST
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 0.0001 	dropout: 0.8 	reg_lambda: 0.1 
+
+
+Epoch 1
+Amount of time to run this epoch: 81.1573340893 secs
+Training accuracy for this epoch: 0.46902
+Mean loss for this epoch: 7.07551687331
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 80.5966579914 secs
+Training accuracy for this epoch: 0.53428
+Mean loss for this epoch: 2.1076214248
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 80.1673901081 secs
+Training accuracy for this epoch: 0.56372
+Mean loss for this epoch: 1.12515944502
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 80.6531028748 secs
+Training accuracy for this epoch: 0.58136
+Mean loss for this epoch: 0.963885416384
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 80.8403968811 secs
+Training accuracy for this epoch: 0.5996
+Mean loss for this epoch: 0.917549328197
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 80.9733371735 secs
+Training accuracy for this epoch: 0.61694
+Mean loss for this epoch: 0.886504739294
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 81.5084481239 secs
+Training accuracy for this epoch: 0.63402
+Mean loss for this epoch: 0.855143387299
+	NEW BEST
+
+Epoch 8
+Amount of time to run this epoch: 80.5781400204 secs
+Training accuracy for this epoch: 0.6466
+Mean loss for this epoch: 0.827274545303
+	NEW BEST
+
+Epoch 9
+Amount of time to run this epoch: 80.819257021 secs
+Training accuracy for this epoch: 0.66156
+Mean loss for this epoch: 0.799259154045
+	NEW BEST
+
+Epoch 10
+Amount of time to run this epoch: 80.7284710407 secs
+Training accuracy for this epoch: 0.67538
+Mean loss for this epoch: 0.774723026034
+	NEW BEST
+
+Epoch 11
+Amount of time to run this epoch: 81.02597785 secs
+Training accuracy for this epoch: 0.6882
+Mean loss for this epoch: 0.748278765384
+	NEW BEST
+
+Epoch 12
+Amount of time to run this epoch: 80.2837688923 secs
+Training accuracy for this epoch: 0.69996
+Mean loss for this epoch: 0.723198855663
+	NEW BEST
+
+Epoch 13
+Amount of time to run this epoch: 80.6423490047 secs
+Training accuracy for this epoch: 0.71074
+Mean loss for this epoch: 0.69951280517
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.656
+Average Loss: 0.861582245678
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	202.00       	81.00        	48.00        
+neutral      	37.00        	238.00       	58.00        
+contradiction	36.00        	84.00        	216.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.80         	0.73         	0.61         	0.67         
+neutral      	0.74         	0.59         	0.71         	0.65         
+contradiction	0.77         	0.67         	0.64         	0.66         
+micro        	0.77         	0.66         	0.66         	0.66         
+macro        	0.77         	0.67         	0.66         	0.66         
+not-O        	0.77         	0.65         	0.66         	0.66         
+
+############################
+TRIAL RESULTS:  	lr: 0.0001 	dropout: 0.8 	reg_lambda: 0.1 
+
+	ACCURACY: 	train: 0.71074 	test: 0.656
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-05 	dropout: 0.8 	reg_lambda: 0.1 
+
+
+Epoch 1
+Amount of time to run this epoch: 80.5027859211 secs
+Training accuracy for this epoch: 0.33328
+Mean loss for this epoch: 12.2456940129
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 80.0550379753 secs
+Training accuracy for this epoch: 0.33406
+Mean loss for this epoch: 10.659493361
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 79.6978299618 secs
+Training accuracy for this epoch: 0.33512
+Mean loss for this epoch: 9.26630292219
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 79.9486310482 secs
+Training accuracy for this epoch: 0.33672
+Mean loss for this epoch: 8.04016117976
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 79.2133982182 secs
+Training accuracy for this epoch: 0.34308
+Mean loss for this epoch: 6.95935916169
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 79.5344209671 secs
+Training accuracy for this epoch: 0.39568
+Mean loss for this epoch: 6.00760438619
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 80.8473529816 secs
+Training accuracy for this epoch: 0.42984
+Mean loss for this epoch: 5.17315745537
+	NEW BEST
+
+Epoch 8
+Amount of time to run this epoch: 78.2680020332 secs
+Training accuracy for this epoch: 0.47216
+Mean loss for this epoch: 4.44365281339
+	NEW BEST
+
+Epoch 9
+Amount of time to run this epoch: 79.5195119381 secs
+Training accuracy for this epoch: 0.4893
+Mean loss for this epoch: 3.81105787096
+	NEW BEST
+
+Epoch 10
+Amount of time to run this epoch: 79.1494159698 secs
+Training accuracy for this epoch: 0.49128
+Mean loss for this epoch: 3.27608983504
+	NEW BEST
+
+Epoch 11
+Amount of time to run this epoch: 79.2384269238 secs
+Training accuracy for this epoch: 0.50468
+Mean loss for this epoch: 2.82043839019
+	NEW BEST
+
+Epoch 12
+Amount of time to run this epoch: 79.2206408978 secs
+Training accuracy for this epoch: 0.51776
+Mean loss for this epoch: 2.43787008905
+	NEW BEST
+
+Epoch 13
+Amount of time to run this epoch: 79.4823520184 secs
+Training accuracy for this epoch: 0.52322
+Mean loss for this epoch: 2.12379981307
+	NEW BEST
+
+Epoch 14
+Amount of time to run this epoch: 79.5116479397 secs
+Training accuracy for this epoch: 0.5276
+Mean loss for this epoch: 1.86684857945
+	NEW BEST
+
+Epoch 15
+Amount of time to run this epoch: 80.9257130623 secs
+Training accuracy for this epoch: 0.53476
+Mean loss for this epoch: 1.65746288851
+	NEW BEST
+
+Epoch 16
+Amount of time to run this epoch: 78.3583087921 secs
+Training accuracy for this epoch: 0.54002
+Mean loss for this epoch: 1.4926754599
+	NEW BEST
+
+Epoch 17
+Amount of time to run this epoch: 79.6886007786 secs
+Training accuracy for this epoch: 0.5418
+Mean loss for this epoch: 1.36535724685
+	NEW BEST
+
+Epoch 18
+Amount of time to run this epoch: 79.6495790482 secs
+Training accuracy for this epoch: 0.5489
+Mean loss for this epoch: 1.26518659839
+	NEW BEST
+
+Epoch 19
+Amount of time to run this epoch: 79.1447548866 secs
+Training accuracy for this epoch: 0.55372
+Mean loss for this epoch: 1.18761728205
+	NEW BEST
+
+Epoch 20
+Amount of time to run this epoch: 79.726195097 secs
+Training accuracy for this epoch: 0.55438
+Mean loss for this epoch: 1.13596617817
+	NEW BEST
+
+Epoch 21
+Amount of time to run this epoch: 80.2043120861 secs
+Training accuracy for this epoch: 0.55934
+Mean loss for this epoch: 1.09189801798
+	NEW BEST
+
+Epoch 22
+Amount of time to run this epoch: 80.2166700363 secs
+Training accuracy for this epoch: 0.56482
+Mean loss for this epoch: 1.05893088332
+	NEW BEST
+
+Epoch 23
+Amount of time to run this epoch: 79.3201768398 secs
+Training accuracy for this epoch: 0.56616
+Mean loss for this epoch: 1.03548053814
+	NEW BEST
+
+Epoch 24
+Amount of time to run this epoch: 79.8740510941 secs
+Training accuracy for this epoch: 0.56964
+Mean loss for this epoch: 1.02019845456
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.605
+Average Loss: 0.997400164604
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	213.00       	57.00        	61.00        
+neutral      	67.00        	191.00       	75.00        
+contradiction	64.00        	71.00        	201.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.75         	0.62         	0.64         	0.63         
+neutral      	0.73         	0.60         	0.57         	0.59         
+contradiction	0.73         	0.60         	0.60         	0.60         
+micro        	0.74         	0.60         	0.60         	0.60         
+macro        	0.74         	0.60         	0.61         	0.60         
+not-O        	0.74         	0.61         	0.61         	0.61         
+
+############################
+TRIAL RESULTS:  	lr: 1e-05 	dropout: 0.8 	reg_lambda: 0.1 
+
+	ACCURACY: 	train: 0.56964 	test: 0.605
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 0.001 	dropout: 1.0 	reg_lambda: 0.1 
+
+
+Epoch 1
+Amount of time to run this epoch: 81.3979840279 secs
+Training accuracy for this epoch: 0.33374
+Mean loss for this epoch: 1.79170103558
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 79.7041838169 secs
+Training accuracy for this epoch: 0.33394
+Mean loss for this epoch: 1.0986123085
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 79.6630392075 secs
+Training accuracy for this epoch: 0.33394
+Mean loss for this epoch: 1.09861230865
+
+Epoch 4
+Amount of time to run this epoch: 79.9191381931 secs
+Training accuracy for this epoch: 0.33394
+Mean loss for this epoch: 1.09861230865
+
+EVALUATING
+Accuracy: 0.331
+Average Loss: 1.0986123085
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	331.00       	0.00         	0.00         
+neutral      	333.00       	0.00         	0.00         
+contradiction	336.00       	0.00         	0.00         
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.33         	0.33         	1.00         	0.50         
+neutral      	0.00         	0.00         	0.00         	0.00         
+contradiction	0.00         	0.00         	0.00         	0.00         
+micro        	0.55         	0.33         	0.33         	0.33         
+macro        	0.11         	0.11         	0.33         	0.17         
+not-O        	0.50         	0.33         	0.50         	0.40         
+
+############################
+TRIAL RESULTS:  	lr: 0.001 	dropout: 1.0 	reg_lambda: 0.1 
+
+	ACCURACY: 	train: 0.33394 	test: 0.331
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 0.0001 	dropout: 1.0 	reg_lambda: 0.1 
+
+
+Epoch 1
+Amount of time to run this epoch: 80.030477047 secs
+Training accuracy for this epoch: 0.51234
+Mean loss for this epoch: 7.14199542207
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 80.3815460205 secs
+Training accuracy for this epoch: 0.60246
+Mean loss for this epoch: 2.16330587071
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 80.6459569931 secs
+Training accuracy for this epoch: 0.6342
+Mean loss for this epoch: 1.12104399758
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 78.4099080563 secs
+Training accuracy for this epoch: 0.66292
+Mean loss for this epoch: 0.907621368804
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 79.9121899605 secs
+Training accuracy for this epoch: 0.68838
+Mean loss for this epoch: 0.828215452221
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 79.501278162 secs
+Training accuracy for this epoch: 0.7129
+Mean loss for this epoch: 0.771892198135
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 79.5840480328 secs
+Training accuracy for this epoch: 0.73792
+Mean loss for this epoch: 0.720841938673
+	NEW BEST
+
+Epoch 8
+Amount of time to run this epoch: 79.5336828232 secs
+Training accuracy for this epoch: 0.76128
+Mean loss for this epoch: 0.674998038698
+	NEW BEST
+
+Epoch 9
+Amount of time to run this epoch: 79.8056409359 secs
+Training accuracy for this epoch: 0.78392
+Mean loss for this epoch: 0.626423148091
+	NEW BEST
+
+Epoch 10
+Amount of time to run this epoch: 79.6098048687 secs
+Training accuracy for this epoch: 0.80178
+Mean loss for this epoch: 0.586791986604
+	NEW BEST
+
+Epoch 11
+Amount of time to run this epoch: 79.2091090679 secs
+Training accuracy for this epoch: 0.82184
+Mean loss for this epoch: 0.54431506595
+	NEW BEST
+
+Epoch 12
+Amount of time to run this epoch: 79.6532700062 secs
+Training accuracy for this epoch: 0.84122
+Mean loss for this epoch: 0.502588626731
+	NEW BEST
+
+Epoch 13
+Amount of time to run this epoch: 79.4887559414 secs
+Training accuracy for this epoch: 0.85618
+Mean loss for this epoch: 0.467621495104
+	NEW BEST
+
+Epoch 14
+Amount of time to run this epoch: 79.687898159 secs
+Training accuracy for this epoch: 0.87366
+Mean loss for this epoch: 0.431046509129
+	NEW BEST
+
+Epoch 15
+Amount of time to run this epoch: 79.9284799099 secs
+Training accuracy for this epoch: 0.88462
+Mean loss for this epoch: 0.402482778672
+	NEW BEST
+
+Epoch 16
+Amount of time to run this epoch: 80.2516059875 secs
+Training accuracy for this epoch: 0.8954
+Mean loss for this epoch: 0.377222199555
+	NEW BEST
+
+Epoch 17
+Amount of time to run this epoch: 79.9996550083 secs
+Training accuracy for this epoch: 0.90652
+Mean loss for this epoch: 0.348804522544
+	NEW BEST
+
+Epoch 18
+Amount of time to run this epoch: 79.9912910461 secs
+Training accuracy for this epoch: 0.91578
+Mean loss for this epoch: 0.323580638032
+	NEW BEST
+
+Epoch 19
+Amount of time to run this epoch: 79.5935890675 secs
+Training accuracy for this epoch: 0.92404
+Mean loss for this epoch: 0.304375642229
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.634
+Average Loss: 1.14451714233
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	180.00       	73.00        	78.00        
+neutral      	48.00        	196.00       	89.00        
+contradiction	32.00        	46.00        	258.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.77         	0.69         	0.54         	0.61         
+neutral      	0.74         	0.62         	0.59         	0.60         
+contradiction	0.76         	0.61         	0.77         	0.68         
+micro        	0.76         	0.63         	0.63         	0.63         
+macro        	0.76         	0.64         	0.63         	0.63         
+not-O        	0.76         	0.65         	0.57         	0.61         
+
+############################
+TRIAL RESULTS:  	lr: 0.0001 	dropout: 1.0 	reg_lambda: 0.1 
+
+	ACCURACY: 	train: 0.92404 	test: 0.634
+		New best TRAIN
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-05 	dropout: 1.0 	reg_lambda: 0.1 
+
+
+Epoch 1
+Amount of time to run this epoch: 81.4496870041 secs
+Training accuracy for this epoch: 0.41748
+Mean loss for this epoch: 12.2280618724
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 80.8263909817 secs
+Training accuracy for this epoch: 0.49232
+Mean loss for this epoch: 10.6042032205
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 80.9798481464 secs
+Training accuracy for this epoch: 0.5402
+Mean loss for this epoch: 9.21343246323
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 80.5208489895 secs
+Training accuracy for this epoch: 0.55918
+Mean loss for this epoch: 8.02582866274
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 80.3734071255 secs
+Training accuracy for this epoch: 0.5722
+Mean loss for this epoch: 6.99302235711
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 80.0841808319 secs
+Training accuracy for this epoch: 0.582
+Mean loss for this epoch: 6.08903117253
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 80.7092158794 secs
+Training accuracy for this epoch: 0.58928
+Mean loss for this epoch: 5.29566447387
+	NEW BEST
+
+Epoch 8
+Amount of time to run this epoch: 80.1598339081 secs
+Training accuracy for this epoch: 0.59366
+Mean loss for this epoch: 4.60131395747
+	NEW BEST
+
+Epoch 9
+Amount of time to run this epoch: 80.5221979618 secs
+Training accuracy for this epoch: 0.60064
+Mean loss for this epoch: 3.99641117294
+	NEW BEST
+
+Epoch 10
+Amount of time to run this epoch: 80.7325839996 secs
+Training accuracy for this epoch: 0.605
+Mean loss for this epoch: 3.47327308124
+	NEW BEST
+
+Epoch 11
+Amount of time to run this epoch: 79.9196848869 secs
+Training accuracy for this epoch: 0.611
+Mean loss for this epoch: 3.02326511635
+	NEW BEST
+
+Epoch 12
+Amount of time to run this epoch: 80.1871058941 secs
+Training accuracy for this epoch: 0.61524
+Mean loss for this epoch: 2.64020412871
+	NEW BEST
+
+Epoch 13
+Amount of time to run this epoch: 80.6168649197 secs
+Training accuracy for this epoch: 0.6196
+Mean loss for this epoch: 2.31670344943
+	NEW BEST
+
+Epoch 14
+Amount of time to run this epoch: 80.3996691704 secs
+Training accuracy for this epoch: 0.62304
+Mean loss for this epoch: 2.04745536052
+	NEW BEST
+
+Epoch 15
+Amount of time to run this epoch: 80.1146409512 secs
+Training accuracy for this epoch: 0.62744
+Mean loss for this epoch: 1.82557955803
+	NEW BEST
+
+Epoch 16
+Amount of time to run this epoch: 80.7312479019 secs
+Training accuracy for this epoch: 0.63162
+Mean loss for this epoch: 1.64420904513
+	NEW BEST
+
+Epoch 17
+Amount of time to run this epoch: 80.2932779789 secs
+Training accuracy for this epoch: 0.63532
+Mean loss for this epoch: 1.49737073973
+	NEW BEST
+
+Epoch 18
+Amount of time to run this epoch: 80.0385859013 secs
+Training accuracy for this epoch: 0.638
+Mean loss for this epoch: 1.37935336121
+	NEW BEST
+
+Epoch 19
+Amount of time to run this epoch: 80.3777627945 secs
+Training accuracy for this epoch: 0.6407
+Mean loss for this epoch: 1.28688225364
+	NEW BEST
+
+Epoch 20
+Amount of time to run this epoch: 80.5552270412 secs
+Training accuracy for this epoch: 0.64626
+Mean loss for this epoch: 1.21305420827
+	NEW BEST
+
+Epoch 21
+Amount of time to run this epoch: 79.7485477924 secs
+Training accuracy for this epoch: 0.64816
+Mean loss for this epoch: 1.15519309699
+	NEW BEST
+
+Epoch 22
+Amount of time to run this epoch: 80.2856049538 secs
+Training accuracy for this epoch: 0.65274
+Mean loss for this epoch: 1.10904576224
+	NEW BEST
+
+Epoch 23
+Amount of time to run this epoch: 80.6444358826 secs
+Training accuracy for this epoch: 0.65574
+Mean loss for this epoch: 1.0720948362
+	NEW BEST
+
+Epoch 24
+Amount of time to run this epoch: 79.9573969841 secs
+Training accuracy for this epoch: 0.65802
+Mean loss for this epoch: 1.04245519318
+	NEW BEST
+
+Epoch 25
+Amount of time to run this epoch: 79.6802120209 secs
+Training accuracy for this epoch: 0.66066
+Mean loss for this epoch: 1.01677786252
+	NEW BEST
+
+Epoch 26
+Amount of time to run this epoch: 80.480451107 secs
+Training accuracy for this epoch: 0.66348
+Mean loss for this epoch: 0.995771633618
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.64
+Average Loss: 1.03512972966
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	209.00       	49.00        	73.00        
+neutral      	47.00        	203.00       	83.00        
+contradiction	45.00        	63.00        	228.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.79         	0.69         	0.63         	0.66         
+neutral      	0.76         	0.64         	0.61         	0.63         
+contradiction	0.74         	0.59         	0.68         	0.63         
+micro        	0.76         	0.64         	0.64         	0.64         
+macro        	0.76         	0.64         	0.64         	0.64         
+not-O        	0.77         	0.67         	0.62         	0.64         
+
+############################
+TRIAL RESULTS:  	lr: 1e-05 	dropout: 1.0 	reg_lambda: 0.1 
+
+	ACCURACY: 	train: 0.66348 	test: 0.64
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 0.001 	dropout: 0.6 	reg_lambda: 0.001 
+
+
+Epoch 1
+Amount of time to run this epoch: 80.3830881119 secs
+Training accuracy for this epoch: 0.45962
+Mean loss for this epoch: 1.06620492525
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 80.3298990726 secs
+Training accuracy for this epoch: 0.52352
+Mean loss for this epoch: 0.949568500299
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 79.3253369331 secs
+Training accuracy for this epoch: 0.55712
+Mean loss for this epoch: 0.885897227108
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 79.7745530605 secs
+Training accuracy for this epoch: 0.5785
+Mean loss for this epoch: 0.835720903962
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 79.9063138962 secs
+Training accuracy for this epoch: 0.60182
+Mean loss for this epoch: 0.794524489766
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 79.7959299088 secs
+Training accuracy for this epoch: 0.6158
+Mean loss for this epoch: 0.749300877838
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 79.4483840466 secs
+Training accuracy for this epoch: 0.63494
+Mean loss for this epoch: 0.718174986294
+	NEW BEST
+
+Epoch 8
+Amount of time to run this epoch: 78.9638841152 secs
+Training accuracy for this epoch: 0.65028
+Mean loss for this epoch: 0.680828020624
+	NEW BEST
+
+Epoch 9
+Amount of time to run this epoch: 79.2739539146 secs
+Training accuracy for this epoch: 0.66234
+Mean loss for this epoch: 0.648508578653
+	NEW BEST
+
+Epoch 10
+Amount of time to run this epoch: 79.9364290237 secs
+Training accuracy for this epoch: 0.66892
+Mean loss for this epoch: 0.627318299602
+	NEW BEST
+
+Epoch 11
+Amount of time to run this epoch: 79.5015449524 secs
+Training accuracy for this epoch: 0.67788
+Mean loss for this epoch: 0.605583276438
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.735
+Average Loss: 0.790847428143
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	246.00       	52.00        	33.00        
+neutral      	43.00        	232.00       	58.00        
+contradiction	27.00        	52.00        	257.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.84         	0.78         	0.74         	0.76         
+neutral      	0.80         	0.69         	0.70         	0.69         
+contradiction	0.83         	0.74         	0.76         	0.75         
+micro        	0.82         	0.73         	0.73         	0.73         
+macro        	0.82         	0.74         	0.73         	0.74         
+not-O        	0.82         	0.73         	0.72         	0.73         
+
+############################
+TRIAL RESULTS:  	lr: 0.001 	dropout: 0.6 	reg_lambda: 0.001 
+
+	ACCURACY: 	train: 0.67788 	test: 0.735
+		New best TEST
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 0.0001 	dropout: 0.6 	reg_lambda: 0.001 
+
+
+Epoch 1
+Amount of time to run this epoch: 79.3593850136 secs
+Training accuracy for this epoch: 0.41416
+Mean loss for this epoch: 1.15819454468
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 79.9238579273 secs
+Training accuracy for this epoch: 0.47454
+Mean loss for this epoch: 1.08047227291
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 80.0146589279 secs
+Training accuracy for this epoch: 0.4968
+Mean loss for this epoch: 1.03413409056
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 79.8740119934 secs
+Training accuracy for this epoch: 0.5111
+Mean loss for this epoch: 1.00037809345
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 80.0956308842 secs
+Training accuracy for this epoch: 0.52494
+Mean loss for this epoch: 0.975314081401
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 79.9890580177 secs
+Training accuracy for this epoch: 0.535
+Mean loss for this epoch: 0.949482545904
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 79.7670419216 secs
+Training accuracy for this epoch: 0.5449
+Mean loss for this epoch: 0.928732834509
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.654
+Average Loss: 0.884738568217
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	223.00       	70.00        	38.00        
+neutral      	48.00        	246.00       	39.00        
+contradiction	59.00        	92.00        	185.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.79         	0.68         	0.67         	0.67         
+neutral      	0.75         	0.60         	0.74         	0.66         
+contradiction	0.77         	0.71         	0.55         	0.62         
+micro        	0.77         	0.65         	0.65         	0.65         
+macro        	0.77         	0.66         	0.65         	0.65         
+not-O        	0.77         	0.64         	0.71         	0.67         
+
+############################
+TRIAL RESULTS:  	lr: 0.0001 	dropout: 0.6 	reg_lambda: 0.001 
+
+	ACCURACY: 	train: 0.5449 	test: 0.654
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-05 	dropout: 0.6 	reg_lambda: 0.001 
+
+
+Epoch 1
+Amount of time to run this epoch: 81.0282490253 secs
+Training accuracy for this epoch: 0.35194
+Mean loss for this epoch: 1.21155052813
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 79.9710309505 secs
+Training accuracy for this epoch: 0.38236
+Mean loss for this epoch: 1.1977670961
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 79.9508869648 secs
+Training accuracy for this epoch: 0.41172
+Mean loss for this epoch: 1.17855852461
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.494
+Average Loss: 1.15462101996
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	165.00       	101.00       	65.00        
+neutral      	65.00        	205.00       	63.00        
+contradiction	83.00        	129.00       	124.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.69         	0.53         	0.50         	0.51         
+neutral      	0.64         	0.47         	0.62         	0.53         
+contradiction	0.66         	0.49         	0.37         	0.42         
+micro        	0.66         	0.49         	0.49         	0.49         
+macro        	0.66         	0.50         	0.49         	0.49         
+not-O        	0.66         	0.49         	0.56         	0.52         
+
+############################
+TRIAL RESULTS:  	lr: 1e-05 	dropout: 0.6 	reg_lambda: 0.001 
+
+	ACCURACY: 	train: 0.41172 	test: 0.494
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 0.001 	dropout: 0.8 	reg_lambda: 0.001 
+
+
+Epoch 1
+Amount of time to run this epoch: 80.6234309673 secs
+Training accuracy for this epoch: 0.5274
+Mean loss for this epoch: 0.995858145721
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 79.9392838478 secs
+Training accuracy for this epoch: 0.6166
+Mean loss for this epoch: 0.832496810523
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 79.8271009922 secs
+Training accuracy for this epoch: 0.67098
+Mean loss for this epoch: 0.724388553435
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 80.00364995 secs
+Training accuracy for this epoch: 0.71452
+Mean loss for this epoch: 0.630610382808
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 80.6866719723 secs
+Training accuracy for this epoch: 0.74818
+Mean loss for this epoch: 0.552669544507
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 79.7155852318 secs
+Training accuracy for this epoch: 0.77214
+Mean loss for this epoch: 0.49561608074
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 80.0244860649 secs
+Training accuracy for this epoch: 0.78936
+Mean loss for this epoch: 0.448768736285
+	NEW BEST
+
+Epoch 8
+Amount of time to run this epoch: 80.2174298763 secs
+Training accuracy for this epoch: 0.80414
+Mean loss for this epoch: 0.411552314716
+	NEW BEST
+
+Epoch 9
+Amount of time to run this epoch: 80.0694317818 secs
+Training accuracy for this epoch: 0.81462
+Mean loss for this epoch: 0.380788309038
+	NEW BEST
+
+Epoch 10
+Amount of time to run this epoch: 80.3874299526 secs
+Training accuracy for this epoch: 0.82506
+Mean loss for this epoch: 0.353943005595
+	NEW BEST
+
+Epoch 11
+Amount of time to run this epoch: 80.228746891 secs
+Training accuracy for this epoch: 0.8335
+Mean loss for this epoch: 0.328939529445
+	NEW BEST
+
+Epoch 12
+Amount of time to run this epoch: 79.6856811047 secs
+Training accuracy for this epoch: 0.83582
+Mean loss for this epoch: 0.319741768853
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.732
+Average Loss: 1.05857783929
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	259.00       	44.00        	28.00        
+neutral      	55.00        	199.00       	79.00        
+contradiction	26.00        	36.00        	274.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.85         	0.76         	0.78         	0.77         
+neutral      	0.79         	0.71         	0.60         	0.65         
+contradiction	0.83         	0.72         	0.82         	0.76         
+micro        	0.82         	0.73         	0.73         	0.73         
+macro        	0.82         	0.73         	0.73         	0.73         
+not-O        	0.82         	0.74         	0.69         	0.71         
+
+############################
+TRIAL RESULTS:  	lr: 0.001 	dropout: 0.8 	reg_lambda: 0.001 
+
+	ACCURACY: 	train: 0.83582 	test: 0.732
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 0.0001 	dropout: 0.8 	reg_lambda: 0.001 
+
+
+Epoch 1
+Amount of time to run this epoch: 81.0534579754 secs
+Training accuracy for this epoch: 0.46192
+Mean loss for this epoch: 1.12471981373
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 79.3689310551 secs
+Training accuracy for this epoch: 0.5423
+Mean loss for this epoch: 1.01275256025
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 79.6879558563 secs
+Training accuracy for this epoch: 0.5711
+Mean loss for this epoch: 0.953780608104
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 79.6162669659 secs
+Training accuracy for this epoch: 0.59056
+Mean loss for this epoch: 0.913698441842
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 80.5161070824 secs
+Training accuracy for this epoch: 0.6143
+Mean loss for this epoch: 0.872926364622
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 79.9941971302 secs
+Training accuracy for this epoch: 0.62622
+Mean loss for this epoch: 0.840413947926
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 79.3640501499 secs
+Training accuracy for this epoch: 0.64858
+Mean loss for this epoch: 0.800757639053
+	NEW BEST
+
+Epoch 8
+Amount of time to run this epoch: 79.5983099937 secs
+Training accuracy for this epoch: 0.6636
+Mean loss for this epoch: 0.766286037157
+	NEW BEST
+
+Epoch 9
+Amount of time to run this epoch: 79.9457161427 secs
+Training accuracy for this epoch: 0.67876
+Mean loss for this epoch: 0.736486466568
+	NEW BEST
+
+Epoch 10
+Amount of time to run this epoch: 79.6792039871 secs
+Training accuracy for this epoch: 0.69142
+Mean loss for this epoch: 0.703795805726
+	NEW BEST
+
+Epoch 11
+Amount of time to run this epoch: 80.0960440636 secs
+Training accuracy for this epoch: 0.70572
+Mean loss for this epoch: 0.674480490329
+	NEW BEST
+
+Epoch 12
+Amount of time to run this epoch: 79.9927170277 secs
+Training accuracy for this epoch: 0.71336
+Mean loss for this epoch: 0.649542212486
+	NEW BEST
+
+Epoch 13
+Amount of time to run this epoch: 79.5996129513 secs
+Training accuracy for this epoch: 0.72422
+Mean loss for this epoch: 0.619018141609
+	NEW BEST
+
+Epoch 14
+Amount of time to run this epoch: 80.2827980518 secs
+Training accuracy for this epoch: 0.73526
+Mean loss for this epoch: 0.593699957594
+	NEW BEST
+
+Epoch 15
+Amount of time to run this epoch: 79.6053659916 secs
+Training accuracy for this epoch: 0.74528
+Mean loss for this epoch: 0.567756320852
+	NEW BEST
+
+Epoch 16
+Amount of time to run this epoch: 79.5256149769 secs
+Training accuracy for this epoch: 0.75554
+Mean loss for this epoch: 0.54012441578
+	NEW BEST
+
+Epoch 17
+Amount of time to run this epoch: 79.3348178864 secs
+Training accuracy for this epoch: 0.76024
+Mean loss for this epoch: 0.524652414919
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.701
+Average Loss: 0.939513318241
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	248.00       	51.00        	32.00        
+neutral      	58.00        	221.00       	54.00        
+contradiction	44.00        	60.00        	232.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.81         	0.71         	0.75         	0.73         
+neutral      	0.78         	0.67         	0.66         	0.66         
+contradiction	0.81         	0.73         	0.69         	0.71         
+micro        	0.80         	0.70         	0.70         	0.70         
+macro        	0.80         	0.70         	0.70         	0.70         
+not-O        	0.80         	0.69         	0.71         	0.70         
+
+############################
+TRIAL RESULTS:  	lr: 0.0001 	dropout: 0.8 	reg_lambda: 0.001 
+
+	ACCURACY: 	train: 0.76024 	test: 0.701
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-05 	dropout: 0.8 	reg_lambda: 0.001 
+
+
+Epoch 1
+Amount of time to run this epoch: 81.5958440304 secs
+Training accuracy for this epoch: 0.3852
+Mean loss for this epoch: 1.20358317557
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 80.8750698566 secs
+Training accuracy for this epoch: 0.42716
+Mean loss for this epoch: 1.17134307595
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 80.6069200039 secs
+Training accuracy for this epoch: 0.46614
+Mean loss for this epoch: 1.13591041772
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 80.7504398823 secs
+Training accuracy for this epoch: 0.49422
+Mean loss for this epoch: 1.10673972484
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 80.6964540482 secs
+Training accuracy for this epoch: 0.50646
+Mean loss for this epoch: 1.08807346392
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.564
+Average Loss: 1.05865786225
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	200.00       	47.00        	84.00        
+neutral      	67.00        	172.00       	94.00        
+contradiction	68.00        	76.00        	192.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.73         	0.60         	0.60         	0.60         
+neutral      	0.72         	0.58         	0.52         	0.55         
+contradiction	0.68         	0.52         	0.57         	0.54         
+micro        	0.71         	0.56         	0.56         	0.56         
+macro        	0.71         	0.57         	0.56         	0.56         
+not-O        	0.72         	0.59         	0.56         	0.57         
+
+############################
+TRIAL RESULTS:  	lr: 1e-05 	dropout: 0.8 	reg_lambda: 0.001 
+
+	ACCURACY: 	train: 0.50646 	test: 0.564
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 0.001 	dropout: 1.0 	reg_lambda: 0.001 
+
+
+Epoch 1
+Amount of time to run this epoch: 81.0845811367 secs
+Training accuracy for this epoch: 0.57242
+Mean loss for this epoch: 0.92644447477
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 80.9038479328 secs
+Training accuracy for this epoch: 0.71644
+Mean loss for this epoch: 0.680300798601
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 80.5525970459 secs
+Training accuracy for this epoch: 0.80532
+Mean loss for this epoch: 0.50111545165
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 80.014218092 secs
+Training accuracy for this epoch: 0.86514
+Mean loss for this epoch: 0.36242588316
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 82.4106340408 secs
+Training accuracy for this epoch: 0.90948
+Mean loss for this epoch: 0.255849791457
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 80.3626577854 secs
+Training accuracy for this epoch: 0.93702
+Mean loss for this epoch: 0.182322159879
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 80.1950850487 secs
+Training accuracy for this epoch: 0.9551
+Mean loss for this epoch: 0.134035244399
+	NEW BEST
+
+Epoch 8
+Amount of time to run this epoch: 80.3311729431 secs
+Training accuracy for this epoch: 0.9682
+Mean loss for this epoch: 0.099985709664
+	NEW BEST
+
+Epoch 9
+Amount of time to run this epoch: 80.306030035 secs
+Training accuracy for this epoch: 0.97516
+Mean loss for this epoch: 0.0796339468926
+	NEW BEST
+
+Epoch 10
+Amount of time to run this epoch: 79.779211998 secs
+Training accuracy for this epoch: 0.98026
+Mean loss for this epoch: 0.0651576030443
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.723
+Average Loss: 1.29521226138
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	246.00       	63.00        	22.00        
+neutral      	39.00        	209.00       	85.00        
+contradiction	21.00        	47.00        	268.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.85         	0.80         	0.74         	0.77         
+neutral      	0.77         	0.66         	0.63         	0.64         
+contradiction	0.82         	0.71         	0.80         	0.75         
+micro        	0.82         	0.72         	0.72         	0.72         
+macro        	0.82         	0.72         	0.72         	0.72         
+not-O        	0.81         	0.73         	0.69         	0.71         
+
+############################
+TRIAL RESULTS:  	lr: 0.001 	dropout: 1.0 	reg_lambda: 0.001 
+
+	ACCURACY: 	train: 0.98026 	test: 0.723
+		New best TRAIN
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 0.0001 	dropout: 1.0 	reg_lambda: 0.001 
+
+
+Epoch 1
+Amount of time to run this epoch: 80.3863699436 secs
+Training accuracy for this epoch: 0.43536
+Mean loss for this epoch: 1.10728024072
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 80.8436968327 secs
+Training accuracy for this epoch: 0.51518
+Mean loss for this epoch: 0.986669153204
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 80.9619300365 secs
+Training accuracy for this epoch: 0.63598
+Mean loss for this epoch: 0.858091722326
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 80.5890688896 secs
+Training accuracy for this epoch: 0.67234
+Mean loss for this epoch: 0.795384718177
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 81.0965948105 secs
+Training accuracy for this epoch: 0.70364
+Mean loss for this epoch: 0.737451589016
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 80.2292401791 secs
+Training accuracy for this epoch: 0.73034
+Mean loss for this epoch: 0.681774928156
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 80.0530509949 secs
+Training accuracy for this epoch: 0.7586
+Mean loss for this epoch: 0.628459439196
+	NEW BEST
+
+Epoch 8
+Amount of time to run this epoch: 80.3396179676 secs
+Training accuracy for this epoch: 0.78286
+Mean loss for this epoch: 0.576041454035
+	NEW BEST
+
+Epoch 9
+Amount of time to run this epoch: 80.3323740959 secs
+Training accuracy for this epoch: 0.80616
+Mean loss for this epoch: 0.524878575798
+	NEW BEST
+
+Epoch 10
+Amount of time to run this epoch: 80.8287668228 secs
+Training accuracy for this epoch: 0.83006
+Mean loss for this epoch: 0.47385168793
+	NEW BEST
+
+Epoch 11
+Amount of time to run this epoch: 80.7024300098 secs
+Training accuracy for this epoch: 0.85014
+Mean loss for this epoch: 0.426704737927
+	NEW BEST
+
+Epoch 12
+Amount of time to run this epoch: 80.9315361977 secs
+Training accuracy for this epoch: 0.87088
+Mean loss for this epoch: 0.381029147321
+	NEW BEST
+
+Epoch 13
+Amount of time to run this epoch: 80.8881947994 secs
+Training accuracy for this epoch: 0.88976
+Mean loss for this epoch: 0.337189043793
+	NEW BEST
+
+Epoch 14
+Amount of time to run this epoch: 80.860432148 secs
+Training accuracy for this epoch: 0.90234
+Mean loss for this epoch: 0.304492249185
+	NEW BEST
+
+Epoch 15
+Amount of time to run this epoch: 80.5635409355 secs
+Training accuracy for this epoch: 0.91946
+Mean loss for this epoch: 0.268401744278
+	NEW BEST
+
+Epoch 16
+Amount of time to run this epoch: 79.7311348915 secs
+Training accuracy for this epoch: 0.92898
+Mean loss for this epoch: 0.241228072997
+	NEW BEST
+
+Epoch 17
+Amount of time to run this epoch: 80.1089289188 secs
+Training accuracy for this epoch: 0.94018
+Mean loss for this epoch: 0.211000115299
+	NEW BEST
+
+Epoch 18
+Amount of time to run this epoch: 80.5190520287 secs
+Training accuracy for this epoch: 0.94374
+Mean loss for this epoch: 0.198110495777
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.638
+Average Loss: 1.48388177902
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	160.00       	127.00       	44.00        
+neutral      	22.00        	262.00       	49.00        
+contradiction	20.00        	100.00       	216.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.79         	0.79         	0.48         	0.60         
+neutral      	0.70         	0.54         	0.79         	0.64         
+contradiction	0.79         	0.70         	0.64         	0.67         
+micro        	0.76         	0.64         	0.64         	0.64         
+macro        	0.76         	0.68         	0.64         	0.64         
+not-O        	0.74         	0.61         	0.64         	0.62         
+
+############################
+TRIAL RESULTS:  	lr: 0.0001 	dropout: 1.0 	reg_lambda: 0.001 
+
+	ACCURACY: 	train: 0.94374 	test: 0.638
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-05 	dropout: 1.0 	reg_lambda: 0.001 
+
+
+Epoch 1
+Amount of time to run this epoch: 81.4359629154 secs
+Training accuracy for this epoch: 0.43186
+Mean loss for this epoch: 1.18536173733
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 81.2044038773 secs
+Training accuracy for this epoch: 0.51616
+Mean loss for this epoch: 1.10236253953
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 81.7379670143 secs
+Training accuracy for this epoch: 0.5536
+Mean loss for this epoch: 1.05058038517
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 81.0162289143 secs
+Training accuracy for this epoch: 0.57012
+Mean loss for this epoch: 1.02213941313
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 81.4588959217 secs
+Training accuracy for this epoch: 0.58006
+Mean loss for this epoch: 1.00055621248
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 81.5630390644 secs
+Training accuracy for this epoch: 0.59042
+Mean loss for this epoch: 0.982809469828
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.578
+Average Loss: 0.990536108613
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	179.00       	81.00        	71.00        
+neutral      	55.00        	207.00       	71.00        
+contradiction	55.00        	89.00        	192.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.74         	0.62         	0.54         	0.58         
+neutral      	0.70         	0.55         	0.62         	0.58         
+contradiction	0.71         	0.57         	0.57         	0.57         
+micro        	0.72         	0.58         	0.58         	0.58         
+macro        	0.72         	0.58         	0.58         	0.58         
+not-O        	0.72         	0.58         	0.58         	0.58         
+
+############################
+TRIAL RESULTS:  	lr: 1e-05 	dropout: 1.0 	reg_lambda: 0.001 
+
+	ACCURACY: 	train: 0.59042 	test: 0.578
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 0.001 	dropout: 0.6 	reg_lambda: 1e-05 
+
+
+Epoch 1
+Amount of time to run this epoch: 81.0365839005 secs
+Training accuracy for this epoch: 0.43638
+Mean loss for this epoch: 1.03450247676
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 80.8941249847 secs
+Training accuracy for this epoch: 0.51674
+Mean loss for this epoch: 0.948989366479
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 80.611754179 secs
+Training accuracy for this epoch: 0.54748
+Mean loss for this epoch: 0.892772367315
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 80.0965738297 secs
+Training accuracy for this epoch: 0.57488
+Mean loss for this epoch: 0.8437762467
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 80.0256538391 secs
+Training accuracy for this epoch: 0.594
+Mean loss for this epoch: 0.805147487184
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 80.5749220848 secs
+Training accuracy for this epoch: 0.60582
+Mean loss for this epoch: 0.771751746878
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 80.7685830593 secs
+Training accuracy for this epoch: 0.6246
+Mean loss for this epoch: 0.73021438028
+	NEW BEST
+
+Epoch 8
+Amount of time to run this epoch: 80.4576468468 secs
+Training accuracy for this epoch: 0.63646
+Mean loss for this epoch: 0.6980130004
+	NEW BEST
+
+Epoch 9
+Amount of time to run this epoch: 80.5072720051 secs
+Training accuracy for this epoch: 0.65112
+Mean loss for this epoch: 0.66573825833
+	NEW BEST
+
+Epoch 10
+Amount of time to run this epoch: 80.4932169914 secs
+Training accuracy for this epoch: 0.65918
+Mean loss for this epoch: 0.646473398713
+	NEW BEST
+
+Epoch 11
+Amount of time to run this epoch: 79.88261199 secs
+Training accuracy for this epoch: 0.66878
+Mean loss for this epoch: 0.621706037303
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.716
+Average Loss: 0.805852536112
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	251.00       	49.00        	31.00        
+neutral      	45.00        	207.00       	81.00        
+contradiction	28.00        	50.00        	258.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.85         	0.77         	0.76         	0.77         
+neutral      	0.78         	0.68         	0.62         	0.65         
+contradiction	0.81         	0.70         	0.77         	0.73         
+micro        	0.81         	0.72         	0.72         	0.72         
+macro        	0.81         	0.72         	0.72         	0.72         
+not-O        	0.81         	0.73         	0.69         	0.71         
+
+############################
+TRIAL RESULTS:  	lr: 0.001 	dropout: 0.6 	reg_lambda: 1e-05 
+
+	ACCURACY: 	train: 0.66878 	test: 0.716
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 0.0001 	dropout: 0.6 	reg_lambda: 1e-05 
+
+
+Epoch 1
+Amount of time to run this epoch: 81.1665410995 secs
+Training accuracy for this epoch: 0.40828
+Mean loss for this epoch: 1.06675064831
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 80.1079559326 secs
+Training accuracy for this epoch: 0.4797
+Mean loss for this epoch: 1.00001193419
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 79.9417769909 secs
+Training accuracy for this epoch: 0.5005
+Mean loss for this epoch: 0.969990514962
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 80.4657700062 secs
+Training accuracy for this epoch: 0.51312
+Mean loss for this epoch: 0.949757576751
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 80.0522270203 secs
+Training accuracy for this epoch: 0.524
+Mean loss for this epoch: 0.929809156281
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.611
+Average Loss: 0.883991550654
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	247.00       	61.00        	23.00        
+neutral      	86.00        	213.00       	34.00        
+contradiction	103.00       	82.00        	151.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.73         	0.57         	0.75         	0.64         
+neutral      	0.74         	0.60         	0.64         	0.62         
+contradiction	0.76         	0.73         	0.45         	0.56         
+micro        	0.74         	0.61         	0.61         	0.61         
+macro        	0.74         	0.63         	0.61         	0.61         
+not-O        	0.73         	0.58         	0.69         	0.63         
+
+############################
+TRIAL RESULTS:  	lr: 0.0001 	dropout: 0.6 	reg_lambda: 1e-05 
+
+	ACCURACY: 	train: 0.524 	test: 0.611
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-05 	dropout: 0.6 	reg_lambda: 1e-05 
+
+
+Epoch 1
+Amount of time to run this epoch: 81.3281080723 secs
+Training accuracy for this epoch: 0.34646
+Mean loss for this epoch: 1.09837647945
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 80.4978621006 secs
+Training accuracy for this epoch: 0.37022
+Mean loss for this epoch: 1.09263021501
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 80.5609898567 secs
+Training accuracy for this epoch: 0.39668
+Mean loss for this epoch: 1.08136856556
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.471
+Average Loss: 1.06820278615
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	166.00       	145.00       	20.00        
+neutral      	65.00        	250.00       	18.00        
+contradiction	87.00        	194.00       	55.00        
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.68         	0.52         	0.50         	0.51         
+neutral      	0.58         	0.42         	0.75         	0.54         
+contradiction	0.68         	0.59         	0.16         	0.26         
+micro        	0.65         	0.47         	0.47         	0.47         
+macro        	0.65         	0.51         	0.47         	0.44         
+not-O        	0.63         	0.46         	0.63         	0.53         
+
+############################
+TRIAL RESULTS:  	lr: 1e-05 	dropout: 0.6 	reg_lambda: 1e-05 
+
+	ACCURACY: 	train: 0.39668 	test: 0.471
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 0.001 	dropout: 0.8 	reg_lambda: 1e-05 
+
+
+Epoch 1
+Amount of time to run this epoch: 78.643050909 secs
+Training accuracy for this epoch: 0.4965
+Mean loss for this epoch: 0.985921574218
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 80.2544589043 secs
+Training accuracy for this epoch: 0.60062
+Mean loss for this epoch: 0.844794475895
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 81.1042730808 secs
+Training accuracy for this epoch: 0.65486
+Mean loss for this epoch: 0.750874450483
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 81.4311549664 secs
+Training accuracy for this epoch: 0.69726
+Mean loss for this epoch: 0.665080283571
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 80.6183691025 secs
+Training accuracy for this epoch: 0.73064
+Mean loss for this epoch: 0.592199354487
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 80.2903261185 secs
+Training accuracy for this epoch: 0.75518
+Mean loss for this epoch: 0.529988641705
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 80.3010919094 secs
+Training accuracy for this epoch: 0.77058
+Mean loss for this epoch: 0.482742379703
+	NEW BEST
+
+Epoch 8
+Amount of time to run this epoch: 80.6313920021 secs
+Training accuracy for this epoch: 0.79078
+Mean loss for this epoch: 0.436459090437
+	NEW BEST
+
+Epoch 9
+Amount of time to run this epoch: 79.9106509686 secs
+Training accuracy for this epoch: 0.8032
+Mean loss for this epoch: 0.403411777295
+	NEW BEST
+
+Epoch 10
+Amount of time to run this epoch: 80.1677980423 secs
+Training accuracy for this epoch: 0.8164
+Mean loss for this epoch: 0.367246076979
+	NEW BEST
+
+Epoch 11
+Amount of time to run this epoch: 80.9641959667 secs
+Training accuracy for this epoch: 0.82566
+Mean loss for this epoch: 0.344813781331
+	NEW BEST
+
+Epoch 12
+Amount of time to run this epoch: 80.7276229858 secs
+Training accuracy for this epoch: 0.83074
+Mean loss for this epoch: 0.329182018061
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.713
+Average Loss: 1.10854941607
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	228.00       	62.00        	41.00        
+neutral      	39.00        	227.00       	67.00        
+contradiction	21.00        	57.00        	258.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.84         	0.79         	0.69         	0.74         
+neutral      	0.78         	0.66         	0.68         	0.67         
+contradiction	0.81         	0.70         	0.77         	0.74         
+micro        	0.81         	0.71         	0.71         	0.71         
+macro        	0.81         	0.72         	0.71         	0.71         
+not-O        	0.81         	0.72         	0.69         	0.70         
+
+############################
+TRIAL RESULTS:  	lr: 0.001 	dropout: 0.8 	reg_lambda: 1e-05 
+
+	ACCURACY: 	train: 0.83074 	test: 0.713
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 0.0001 	dropout: 0.8 	reg_lambda: 1e-05 
+
+
+Epoch 1
+Amount of time to run this epoch: 80.8745951653 secs
+Training accuracy for this epoch: 0.47752
+Mean loss for this epoch: 1.01553937046
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 80.5395388603 secs
+Training accuracy for this epoch: 0.54508
+Mean loss for this epoch: 0.934618326404
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 80.0933477879 secs
+Training accuracy for this epoch: 0.5697
+Mean loss for this epoch: 0.890759611145
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 79.8406767845 secs
+Training accuracy for this epoch: 0.58996
+Mean loss for this epoch: 0.86257638506
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 80.0115709305 secs
+Training accuracy for this epoch: 0.60614
+Mean loss for this epoch: 0.832970684561
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 80.2414588928 secs
+Training accuracy for this epoch: 0.62892
+Mean loss for this epoch: 0.798785407144
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 80.6301338673 secs
+Training accuracy for this epoch: 0.64508
+Mean loss for this epoch: 0.767600558412
+	NEW BEST
+
+Epoch 8
+Amount of time to run this epoch: 80.4604151249 secs
+Training accuracy for this epoch: 0.66002
+Mean loss for this epoch: 0.739371398526
+	NEW BEST
+
+Epoch 9
+Amount of time to run this epoch: 80.2015910149 secs
+Training accuracy for this epoch: 0.67542
+Mean loss for this epoch: 0.709074967658
+	NEW BEST
+
+Epoch 10
+Amount of time to run this epoch: 81.0372569561 secs
+Training accuracy for this epoch: 0.68646
+Mean loss for this epoch: 0.687089081387
+	NEW BEST
+
+Epoch 11
+Amount of time to run this epoch: 80.1739530563 secs
+Training accuracy for this epoch: 0.7002
+Mean loss for this epoch: 0.654760082207
+	NEW BEST
+
+Epoch 12
+Amount of time to run this epoch: 80.6731729507 secs
+Training accuracy for this epoch: 0.71124
+Mean loss for this epoch: 0.631635023781
+	NEW BEST
+
+Epoch 13
+Amount of time to run this epoch: 80.5621230602 secs
+Training accuracy for this epoch: 0.7236
+Mean loss for this epoch: 0.604317935874
+	NEW BEST
+
+Epoch 14
+Amount of time to run this epoch: 80.6328961849 secs
+Training accuracy for this epoch: 0.73258
+Mean loss for this epoch: 0.582398685196
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.692
+Average Loss: 0.821932848543
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	245.00       	43.00        	43.00        
+neutral      	59.00        	218.00       	56.00        
+contradiction	46.00        	61.00        	229.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.81         	0.70         	0.74         	0.72         
+neutral      	0.78         	0.68         	0.65         	0.67         
+contradiction	0.79         	0.70         	0.68         	0.69         
+micro        	0.79         	0.69         	0.69         	0.69         
+macro        	0.79         	0.69         	0.69         	0.69         
+not-O        	0.80         	0.69         	0.70         	0.69         
+
+############################
+TRIAL RESULTS:  	lr: 0.0001 	dropout: 0.8 	reg_lambda: 1e-05 
+
+	ACCURACY: 	train: 0.73258 	test: 0.692
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-05 	dropout: 0.8 	reg_lambda: 1e-05 
+
+
+Epoch 1
+Amount of time to run this epoch: 81.597671032 secs
+Training accuracy for this epoch: 0.38654
+Mean loss for this epoch: 1.08819561549
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 80.5958409309 secs
+Training accuracy for this epoch: 0.44562
+Mean loss for this epoch: 1.05361770311
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 81.1547729969 secs
+Training accuracy for this epoch: 0.48252
+Mean loss for this epoch: 1.01735890941
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 80.2179689407 secs
+Training accuracy for this epoch: 0.50334
+Mean loss for this epoch: 0.994508869813
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 79.9033999443 secs
+Training accuracy for this epoch: 0.51774
+Mean loss for this epoch: 0.976148214334
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.571
+Average Loss: 0.947360601276
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	196.00       	61.00        	74.00        
+neutral      	70.00        	189.00       	74.00        
+contradiction	71.00        	79.00        	186.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.72         	0.58         	0.59         	0.59         
+neutral      	0.72         	0.57         	0.57         	0.57         
+contradiction	0.70         	0.56         	0.55         	0.56         
+micro        	0.71         	0.57         	0.57         	0.57         
+macro        	0.71         	0.57         	0.57         	0.57         
+not-O        	0.72         	0.58         	0.58         	0.58         
+
+############################
+TRIAL RESULTS:  	lr: 1e-05 	dropout: 0.8 	reg_lambda: 1e-05 
+
+	ACCURACY: 	train: 0.51774 	test: 0.571
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 0.001 	dropout: 1.0 	reg_lambda: 1e-05 
+
+
+Epoch 1
+Amount of time to run this epoch: 81.9082040787 secs
+Training accuracy for this epoch: 0.58168
+Mean loss for this epoch: 0.8899494921
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 81.5612750053 secs
+Training accuracy for this epoch: 0.71282
+Mean loss for this epoch: 0.677340245575
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 81.2227540016 secs
+Training accuracy for this epoch: 0.79654
+Mean loss for this epoch: 0.507838969722
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 80.891908884 secs
+Training accuracy for this epoch: 0.85808
+Mean loss for this epoch: 0.366827918155
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 80.9393289089 secs
+Training accuracy for this epoch: 0.90056
+Mean loss for this epoch: 0.261137248315
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 81.2222738266 secs
+Training accuracy for this epoch: 0.93092
+Mean loss for this epoch: 0.187387233518
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 81.1246330738 secs
+Training accuracy for this epoch: 0.9516
+Mean loss for this epoch: 0.134478895831
+	NEW BEST
+
+Epoch 8
+Amount of time to run this epoch: 81.4652838707 secs
+Training accuracy for this epoch: 0.96368
+Mean loss for this epoch: 0.102957183822
+	NEW BEST
+
+Epoch 9
+Amount of time to run this epoch: 81.2057740688 secs
+Training accuracy for this epoch: 0.97456
+Mean loss for this epoch: 0.0745942193039
+	NEW BEST
+
+Epoch 10
+Amount of time to run this epoch: 81.2958781719 secs
+Training accuracy for this epoch: 0.98078
+Mean loss for this epoch: 0.0611197805905
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.74
+Average Loss: 1.35113011673
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	248.00       	49.00        	34.00        
+neutral      	32.00        	239.00       	62.00        
+contradiction	25.00        	58.00        	253.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.86         	0.81         	0.75         	0.78         
+neutral      	0.80         	0.69         	0.72         	0.70         
+contradiction	0.82         	0.72         	0.75         	0.74         
+micro        	0.83         	0.74         	0.74         	0.74         
+macro        	0.83         	0.74         	0.74         	0.74         
+not-O        	0.83         	0.75         	0.73         	0.74         
+
+############################
+TRIAL RESULTS:  	lr: 0.001 	dropout: 1.0 	reg_lambda: 1e-05 
+
+	ACCURACY: 	train: 0.98078 	test: 0.74
+		New best TRAIN
+		New best TEST
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 0.0001 	dropout: 1.0 	reg_lambda: 1e-05 
+
+
+Epoch 1
+Amount of time to run this epoch: 80.8217329979 secs
+Training accuracy for this epoch: 0.53132
+Mean loss for this epoch: 0.961294237
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 80.593102932 secs
+Training accuracy for this epoch: 0.61562
+Mean loss for this epoch: 0.84499833407
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 83.6979060173 secs
+Training accuracy for this epoch: 0.65312
+Mean loss for this epoch: 0.781503193404
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 80.0871889591 secs
+Training accuracy for this epoch: 0.6838
+Mean loss for this epoch: 0.727660477276
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 80.7294461727 secs
+Training accuracy for this epoch: 0.71226
+Mean loss for this epoch: 0.676066727056
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 80.8137090206 secs
+Training accuracy for this epoch: 0.7402
+Mean loss for this epoch: 0.622229789062
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 80.3978130817 secs
+Training accuracy for this epoch: 0.76632
+Mean loss for this epoch: 0.572280400545
+	NEW BEST
+
+Epoch 8
+Amount of time to run this epoch: 80.5910880566 secs
+Training accuracy for this epoch: 0.79128
+Mean loss for this epoch: 0.520014970501
+	NEW BEST
+
+Epoch 9
+Amount of time to run this epoch: 80.2637448311 secs
+Training accuracy for this epoch: 0.81356
+Mean loss for this epoch: 0.473206954677
+	NEW BEST
+
+Epoch 10
+Amount of time to run this epoch: 80.2485189438 secs
+Training accuracy for this epoch: 0.83764
+Mean loss for this epoch: 0.421231893408
+	NEW BEST
+
+Epoch 11
+Amount of time to run this epoch: 80.4668591022 secs
+Training accuracy for this epoch: 0.85514
+Mean loss for this epoch: 0.378581816004
+	NEW BEST
+
+Epoch 12
+Amount of time to run this epoch: 81.0601990223 secs
+Training accuracy for this epoch: 0.878
+Mean loss for this epoch: 0.328746942431
+	NEW BEST
+
+Epoch 13
+Amount of time to run this epoch: 80.5923829079 secs
+Training accuracy for this epoch: 0.89202
+Mean loss for this epoch: 0.291503070418
+	NEW BEST
+
+Epoch 14
+Amount of time to run this epoch: 80.5267457962 secs
+Training accuracy for this epoch: 0.908
+Mean loss for this epoch: 0.25300109007
+	NEW BEST
+
+Epoch 15
+Amount of time to run this epoch: 80.8804180622 secs
+Training accuracy for this epoch: 0.92154
+Mean loss for this epoch: 0.21909560878
+	NEW BEST
+
+Epoch 16
+Amount of time to run this epoch: 80.0272758007 secs
+Training accuracy for this epoch: 0.93276
+Mean loss for this epoch: 0.190193712116
+	NEW BEST
+
+Epoch 17
+Amount of time to run this epoch: 80.5923202038 secs
+Training accuracy for this epoch: 0.94328
+Mean loss for this epoch: 0.163997550444
+	NEW BEST
+
+Epoch 18
+Amount of time to run this epoch: 80.611467123 secs
+Training accuracy for this epoch: 0.94846
+Mean loss for this epoch: 0.148707798184
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.639
+Average Loss: 1.47987149283
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	176.00       	111.00       	44.00        
+neutral      	21.00        	248.00       	64.00        
+contradiction	28.00        	93.00        	215.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.80         	0.78         	0.53         	0.63         
+neutral      	0.71         	0.55         	0.74         	0.63         
+contradiction	0.77         	0.67         	0.64         	0.65         
+micro        	0.76         	0.64         	0.64         	0.64         
+macro        	0.76         	0.67         	0.64         	0.64         
+not-O        	0.75         	0.63         	0.64         	0.63         
+
+############################
+TRIAL RESULTS:  	lr: 0.0001 	dropout: 1.0 	reg_lambda: 1e-05 
+
+	ACCURACY: 	train: 0.94846 	test: 0.639
+########################################################
+########################################################
+
+RUNNING TRIAL:  	lr: 1e-05 	dropout: 1.0 	reg_lambda: 1e-05 
+
+
+Epoch 1
+Amount of time to run this epoch: 81.5349860191 secs
+Training accuracy for this epoch: 0.38828
+Mean loss for this epoch: 1.08908200919
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 84.021463871 secs
+Training accuracy for this epoch: 0.43568
+Mean loss for this epoch: 1.04865388873
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 78.507625103 secs
+Training accuracy for this epoch: 0.45518
+Mean loss for this epoch: 1.01168699848
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 81.4699809551 secs
+Training accuracy for this epoch: 0.46016
+Mean loss for this epoch: 0.992295667567
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 81.4046468735 secs
+Training accuracy for this epoch: 0.4654
+Mean loss for this epoch: 0.978632364736
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.449
+Average Loss: 0.993136562407
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	217.00       	0.00         	114.00       
+neutral      	205.00       	0.00         	128.00       
+contradiction	104.00       	0.00         	232.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.58         	0.41         	0.66         	0.51         
+neutral      	0.00         	0.00         	0.00         	0.00         
+contradiction	0.65         	0.49         	0.69         	0.57         
+micro        	0.63         	0.45         	0.45         	0.45         
+macro        	0.41         	0.30         	0.45         	0.36         
+not-O        	0.62         	0.41         	0.33         	0.36         
+
+############################
+TRIAL RESULTS:  	lr: 1e-05 	dropout: 1.0 	reg_lambda: 1e-05 
+
+	ACCURACY: 	train: 0.4654 	test: 0.449
+########################################################
