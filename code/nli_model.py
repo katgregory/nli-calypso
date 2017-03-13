@@ -310,8 +310,8 @@ class NLISystem(object):
 
   def predict(self, session, batch_size, batch):
     premise, premise_len, hypothesis, hypothesis_len, goldlabel = batch
-    premise_max = 100# len(max(premise, key=len))
-    hypothesis_max = 100# len(max(hypothesis, key=len))
+    premise_max = len(max(premise, key=len))
+    hypothesis_max = len(max(hypothesis, key=len))
 
     premise_arr = np.array(self.pad_sequences(premise, premise_max))
     hypothesis_arr = np.array(self.pad_sequences(hypothesis, hypothesis_max))
