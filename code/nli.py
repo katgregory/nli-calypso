@@ -118,16 +118,16 @@ class NLI(object):
     e_exp = tf.exp(e)    
 
     # output of tf.reduce_sum has dimensions batch_size x statement2_len
-    # reshape to prepare for broadcast
-    # magnitude1 = tf.tile(tf.reduce_sum(e_exp, axis=1), hidden_size)
+    # reshape to batch_size x statement2_len x 1 to prepare for broadcast
     magnitude1 = tf.reshape(tf.reduce_sum(e_exp, axis=1), (batch_size, -1, 1))
+    # transpose to batch_size x 1 x statement2_len
+    magnitude1 = tf.transpose(magnitude1, perm=[0, 2, 1])
     e_norm1 = tf.div(e_exp, magnitude1)
     context1 = tf.matmul(states2, e_norm1, transpose_a=True, transpose_b=True)
     context1 = tf.transpose(context1, perm=[0, 2, 1])
 
     # output of tf.reduce_sum has dimensions batch_size x statement1_len
-    # reshape to prepare for broadcast
-    # magnitude2 = tf.tile(tf.reduce_sum(e_exp, axis=0), hidden_size)
+    # reshape to batch_size x statement1_len x 1 to prepare for broadcast
     magnitude2 = tf.reshape(tf.reduce_sum(e_exp, axis=2), (batch_size, -1, 1))
     e_norm2 = tf.div(e_exp, magnitude2)
     context2 = tf.matmul(states1, e_norm2, transpose_a=True)

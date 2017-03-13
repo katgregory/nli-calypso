@@ -88,7 +88,7 @@ class NLISystem(object):
 
     # Dimensions
     batch_size = None
-    sen_len = 100
+    sen_len = None
 
     # Placeholders
     self.dropout_ph = ph(tf.float32, shape=(), name="Dropout-Placeholder")
@@ -169,8 +169,8 @@ class NLISystem(object):
       print( " ".join([rev_vocab[i] for i in premise_stmt]))
       print( " ".join([rev_vocab[i] for i in hypothesis_stmt]))
 
-    premise_max = 100# len(max(premise, key=len))
-    hypothesis_max = 100# len(max(hypothesis, key=len))
+    premise_max = len(max(premise, key=len))
+    hypothesis_max = len(max(hypothesis, key=len))
 
     premise_arr = np.array(self.pad_sequences(premise, premise_max))
     hypothesis_arr = np.array(self.pad_sequences(hypothesis, hypothesis_max))
