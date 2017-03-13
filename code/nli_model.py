@@ -10,6 +10,7 @@ import tensorflow as tf
 from tensorflow.python.ops import variable_scope as vs
 from util import Progbar, minibatches, ConfusionMatrix
 from functools import partial
+from tqdm import *
 
 ph = tf.placeholder
 
@@ -203,18 +204,21 @@ class NLISystem(object):
     num_correct = 0
     num_batches = 0
     total_loss = 0
-    for i, batch in enumerate(minibatches(dataset, batch_size, bucket=self.bucket)):
-      if self.verbose and (i % 10 == 0):
-        sys.stdout.write(str(i) + "...")
-        sys.stdout.flush()
-      premises, premise_lens, hypotheses, hypothesis_lens, goldlabels = batch
-      loss, probs = self.optimize(session, rev_vocab, premises, premise_lens, hypotheses, hypothesis_lens, goldlabels)
-      total_loss += loss
-      num_batches += 1
 
-      # Record correctness of training predictions
-      correct_predictions = np.equal(np.argmax(probs, axis=1), np.argmax(goldlabels, axis=1))
-      num_correct += np.sum(correct_predictions)
+    with tqdm(total=int(len(dataset[0]))) as pbar:
+      for i, batch in enumerate(minibatches(dataset, batch_size, bucket=self.bucket)):
+        if self.verbose and (i % 10 == 0):
+          sys.stdout.write(str(i) + "...")
+          sys.stdout.flush()
+        premises, premise_lens, hypotheses, hypothesis_lens, goldlabels = batch
+        loss, probs = self.optimize(session, rev_vocab, premises, premise_lens, hypotheses, hypothesis_lens, goldlabels)
+        total_loss += loss
+        num_batches += 1
+
+        # Record correctness of training predictions
+        correct_predictions = np.equal(np.argmax(probs, axis=1), np.argmax(goldlabels, axis=1))
+        num_correct += np.sum(correct_predictions)
+        pbar.update(batch_size)
 
     toc = time.time()
 
