@@ -66,7 +66,9 @@ class NLISystem(object):
     # Placeholders
     self.dropout_ph = ph(tf.float32, shape=(), name="Dropout-Placeholder")
     self.premise_ph = ph(tf.int32, shape=(batch_size, sen_len), name="Premise-Placeholder")
+    self.premise_len_ph = ph(tf.int32, shape=(batch_size,), name="Premise-Len-Placeholder")
     self.hypothesis_ph = ph(tf.int32, shape=(batch_size, sen_len), name="Hypothesis-Placeholder")
+    self.hypothesis_len_ph = ph(tf.int32, shape=(batch_size,), name="Hypothesis-Len-Placeholder")
     self.output_ph = ph(tf.int32, shape=(batch_size, num_classes), name="Output-Placeholder")
     embeddings = tf.Variable(pretrained_embeddings, name="Embeddings", dtype=tf.float32)
 
@@ -79,22 +81,22 @@ class NLISystem(object):
       lstm_cell_fw = NLI.process_stmt_LSTM_cell(lstm_hidden_size)
       lstm_cell_bw = NLI.process_stmt_LSTM_cell(lstm_hidden_size)
 
-    def process_stmt(stmt):
+    def process_stmt(stmt, stmt_len):
       stmt_embed = tf.nn.embedding_lookup(embeddings, stmt)
       stmt_lens = tf.reduce_sum(tf.sign(stmt), axis=1)
       if (stmt_processor == "bow"):
           return NLI.process_stmt_bow(stmt_embed, lstm_hidden_size, reg_list)
       elif (stmt_processor == "lstm"):
-        return NLI.process_stmt_LSTM(stmt_embed, stmt_lens, lstm_cell, reg_list)
+        return NLI.process_stmt_LSTM(stmt_embed, stmt_len, lstm_cell, reg_list)
       elif (stmt_processor == "bilstm"):
-        return NLI.process_stmt_BiLSTM(stmt_embed, stmt_lens, lstm_cell_fw, lstm_cell_bw, reg_list)
+        return NLI.process_stmt_BiLSTM(stmt_embed, stmt_len, lstm_cell_fw, lstm_cell_bw, reg_list)
       else:
         assert(False)
 
     with tf.variable_scope("Process-Premise"):
-      premise = process_stmt(self.premise_ph)
+      premise = process_stmt(self.premise_ph, self.premise_len_ph)
     with tf.variable_scope("Process-Hypothesis"):
-      hypothesis = process_stmt(self.hypothesis_ph)
+      hypothesis = process_stmt(self.hypothesis_ph, self.hypothesis_len_ph)
 
     merged = NLI.merge_processed_stmts(premise, hypothesis, stmt_hidden_size, reg_list)
     preds = NLI.feed_forward(merged, self.dropout_ph, ff_hidden_size, num_classes, reg_list)
@@ -124,7 +126,7 @@ class NLISystem(object):
     return ret
 
   # premise, hypothesis, label are all lists of ints
-  def optimize(self, session, rev_vocab, premise, hypothesis, label):
+  def optimize(self, session, rev_vocab, premise, premise_len, hypothesis, hypothesis_len, label):
 
     if self.verbose and hasattr(self, "iteration") and self.iteration % 100 == 0:
       premise_stmt = premise_arr[0]
@@ -141,7 +143,9 @@ class NLISystem(object):
 
     input_feed = {
       self.premise_ph: premise_arr,
+      self.premise_len_ph: premise_len,
       self.hypothesis_ph: hypothesis_arr,
+      self.hypothesis_len_ph: hypothesis_len,
       self.output_ph: label,
       self.dropout_ph: self.dropout_keep
     }
@@ -170,8 +174,8 @@ class NLISystem(object):
       if self.verbose and (i % 10 == 0):
         sys.stdout.write(str(i) + "...")
         sys.stdout.flush()
-      premises, hypotheses, goldlabels = batch
-      loss, probs = self.optimize(session, rev_vocab, premises, hypotheses, goldlabels)
+      premises, premise_lens, hypotheses, hypothesis_lens, goldlabels = batch
+      loss, probs = self.optimize(session, rev_vocab, premises, premise_lens, hypotheses, hypothesis_lens, goldlabels)
       total_loss += loss
       num_batches += 1
 
@@ -271,7 +275,8 @@ class NLISystem(object):
   # TEST
   #############################
 
-  def predict(self, session, batch_size, premise, hypothesis, goldlabel):
+  def predict(self, session, batch_size, batch):
+    premise, premise_len, hypothesis, hypothesis_len, goldlabel = batch
     premise_max = 100# len(max(premise, key=len))
     hypothesis_max = 100# len(max(hypothesis, key=len))
 
@@ -280,7 +285,9 @@ class NLISystem(object):
 
     input_feed = {
       self.premise_ph: premise_arr,
+      self.premise_len_ph: premise_len,
       self.hypothesis_ph: hypothesis_arr,
+      self.hypothesis_len_ph: hypothesis_len,
       self.output_ph: goldlabel,
       self.dropout_ph: 1
     }
@@ -299,8 +306,8 @@ class NLISystem(object):
     total_correct = 0
     num_batches = 0
     for batch in minibatches(dataset, batch_size, bucket=self.bucket):
-      probs, loss = self.predict(session, batch_size, *batch)
-      _, _, goldlabels = batch
+      probs, loss = self.predict(session, batch_size, batch)
+      _, _, _, _, goldlabels = batch
       for i in xrange(len(probs)):
         total_correct += 1 if label_to_name(probs[i]) == label_to_name(goldlabels[i]) else 0
 

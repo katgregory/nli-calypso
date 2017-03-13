@@ -24,7 +24,7 @@ tf.app.flags.DEFINE_bool("test", False, "")
 tf.app.flags.DEFINE_integer("num_train", 10000, "")
 tf.app.flags.DEFINE_integer("num_dev", 1000, "")
 tf.app.flags.DEFINE_integer("num_test", 1000, "")
-tf.app.flags.DEFINE_bool("bucket", False, "")
+tf.app.flags.DEFINE_bool("bucket", True, "")
 tf.app.flags.DEFINE_string("stmt_processor", "bilstm", "How to process statements. Options: 'bow', 'lstm', 'bilstm'")
 
 # HYPERPARAMETERS
@@ -94,7 +94,9 @@ def convert_to_one_hot(label):
 # Read entire file if num_samples is -1
 def load_dataset(tier, num_samples=-1): # tier: 'train', 'dev', 'test'
   premises = []
+  premise_lens = []
   hypotheses = []
+  hypothesis_lens = []
   goldlabels = []
   with open(pjoin(FLAGS.data_dir, tier + '.ids.premise')) as premise_file, \
        open(pjoin(FLAGS.data_dir, tier + '.ids.hypothesis')) as hypothesis_file, \
@@ -105,11 +107,15 @@ def load_dataset(tier, num_samples=-1): # tier: 'train', 'dev', 'test'
       if i == num_samples: break
 
       # line as list of int indices
-      premises.append(map(int, premise_line.strip().split()))
-      hypotheses.append(map(int, hypothesis_file.readline().strip().split()))
+      premise = map(int, premise_line.strip().split())
+      premises.append(premise)
+      premise_lens.append(len(premise))
+      hypothesis = map(int, hypothesis_file.readline().strip().split())
+      hypotheses.append(hypothesis)
+      hypothesis_lens.append(len(hypothesis))
       goldlabels.append(convert_to_one_hot(goldlabel_file.readline().strip()))
 
-    return (premises, hypotheses, goldlabels)
+    return (premises, premise_lens, hypotheses, hypothesis_lens, goldlabels)
 
 def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dropout_keep, reg_lambda):
 
