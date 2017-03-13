@@ -47,6 +47,7 @@ class NLISystem(object):
                lstm_hidden_size,
                num_classes,
                dropout_keep,
+               bucket,
                tboard_path = None,
                verbose = False,
                statement_processor="bilstm"):
@@ -56,6 +57,7 @@ class NLISystem(object):
     self.verbose = verbose
     self.dropout_keep = dropout_keep
     self.LBLS = ['entailment', 'neutral', 'contradiction']
+    self.bucket = bucket
 
     # Dimensions
     batch_size = None
@@ -160,7 +162,7 @@ class NLISystem(object):
     num_correct = 0
     num_batches = 0
     total_loss = 0
-    for i, batch in enumerate(minibatches(dataset, batch_size)):
+    for i, batch in enumerate(minibatches(dataset, batch_size, bucket=self.bucket)):
       if self.verbose and (i % 10 == 0):
         sys.stdout.write(str(i) + "...")
         sys.stdout.flush()
@@ -292,7 +294,7 @@ class NLISystem(object):
     total_loss = 0
     total_correct = 0
     num_batches = 0
-    for batch in minibatches(dataset, batch_size):
+    for batch in minibatches(dataset, batch_size, bucket=self.bucket):
       probs, loss = self.predict(session, batch_size, *batch)
       _, _, goldlabels = batch
       for i in xrange(len(probs)):

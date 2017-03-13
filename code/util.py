@@ -367,7 +367,7 @@ class Progbar(object):
         self.update(self.seen_so_far+n, values)
 
 
-def get_minibatches(data, minibatch_size, shuffle=True):
+def get_minibatches(data, minibatch_size, bucket=False, shuffle=True):
     """
     Iterates through the provided data one minibatch at at time. You can use this function to
     iterate through data in minibatches as follows:
@@ -397,7 +397,10 @@ def get_minibatches(data, minibatch_size, shuffle=True):
     list_data = type(data) is list and (type(data[0]) is list or type(data[0]) is np.ndarray)
     data_size = len(data[0]) if list_data else len(data)
     indices = np.arange(data_size)
-    if shuffle:
+    if bucket:
+        formatted_data = zip(*data) # List of tuples (premise, hypothesis, label)
+        indices = sorted(indices, key=lambda i: len(formatted_data[i][0]) + len(formatted_data[i][1]) + np.random.random())
+    elif shuffle:
         np.random.shuffle(indices)
     for minibatch_start in np.arange(0, data_size, minibatch_size):
         minibatch_indices = indices[minibatch_start:minibatch_start + minibatch_size]
@@ -408,10 +411,10 @@ def get_minibatches(data, minibatch_size, shuffle=True):
 def minibatch(data, minibatch_idx):
     return data[minibatch_idx] if type(data) is np.ndarray else [data[i] for i in minibatch_idx]
 
-def minibatches(data, batch_size, shuffle=True):
+def minibatches(data, batch_size, bucket=False, shuffle=True):
     # batches = [np.array(col) for col in zip(*data)]
     batches = [col for col in data]
-    return get_minibatches(batches, batch_size, shuffle)
+    return get_minibatches(batches, batch_size, bucket, shuffle)
 
 def print_sentence(output, sentence, labels, predictions):
 
