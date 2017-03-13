@@ -9,6 +9,7 @@ from six.moves import xrange  # pylint: disable=redefined-builtin
 import tensorflow as tf
 from tensorflow.python.ops import variable_scope as vs
 from util import Progbar, minibatches, ConfusionMatrix
+from functools import partial
 
 ph = tf.placeholder
 
@@ -74,27 +75,25 @@ class NLISystem(object):
     ##########################
     reg_list = []               # List of variables to regularize
 
-    # Create LSTM cells to be reused
-    if (stmt_processor == "lstm"):
+    if stmt_processor == "lstm":
       lstm_cell = NLI.LSTM_cell(lstm_hidden_size)
-    elif (stmt_processor == "bilstm"):
+      lstm_process_stmt = partial(lambda c, d, a, b: NLI.LSTM(a, b, c, d), lstm_cell, reg_list)
+      process_stmt = lambda a, b: lstm_process_stmt(a, b)[1]
+    elif stmt_processor == "bilstm":
       lstm_cell_fw = NLI.LSTM_cell(lstm_hidden_size)
       lstm_cell_bw = NLI.LSTM_cell(lstm_hidden_size)
-
-    # Choose process statement function based on flags
-    def process_stmt(stmt, stmt_len):
-      stmt_embed = tf.nn.embedding_lookup(embeddings, stmt)
-      if stmt_processor == "bow": return NLI.BOW(stmt_embed, lstm_hidden_size, reg_list)
-      elif stmt_processor == "lstm": return NLI.LSTM(stmt_embed, stmt_len, lstm_cell, reg_list)[1]
-      elif stmt_processor == "bilstm":
-        return NLI.biLSTM(stmt_embed, stmt_len, lstm_cell_fw, lstm_cell_bw, reg_list)[1]
-      else: assert(False)
+      lstm_process_stmt = partial(lambda c, d, e, a, b: NLI.biLSTM(a, b, c, d, e),
+                                  lstm_cell_fw, lstm_cell_bw, reg_list)
+      process_stmt = lambda a, b: lstm_process_stmt(a, b)[1]
+    else: process_stmt = partial(lambda c, a, b: NLI.BOW(a, b, c), reg_list)
 
     # Process statements
     with tf.variable_scope("Process-Premise"):
-      premise = process_stmt(self.premise_ph, self.premise_len_ph)
+      premise_embed = tf.nn.embedding_lookup(embeddings, self.premise_ph)
+      premise = process_stmt(premise_embed, self.premise_len_ph)
     with tf.variable_scope("Process-Hypothesis"):
-      hypothesis = process_stmt(self.hypothesis_ph, self.hypothesis_len_ph)
+      hypothesis_embed = tf.nn.embedding_lookup(embeddings, self.hypothesis_ph)
+      hypothesis = process_stmt(hypothesis_embed, self.hypothesis_len_ph)
 
     # Merge and feed-forward
     merged = NLI.merge_states(premise, hypothesis, stmt_hidden_size, reg_list)
