@@ -9,7 +9,6 @@ from six.moves import xrange  # pylint: disable=redefined-builtin
 import tensorflow as tf
 from tensorflow.python.ops import variable_scope as vs
 from util import Progbar, minibatches, ConfusionMatrix
-from functools import partial
 from tqdm import *
 
 ph = tf.placeholder
@@ -34,34 +33,6 @@ def label_to_name(label):
     '1': 'neutral',
     '2': 'contradiction'
   }[str(np.argmax(label))]
-
-
-"""
-Binds processor function as specified by @processor to a function that takes in 2 arguments:
-a statements and the lengths of its sentences. Creates cells as needed such that every call
-to the returned function will use the same cells.
-
-:param processor: String, either "lstm", "bilstm", or "bow"
-:param reg_list: List of regularization varibles. Variables that need to be regularized 
-will be appended as needed to this list.
-
-:return: function that takes 2 arguments: statement, stmt_len where statement is
-of dimensions batch_size x statement_len x embedding_size and stmt_len is of dimensions 
-batch_size x 1
-"""
-def bind_processor(processor, lstm_hidden_size, reg_list):
-  if processor == "lstm":
-    lstm_cell = NLI.LSTM_cell(lstm_hidden_size)
-    process_stmt = partial(lambda c, d, a, b: NLI.LSTM(a, b, c, d), lstm_cell, reg_list)
-  elif processor == "bilstm":
-    lstm_cell_fw = NLI.LSTM_cell(lstm_hidden_size)
-    lstm_cell_bw = NLI.LSTM_cell(lstm_hidden_size)
-    process_stmt = partial(lambda c, d, e, a, b: NLI.biLSTM(a, b, c, d, e),
-                           lstm_cell_fw, lstm_cell_bw, reg_list)
-  elif processor == "bow": # artificially return (None, hidden_state)
-    process_stmt = partial(lambda c, a, b: NLI.BOW(a, b, c), reg_list)
-    process_stmt = lambda a, b: (None, process_stmt(a, b))
-  return process_stmt
 
 class NLISystem(object):
   def __init__(self, pretrained_embeddings,
@@ -109,7 +80,7 @@ class NLISystem(object):
     hypothesis_embed = tf.nn.embedding_lookup(embeddings, self.hypothesis_ph)
     
     # Configure LSTM and process_stmt functions based on flags
-    process_stmt = bind_processor(stmt_processor, lstm_hidden_size, reg_list)
+    process_stmt = NLI.processor(stmt_processor, lstm_hidden_size, reg_list)
 
     # Process statements
     with tf.variable_scope("Process-Premise"):
@@ -124,7 +95,7 @@ class NLISystem(object):
         p_inferred = NLI.infer(p_context, p_states)
         h_inferred = NLI.infer(h_context, h_states)
 
-      post_process_stmt = bind_processor(stmt_processor, lstm_hidden_size, reg_list)
+      post_process_stmt = NLI.processor(stmt_processor, lstm_hidden_size, reg_list)
       with tf.variable_scope("Post-Process-Premise"):
         _, p_last = post_process_stmt(p_inferred, self.premise_len_ph)
       with tf.variable_scope("Post-Process-Hypothesis"):
