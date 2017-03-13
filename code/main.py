@@ -155,9 +155,9 @@ def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dro
     return (epoch_number, train_accuracy, train_loss, test_accuracy, avg_test_loss, cm)
 
 def validate_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab):
-  lr_range = np.array([10**lr_exp for lr_exp in range(-8, -1, 1)])
-  dropout_range = np.arange(0.5, 1.1, 0.1) 
-  reg_lambda_range = np.array([10**lr_exp for lr_exp in range(-4, 1, 1)]) 
+  lr_range = [.001, .0001, .00001] # np.array([10**lr_exp for lr_exp in range(-8, -1, 1)])
+  dropout_range = [.6, .8, 1.0] # np.arange(0.5, 1.1, 0.1) 
+  reg_lambda_range = [.1, .001, .00001] # np.array([10**lr_exp for lr_exp in range(-4, 1, 1)]) 
 
   results_map = {}
   best_train_accuracy = 0
