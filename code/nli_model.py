@@ -48,9 +48,9 @@ class NLISystem(object):
                num_classes,
                dropout_keep,
                bucket,
+               stmt_processor,
                tboard_path = None,
-               verbose = False,
-               statement_processor="bilstm"):
+               verbose = False):
 
     # Vars that need to be used globally
     self.tboard_path = tboard_path
@@ -73,19 +73,23 @@ class NLISystem(object):
     # Build neural net
     reg_list = []               # List of variables to regularize
 
-    if (statement_processor == "lstm"):
+    if (stmt_processor == "lstm"):
       lstm_cell = NLI.process_stmt_LSTM_cell(lstm_hidden_size)
-    elif (statement_processor == "bilstm"):
+    elif (stmt_processor == "bilstm"):
       lstm_cell_fw = NLI.process_stmt_LSTM_cell(lstm_hidden_size)
       lstm_cell_bw = NLI.process_stmt_LSTM_cell(lstm_hidden_size)
 
     def process_stmt(stmt):
       stmt_embed = tf.nn.embedding_lookup(embeddings, stmt)
       stmt_lens = tf.reduce_sum(tf.sign(stmt), axis=1)
-      if (statement_processor == "lstm"):
+      if (stmt_processor == "bow"):
+          return NLI.process_stmt_bow(stmt_embed, lstm_hidden_size, reg_list)
+      elif (stmt_processor == "lstm"):
         return NLI.process_stmt_LSTM(stmt_embed, stmt_lens, lstm_cell, reg_list)
-      elif (statement_processor == "bilstm"):
+      elif (stmt_processor == "bilstm"):
         return NLI.process_stmt_BiLSTM(stmt_embed, stmt_lens, lstm_cell_fw, lstm_cell_bw, reg_list)
+      else:
+        assert(False)
 
     with tf.variable_scope("Process-Premise"):
       premise = process_stmt(self.premise_ph)

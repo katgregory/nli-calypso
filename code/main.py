@@ -25,6 +25,7 @@ tf.app.flags.DEFINE_integer("num_train", 10000, "")
 tf.app.flags.DEFINE_integer("num_dev", 1000, "")
 tf.app.flags.DEFINE_integer("num_test", 1000, "")
 tf.app.flags.DEFINE_bool("bucket", False, "")
+tf.app.flags.DEFINE_string("stmt_processor", "bilstm", "How to process statements. Options: 'bow', 'lstm', 'bilstm'")
 
 # HYPERPARAMETERS
 tf.app.flags.DEFINE_float("lr", 0.0001, "Learning rate.")
@@ -125,7 +126,8 @@ def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dro
     num_classes = FLAGS.num_classes,
     tboard_path = FLAGS.tboard_path,
     dropout_keep = dropout_keep,
-    bucket = FLAGS.bucket)
+    bucket = FLAGS.bucket,
+    stmt_processor = FLAGS.stmt_processor)
 
   if not os.path.exists(FLAGS.log_dir):
     os.makedirs(FLAGS.log_dir)

@@ -7,6 +7,7 @@ class NLI(object):
   @statement is of dimensions batch_size x sentence_size x embedding_size
   """
   # batch_size x sentence_size x embedding_size
+  @staticmethod
   def process_stmt_bow(statement, hidden_size, reg_list):
     with tf.name_scope("Process_Stmt_BOW"):
       # batch_size x embedding_size
