@@ -39,8 +39,9 @@ class NLI(object):
   :param reg_list: List of regularization varibles. Variables that need to be regularized 
   will be appended as needed to this list.
 
-  :return: A hidden state representing the statement of dimensions batch_size x hidden_size where
-  hidden_size is hidden size of @cell
+  :return: A tuple of (outputs, last_output) where outputs represents all LSTM outputs and is 
+  of dimensions batch_size x sentence_size x hidden_size; and last_output represents the last
+  output for each statement in the batch, of dimensions batch_size x hidden_size
   """
   @staticmethod
   def LSTM(statement, stmt_lens, cell, reg_list):
@@ -57,7 +58,7 @@ class NLI(object):
                                               initial_state=initial_state)
       last_rnn_output = tf.gather_nd(rnn_outputs,
                                      tf.pack([tf.range(batch_size), stmt_lens-1], axis=1))
-    return last_rnn_output
+    return rnn_outputs, last_rnn_output
 
   """
   Run inputs through Bi-LSTM and output concatonation of forward and backward
@@ -71,8 +72,10 @@ class NLI(object):
   :param reg_list: List of regularization varibles. Variables that need to be regularized 
   will be appended as needed to this list.
 
-  :return: A hidden state representing the statement. Concatenation of final 
-  forward and backward hidden states. Dimensions are batch_size x (hidden_size * 2)
+  :return: A tuple of (outputs, last_output) where outputs represents all biLSTM outputs and is 
+  of dimensions batch_size x sentence_size x (hidden_size * 2); and last_output represents the last
+  hidden state for each statement in the batch, of dimensions batch_size x (hidden_size * 2). 
+  Outputs are concatenations of forward and backward outputs.
   """
   @staticmethod
   def biLSTM(statement, stmt_lens, cell_fw, cell_bw, reg_list):
@@ -91,7 +94,7 @@ class NLI(object):
       rnn_outputs = tf.concat(2, rnn_outputs)
       last_rnn_output = tf.gather_nd(rnn_outputs,
                                      tf.pack([tf.range(batch_size), stmt_lens-1], axis=1))
-    return last_rnn_output
+    return rnn_outputs, last_rnn_output
 
   """
   Merge two hidden states through concatenation after weighting.
@@ -129,47 +132,29 @@ class NLI(object):
   :param dropout: Dropout keep probability
   :param hidden_size: Hidden size of each layer
   :param output_size: Size of output layer
+  :param num_layers: Number >1 representing number of layers in network
   :param reg_list: List of regularization varibles. Variables that need to be regularized 
   will be appended as needed to this list.
 
   :return: Output state of dimensions batch_size x output_size
   """
   @staticmethod
-  def feed_forward(input, dropout, hidden_size, output_size, reg_list):
-    with tf.variable_scope("FF"):
-      # r1 = tanh(input W1 + b1)
-      with tf.variable_scope("FF-First-Layer"):
-        input_size = input.get_shape().as_list()[1]
-        W1 = tf.get_variable("W", shape=(input_size, hidden_size), initializer=xavier())
-        b1 = tf.Variable(tf.zeros([hidden_size,]), name="b")
-        r1 = tf.nn.relu(tf.matmul(input, W1) + b1, name="r")
-        r1_dropout = tf.nn.dropout(r1, dropout)
+  def feed_forward(input, dropout, hidden_size, output_size, num_layers, reg_list):
+    with tf.variable_scope("Feed-Forward"):
+      input_size = input.get_shape().as_list()[1]
+      r = input
 
-        tf.summary.histogram("W", W1)
-        tf.summary.histogram("b", b1)
-        tf.summary.histogram("r1", r1)
+      for i in range(num_layers):
+        i_size = input_size if i == 0 else hidden_size
+        o_size = output_size if i == num_layers - 1 else hidden_size
+        with tf.variable_scope("FF-Layer-" + str(i)):
+          W = tf.get_variable("W", shape=(i_size, o_size), initializer=xavier())
+          b = tf.Variable(tf.zeros([o_size,]), name="b")
+          r = tf.nn.relu(tf.matmul(r, W) + b, name="r")
+          r = tf.nn.dropout(r, dropout)
+          tf.summary.histogram("W", W)
+          tf.summary.histogram("b", b)
+          tf.summary.histogram("r", r)
+        reg_list.append(W)
 
-      # r2 = tanh(r1 W2 + b2)
-      with tf.variable_scope("FF-Second-Layer"):
-        W2 = tf.get_variable("W", shape=(hidden_size, hidden_size), initializer=xavier())
-        b2 = tf.Variable(tf.zeros([hidden_size,]), name="b")
-        r2 = tf.nn.relu(tf.matmul(r1_dropout, W2) + b2, name="r")
-        r2_dropout = tf.nn.dropout(r2, dropout)
-
-        tf.summary.histogram("W", W2)
-        tf.summary.histogram("b", b2)
-        tf.summary.histogram("r2", r2)
-
-      # r3 = tanh(r2 W3 + b3)
-      with tf.variable_scope("FF-Third-Layer"):
-        W3 = tf.get_variable("W", shape=(hidden_size, output_size), initializer=xavier())
-        b3 = tf.Variable(tf.zeros([output_size,]), name="b")
-        r3 = tf.nn.relu(tf.matmul(r2_dropout, W3) + b3, name="r")
-        preds = r3
-
-        tf.summary.histogram("W", W3)
-        tf.summary.histogram("b", b3)
-        tf.summary.histogram("preds", preds)
-
-      reg_list.extend((W1, W2, W3))
-      return preds
+      return r

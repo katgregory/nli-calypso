@@ -53,6 +53,7 @@ tf.app.flags.DEFINE_integer("keep", 0, "How many checkpoints to keep, 0 indicate
 tf.app.flags.DEFINE_string("vocab_path", "data/snli/vocab.dat", "Path to vocab file (default: ./data/snli/vocab.dat)")
 tf.app.flags.DEFINE_string("embed_path", "", "Path to the trimmed GLoVe embedding (default: ./data/snli/glove.trimmed.{embedding_size}.npz)")
 tf.app.flags.DEFINE_float("num_classes", 3, "Neutral, Entailment, Contradiction")
+tf.app.flags.DEFINE_float("ff_num_layers", 3, "Number of layers in final FF network")
 tf.app.flags.DEFINE_string("hyperparameter_grid_search_file", "data/hyperparams/grid.p", "Stores pickle file of search results")
 
 FLAGS = tf.app.flags.FLAGS
@@ -130,6 +131,7 @@ def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dro
     stmt_hidden_size = FLAGS.stmt_hidden_size,
     lstm_hidden_size = FLAGS.lstm_hidden_size,
     num_classes = FLAGS.num_classes,
+    ff_num_layers = FLAGS.ff_num_layers,
     tboard_path = FLAGS.tboard_path,
     dropout_keep = dropout_keep,
     bucket = FLAGS.bucket,
