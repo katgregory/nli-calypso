@@ -122,6 +122,7 @@ def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dro
 
   # Reset every time. TODO: we should be using the same graph
   tf.reset_default_graph()
+  tf.set_random_seed(1)
 
   nli = NLISystem(
     pretrained_embeddings = embeddings,
