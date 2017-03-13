@@ -1,0 +1,67 @@
+
+Epoch 1
+Amount of time to run this epoch: 894.663591146 secs
+Training accuracy for this epoch: 0.777811554025
+Mean loss for this epoch: 0.550961348786
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 893.163511038 secs
+Training accuracy for this epoch: 0.85680428566
+Mean loss for this epoch: 0.382485251063
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 890.540639877 secs
+Training accuracy for this epoch: 0.890583162076
+Mean loss for this epoch: 0.301920116756
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 890.12589407 secs
+Training accuracy for this epoch: 0.914099317942
+Mean loss for this epoch: 0.242733759004
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 890.337579966 secs
+Training accuracy for this epoch: 0.929770080838
+Mean loss for this epoch: 0.200278884383
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 890.70124507 secs
+Training accuracy for this epoch: 0.940438723112
+Mean loss for this epoch: 0.169579052338
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 890.921453953 secs
+Training accuracy for this epoch: 0.948096627573
+Mean loss for this epoch: 0.147161764034
+	NEW BEST
+
+Epoch 8
+Amount of time to run this epoch: 897.169937134 secs
+Training accuracy for this epoch: 0.954099900431
+Mean loss for this epoch: 0.129870886632
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.827
+Average Loss: 0.702375110239
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	286.00       	44.00        	14.00        
+neutral      	38.00        	256.00       	33.00        
+contradiction	7.00         	37.00        	285.00       
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.90         	0.86         	0.83         	0.85         
+neutral      	0.85         	0.76         	0.78         	0.77         
+contradiction	0.91         	0.86         	0.87         	0.86         
+micro        	0.88         	0.83         	0.83         	0.83         
+macro        	0.88         	0.83         	0.83         	0.83         
+not-O        	0.87         	0.81         	0.81         	0.81         
+
