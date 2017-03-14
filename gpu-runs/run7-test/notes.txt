@@ -1,0 +1,3 @@
+lr=.001
+dropout=.9
+reg_lambda=.0001
