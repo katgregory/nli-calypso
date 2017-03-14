@@ -19,15 +19,15 @@ class NLI(object):
   batch_size x 1
   """
   @staticmethod
-  def processor(processor, lstm_hidden_size, reg_list):
+  def processor(processor, lstm_hidden_size, n_stacked_lstm_layers, reg_list):
     if processor == "lstm":
       lstm_cell = NLI.LSTM_cell(lstm_hidden_size)
       process_stmt = partial(lambda c, d, a, b: NLI.LSTM(a, b, c, d), lstm_cell, reg_list)
     elif processor == "bilstm":
       lstm_cell_fw = NLI.LSTM_cell(lstm_hidden_size)
       lstm_cell_bw = NLI.LSTM_cell(lstm_hidden_size)
-      process_stmt = partial(lambda c, d, e, a, b: NLI.biLSTM(a, b, c, d, e),
-                             lstm_cell_fw, lstm_cell_bw, reg_list)
+      process_stmt = partial(lambda c, d, e, f, a, b: NLI.biLSTM(a, b, c, d, e, f),
+                             lstm_cell_fw, lstm_cell_bw, n_stacked_lstm_layers, reg_list)
     elif processor == "bow": # artificially return (None, hidden_state)
       process_stmt = partial(lambda c, a, b: NLI.BOW(a, b, c), reg_list)
       process_stmt = lambda a, b: (None, process_stmt(a, b))
@@ -91,7 +91,7 @@ class NLI(object):
     return rnn_outputs, last_rnn_output
 
   """
-  Run inputs through Bi-LSTM and output concatonation of forward and backward
+  Run inputs through stacked Bi-LSTM and output concatonation of forward and backward
   final hidden state. Assumes that input statements are padded with zeros.
 
   :param statement: Statement as list of embeddings of dimensions batch_size x statement_len
@@ -100,7 +100,8 @@ class NLI(object):
   Dimensions of batch_size x 1.
   :param cell_fw: Forward LSTM cell as returned from NLI.LSTM_cell
   :param cell_bw: Backwards LSTM cell as returned from NLI.LSTM_cell
-  :param reg_list: List of regularization varibles. Variables that need to be regularized
+  :param n_layers: Number of LSTM layers
+  :param reg_list: List of regularization varibles. Variables that need to be regularized 
   will be appended as needed to this list.
 
   :return: A tuple of (outputs, last_output) where outputs represents all biLSTM outputs and is
@@ -109,19 +110,24 @@ class NLI(object):
   Outputs are concatenations of forward and backward outputs.
   """
   @staticmethod
-  def biLSTM(statement, stmt_lens, cell_fw, cell_bw, reg_list):
+  def biLSTM(statement, stmt_lens, cell_fw, cell_bw, n_layers, reg_list):
     with tf.name_scope("Process_Stmt_Bi-LSTM"):
       # dimensions
       batch_size = tf.shape(statement)[0]
 
-      initial_state_fw = cell_fw.zero_state(batch_size, tf.float32)
-      initial_state_bw = cell_bw.zero_state(batch_size, tf.float32)
+      rnn_inputs = statement
+      for layer_i in xrange(n_layers):
+        with tf.variable_scope("Process_Stmt_Stacked_Bi-LSTM-Layer%d" % layer_i):
+          initial_state_fw = cell_fw.zero_state(batch_size, tf.float32)
+          initial_state_bw = cell_bw.zero_state(batch_size, tf.float32)
 
-      rnn_outputs, fin_state = tf.nn.bidirectional_dynamic_rnn(cell_fw, cell_bw, statement,
-                                              sequence_length=stmt_lens,
-                                              initial_state_fw=initial_state_fw,
-                                              initial_state_bw=initial_state_bw)
-      rnn_outputs = tf.concat(2, rnn_outputs)
+          rnn_outputs, fin_state = tf.nn.bidirectional_dynamic_rnn(cell_fw, cell_bw, rnn_inputs,
+                                                sequence_length=stmt_lens,
+                                                initial_state_fw=initial_state_fw,
+                                                initial_state_bw=initial_state_bw)
+          rnn_outputs = tf.concat(2, rnn_outputs)
+          rnn_inputs = rnn_outputs
+
       last_rnn_output = tf.gather_nd(rnn_outputs,
                                      tf.pack([tf.range(batch_size), stmt_lens-1], axis=1))
     return rnn_outputs, last_rnn_output
