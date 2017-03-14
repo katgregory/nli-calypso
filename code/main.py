@@ -29,11 +29,12 @@ tf.app.flags.DEFINE_string("stmt_processor", "bilstm", "How to process statement
 tf.app.flags.DEFINE_bool("attention", True, "")
 tf.app.flags.DEFINE_bool("infer_embeddings", False, "Include embeddings in inference step")
 tf.app.flags.DEFINE_bool("weight_attention", True, "Adds weight multiplication to attention calculation")
+tf.app.flags.DEFINE_bool("restore", False, "Read in all parameters from file")
 
 # HYPERPARAMETERS
-tf.app.flags.DEFINE_float("lr", 0.0001, "Learning rate.")
-tf.app.flags.DEFINE_float("dropout_keep", 0.8, "Keep_prob")
-tf.app.flags.DEFINE_float("reg_lambda", 0.01, "Regularization")
+tf.app.flags.DEFINE_float("lr", 0.0004, "Learning rate.")
+tf.app.flags.DEFINE_float("dropout_keep", 0.5, "Keep_prob")
+tf.app.flags.DEFINE_float("reg_lambda", -1, "Regularization")
 
 
 tf.app.flags.DEFINE_integer("batch_size", 64, "Batch size to use during training.")
@@ -46,8 +47,8 @@ tf.app.flags.DEFINE_integer("lstm_hidden_size", 100, "Size of hidden layers in L
 tf.app.flags.DEFINE_integer("output_size", 3, "The output size of your model.")
 tf.app.flags.DEFINE_integer("embedding_size", 300, "Size of the pretrained vocabulary.")
 tf.app.flags.DEFINE_string("data_dir", "data/snli", "snli directory (default ./data/snli)")
-tf.app.flags.DEFINE_string("train_dir", "train", "Training directory to save the model parameters (default: ./train).")
-tf.app.flags.DEFINE_string("load_train_dir", "", "Training directory to load model parameters from to resume training (default: {train_dir}).")
+tf.app.flags.DEFINE_string("train_dir", "log/train_params", "Training directory to save the model parameters")
+tf.app.flags.DEFINE_string("validation_dir", "log/validation_params", "Validation directory to save the model parameters")
 tf.app.flags.DEFINE_string("log_dir", "log", "Path to store log and flag files (default: ./log)")
 tf.app.flags.DEFINE_string("tboard_path", None, "Path to store tensorboard files (default: None)")
 tf.app.flags.DEFINE_string("optimizer", "adam", "adam / sgd")
@@ -61,18 +62,22 @@ tf.app.flags.DEFINE_string("hyperparameter_grid_search_file", "data/hyperparams/
 
 FLAGS = tf.app.flags.FLAGS
 
-def initialize_model(session, model, train_dir):
-  ckpt = tf.train.get_checkpoint_state(train_dir)
-  v2_path = ckpt.model_checkpoint_path + ".index" if ckpt else ""
-  if ckpt and (tf.gfile.Exists(ckpt.model_checkpoint_path) or tf.gfile.Exists(v2_path)):
-      logging.info("Reading model parameters from %s" % ckpt.model_checkpoint_path)
-      model.saver.restore(session, ckpt.model_checkpoint_path)
-  else:
-      logging.info("Created model with fresh parameters.")
-      session.run(tf.global_variables_initializer())
-      logging.info('Num params: %d' % sum(v.get_shape().num_elements() for v in tf.trainable_variables()))
-  return model
+def initialize_model(session, model):
+  # ckpt = tf.train.get_checkpoint_state(train_dir)
+  # v2_path = ckpt.model_checkpoint_path + ".index" if ckpt else ""
+  # if ckpt and (tf.gfile.Exists(ckpt.model_checkpoint_path) or tf.gfile.Exists(v2_path)):
+      # logging.info("Reading model parameters from %s" % ckpt.model_checkpoint_path)
+      # model.saver.restore(session, ckpt.model_checkpoint_path)
+  # else:
+      # logging.info("Created model with fresh parameters.")
+      # session.run(tf.global_variables_initializer())
+      # logging.info('Num params: %d' % sum(v.get_shape().num_elements() for v in tf.trainable_variables()))
+  # return model
 
+  logging.info("Created model with fresh parameters.")
+  session.run(tf.global_variables_initializer())
+  logging.info('Num params: %d' % sum(v.get_shape().num_elements() for v in tf.trainable_variables()))
+  return model
 
 def initialize_vocab(vocab_path):
     if tf.gfile.Exists(vocab_path):
@@ -121,7 +126,18 @@ def load_dataset(tier, num_samples=-1): # tier: 'train', 'dev', 'test'
 
     return (premises, premise_lens, hypotheses, hypothesis_lens, goldlabels)
 
+def get_save_filename(lr, dropout_keep):
+  ntrain_str = str(FLAGS.num_train) if not FLAGS.num_train == -1 else 'all'
+  return ('dev' if FLAGS.dev else 'test') + '_numtrain' + ntrain_str + \
+                                            '_lr' + str(lr) + \
+                                            '_dropoutkeep' + str(dropout_keep) 
+
 def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dropout_keep, reg_lambda):
+
+  logging.info(FLAGS.__flags)
+  logging.info("Learning rate: " + str(lr))
+  logging.info("Dropout keep: " + str(dropout_keep))
+  logging.info("Reg lambda: " + str(reg_lambda))
 
   # Reset every time. TODO: we should be using the same graph
   tf.reset_default_graph()
@@ -143,6 +159,7 @@ def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dro
     attention = FLAGS.attention,
     infer_embeddings = FLAGS.infer_embeddings,
     weight_attention = FLAGS.weight_attention)
+  nli.saver = tf.train.Saver() # for saving
 
   if not os.path.exists(FLAGS.log_dir):
     os.makedirs(FLAGS.log_dir)
@@ -152,11 +169,22 @@ def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dro
   with open(os.path.join(FLAGS.log_dir, "flags.json"), 'w') as fout:
     json.dump(FLAGS.__flags, fout)
 
+  # Train and evaluate the model
   with tf.Session() as sess:
-    initialize_model(sess, nli, FLAGS.load_train_dir)
+    initialize_model(sess, nli)
 
-    # Train and evaluate the model
-    epoch_number, train_accuracy, train_loss = nli.train(sess, train_dataset, rev_vocab, FLAGS.train_dir, FLAGS.batch_size)
+    if FLAGS.restore:
+      nli.saver.restore(sess, pjoin(FLAGS.train_dir, get_save_filename(lr, dropout_keep)))
+      epoch_number, train_accuracy, train_loss = (-1, -1, -1) # Placeholders
+    else:
+      epoch_number, train_accuracy, train_loss = nli.train(sess, train_dataset, rev_vocab, FLAGS.train_dir, FLAGS.batch_size)
+   
+      # Save the parameters to file
+      if not FLAGS.validation:
+        nli.saver.save(sess, pjoin(FLAGS.train_dir, get_save_filename(lr, dropout_keep)))
+      else:
+        nli.saver.save(sess, pjoin(FLAGS.validation_dir, get_save_filename(lr, dropout_keep)))
+
     test_accuracy, avg_test_loss, cm = nli.evaluate_prediction(sess, FLAGS.batch_size, eval_dataset)
     return (epoch_number, train_accuracy, train_loss, test_accuracy, avg_test_loss, cm)
 

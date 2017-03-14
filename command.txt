@@ -1,3 +1,6 @@
 python -u code/main.py --dev --num_train=-1 --stmt_processor=bilstm --attention --lr=.001 --dropout=1.0 --reg_lambda=.00001 > >(tee train-attention-run.out) 2> >(tee train-attention-run.err >&2)
 
 python -u code/main.py --dev --num_train=-1 --stmt_processor=bilstm --attention --lr=.001 --dropout=0.9 --reg_lambda=.0001 > >(tee train-attention-run.out) 2> >(tee train-attention-run.err >&2)
+
+CHEN's learning rate: 0.0004
+CHEN's dropout: 0.5
