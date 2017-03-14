@@ -135,22 +135,28 @@ class NLI(object):
   batch_size x statement1_len x hidden_size
   :param states2: States of statement 2 as output from an LSTM, biLSTM, etc. Dimensions are
   batch_size x statement2_len x hidden_size
+  :param weight_attention: If true, add weight in atention calculation
 
   :return: A tuple of (context1, context2) of context vectors for each of the words in statement 1
   and statement 2 respectively. context1 and context2 have the same dimensions as states1 and 
   states2
   """
   @staticmethod
-  def context_tensors(states1, states2):
+  def context_tensors(states1, states2, weight_attention):
     # dimensions
-    batch_size = tf.shape(states1)[0]
+    hidden_size = states1.get_shape().as_list()[2]
+    # TODO(colin): We can't get this to work when dynamically determining batch_size
+    batch_size = 64
 
     # e: batch_size x statement1_len x statement2_len
-    e = tf.matmul(states1, states2, transpose_b=True)
-    e_exp = tf.exp(e)    
+    W = tf.get_variable("W", shape=(batch_size, hidden_size, hidden_size), initializer=xavier())
+    e = tf.matmul(states1, W)
+    e = tf.matmul(e, states2, transpose_b=True)
+    e_exp = tf.exp(e)
 
     # output of tf.reduce_sum has dimensions batch_size x statement2_len
     # reshape to batch_size x statement2_len x 1 to prepare for broadcast
+    batch_size = tf.shape(states1)[0]
     magnitude1 = tf.reshape(tf.reduce_sum(e_exp, axis=1), (batch_size, -1, 1))
     # transpose to batch_size x 1 x statement2_len
     magnitude1 = tf.transpose(magnitude1, perm=[0, 2, 1])

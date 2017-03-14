@@ -28,6 +28,8 @@ tf.app.flags.DEFINE_bool("bucket", True, "")
 tf.app.flags.DEFINE_string("stmt_processor", "bilstm", "How to process statements. Options: 'bow', 'lstm', 'bilstm'")
 tf.app.flags.DEFINE_bool("attention", True, "")
 tf.app.flags.DEFINE_bool("infer_embeddings", False, "Include embeddings in inference step")
+tf.app.flags.DEFINE_bool("weight_attention", True, "Adds weight multiplication to attention calculation")
+
 # HYPERPARAMETERS
 tf.app.flags.DEFINE_float("lr", 0.0001, "Learning rate.")
 tf.app.flags.DEFINE_float("dropout_keep", 0.8, "Keep_prob")
@@ -139,7 +141,8 @@ def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dro
     bucket = FLAGS.bucket,
     stmt_processor = FLAGS.stmt_processor,
     attention = FLAGS.attention,
-    infer_embeddings = FLAGS.infer_embeddings)
+    infer_embeddings = FLAGS.infer_embeddings,
+    weight_attention = FLAGS.weight_attention)
 
   if not os.path.exists(FLAGS.log_dir):
     os.makedirs(FLAGS.log_dir)
