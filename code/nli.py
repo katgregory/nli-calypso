@@ -168,6 +168,7 @@ class NLI(object):
     else:
       # e: batch_size x statement1_len x statement2_len
       e = tf.matmul(states1, states2, transpose_b=True)
+
     e_exp = tf.exp(e)
 
     # output of tf.reduce_sum has dimensions batch_size x statement2_len
