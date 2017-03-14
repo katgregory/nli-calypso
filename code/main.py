@@ -29,7 +29,7 @@ tf.app.flags.DEFINE_string("stmt_processor", "bilstm", "How to process statement
 tf.app.flags.DEFINE_bool("attention", True, "")
 tf.app.flags.DEFINE_bool("infer_embeddings", False, "Include embeddings in inference step")
 tf.app.flags.DEFINE_bool("weight_attention", True, "Adds weight multiplication to attention calculation")
-tf.app.flags.DEFINE_integer("n_lstm_layers", 1, "Number of layers in the stacked bidirectional LSTM")
+tf.app.flags.DEFINE_integer("n_bilstm_layers", 1, "Number of layers in the stacked bidirectional LSTM")
 
 # HYPERPARAMETERS
 tf.app.flags.DEFINE_float("lr", 0.0001, "Learning rate.")
@@ -144,7 +144,7 @@ def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dro
     attention = FLAGS.attention,
     infer_embeddings = FLAGS.infer_embeddings,
     weight_attention = FLAGS.weight_attention,
-    n_lstm_layers = FLAGS.n_lstm_layers)
+    n_bilstm_layers = FLAGS.n_bilstm_layers)
 
   if not os.path.exists(FLAGS.log_dir):
     os.makedirs(FLAGS.log_dir)
