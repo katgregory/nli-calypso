@@ -97,3 +97,4 @@ data/snli/snli_1.0_*
 
 # Tensorboard logs
 logs/
+log/
