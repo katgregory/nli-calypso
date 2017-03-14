@@ -30,8 +30,8 @@ class NLI(object):
       process_stmt = partial(lambda c, d, e, f, a, b: NLI.biLSTM(a, b, c, d, e, f),
                              lstm_cell_fw, lstm_cell_bw, n_bilstm_layers, reg_list)
     elif processor == "bow": # artificially return (None, hidden_state)
-      process_stmt = partial(lambda c, a, b: NLI.BOW(a, b, c), reg_list)
-      process_stmt = lambda a, b: (None, process_stmt(a, b))
+      bow_fn = partial(lambda c, a, b: NLI.BOW(a, b, c), reg_list)
+      process_stmt = lambda a, b: (None, bow_fn(a, b))
     return process_stmt
 
   """
