@@ -147,19 +147,26 @@ class NLI(object):
     batch_size = tf.shape(states1)[0]
     statement1_len, hidden_size = states1.get_shape().as_list()[1:3]
 
-    # e: batch_size x statement1_len x statement2_len
     if weight_attention: 
       # Reshape to 2D matrices for the first multiplication
       W = tf.get_variable("W", shape=(hidden_size, hidden_size), initializer=xavier())
       statement1_len = tf.shape(states1)[1]
+
+      # states1: batch_size * statement1_len x hidden_size
+      # e: batch_size * statement1_len x hidden_size
       states1 = tf.reshape(states1, (batch_size * statement1_len, hidden_size))
       e = tf.matmul(states1, W)
 
       # Reshape to 3D matrices for the second multiplication
+      # states1: batch_size x statement1_len x hidden_size
+      # e: batch_size x statement1_len x hidden_size
       states1 = tf.reshape(states1, (batch_size, statement1_len, hidden_size))
       e = tf.reshape(e, (batch_size, statement1_len, hidden_size))
+
+      # e: batch_size x statement1_len x statement2_len
       e = tf.matmul(e, states2, transpose_b=True)
     else:
+      # e: batch_size x statement1_len x statement2_len
       e = tf.matmul(states1, states2, transpose_b=True)
     e_exp = tf.exp(e)
 
