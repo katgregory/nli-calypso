@@ -11,6 +11,7 @@ class NLI(object):
   to the returned function will use the same cells.
 
   :param processor: String, either "lstm", "bilstm", or "bow"
+  :param n_bilstm_layers: Number of layers in bilstm. Only applicable if processor=bilstm
   :param reg_list: List of regularization varibles. Variables that need to be regularized
   will be appended as needed to this list.
 
@@ -19,7 +20,7 @@ class NLI(object):
   batch_size x 1
   """
   @staticmethod
-  def processor(processor, lstm_hidden_size, n_stacked_lstm_layers, reg_list):
+  def processor(processor, lstm_hidden_size, n_bilstm_layers, reg_list):
     if processor == "lstm":
       lstm_cell = NLI.LSTM_cell(lstm_hidden_size)
       process_stmt = partial(lambda c, d, a, b: NLI.LSTM(a, b, c, d), lstm_cell, reg_list)
@@ -27,7 +28,7 @@ class NLI(object):
       lstm_cell_fw = NLI.LSTM_cell(lstm_hidden_size)
       lstm_cell_bw = NLI.LSTM_cell(lstm_hidden_size)
       process_stmt = partial(lambda c, d, e, f, a, b: NLI.biLSTM(a, b, c, d, e, f),
-                             lstm_cell_fw, lstm_cell_bw, n_stacked_lstm_layers, reg_list)
+                             lstm_cell_fw, lstm_cell_bw, n_bilstm_layers, reg_list)
     elif processor == "bow": # artificially return (None, hidden_state)
       process_stmt = partial(lambda c, a, b: NLI.BOW(a, b, c), reg_list)
       process_stmt = lambda a, b: (None, process_stmt(a, b))
