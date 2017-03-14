@@ -142,15 +142,14 @@ class NLI(object):
   states2
   """
   @staticmethod
-  def context_tensors(states1, states2, weight_attention):
+  def context_tensors(states1, states2, weight_attention, batch_size):
     # dimensions
     hidden_size = states1.get_shape().as_list()[2]
-    # TODO(colin): We can't get this to work when dynamically determining batch_size
-    batch_size = 64
 
     # e: batch_size x statement1_len x statement2_len
     if weight_attention: 
-      W = tf.get_variable("W", shape=(batch_size, hidden_size, hidden_size), initializer=xavier())
+      W = tf.get_variable("W", shape=(hidden_size, hidden_size), initializer=xavier())
+      W = tf.tile(W, batch_size)
       e = tf.matmul(states1, W)
       e = tf.matmul(e, states2, transpose_b=True)
     else:
