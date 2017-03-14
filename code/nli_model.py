@@ -49,7 +49,7 @@ class NLISystem(object):
                attention,
                infer_embeddings,
                weight_attention,
-               n_stacked_lstm_layers,
+               n_lstm_layers,
                tboard_path = None,
                verbose = False):
 
@@ -83,7 +83,7 @@ class NLISystem(object):
     hypothesis_embed = tf.nn.embedding_lookup(embeddings, self.hypothesis_ph)
     
     # Configure LSTM and process_stmt functions based on flags
-    process_stmt = NLI.processor(stmt_processor, lstm_hidden_size, n_stacked_lstm_layers, reg_list)
+    process_stmt = NLI.processor(stmt_processor, lstm_hidden_size, n_lstm_layers, reg_list)
 
     # Process statements
     with tf.variable_scope("Process-Premise"):
@@ -102,7 +102,7 @@ class NLISystem(object):
           p_merged = NLI.merge_context(p_context, p_states)
           h_merged = NLI.merge_context(h_context, h_states)
 
-      infer_processor = NLI.processor(stmt_processor, lstm_hidden_size, n_stacked_lstm_layers, reg_list)
+      infer_processor = NLI.processor(stmt_processor, lstm_hidden_size, n_lstm_layers, reg_list)
       with tf.variable_scope("Infer-Premise"):
         _, p_last = infer_processor(p_merged, self.premise_len_ph)
       with tf.variable_scope("Infer-Hypothesis"):
