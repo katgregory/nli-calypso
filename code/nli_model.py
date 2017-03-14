@@ -93,7 +93,7 @@ class NLISystem(object):
     # Attention
     if attention:
       with tf.variable_scope("Context"):
-        p_context, h_context = NLI.context_tensors(p_states, h_states, weight_attention, batch_size)
+        p_context, h_context = NLI.context_tensors(p_states, h_states, weight_attention)
         if infer_embeddings:
           p_merged = NLI.merge_context(p_context, p_states, premise_embed)
           h_merged = NLI.merge_context(h_context, h_states, hypothesis_embed)

@@ -142,15 +142,22 @@ class NLI(object):
   states2
   """
   @staticmethod
-  def context_tensors(states1, states2, weight_attention, batch_size):
+  def context_tensors(states1, states2, weight_attention):
     # dimensions
-    hidden_size = states1.get_shape().as_list()[2]
+    batch_size = tf.shape(states1)[0]
+    statement1_len, hidden_size = states1.get_shape().as_list()[1:3]
 
     # e: batch_size x statement1_len x statement2_len
     if weight_attention: 
+      # Reshape to 2D matrices for the first multiplication
       W = tf.get_variable("W", shape=(hidden_size, hidden_size), initializer=xavier())
-      W = tf.tile(W, batch_size)
+      statement1_len = tf.shape(states1)[1]
+      states1 = tf.reshape(states1, (batch_size * statement1_len, hidden_size))
       e = tf.matmul(states1, W)
+
+      # Reshape to 3D matrices for the second multiplication
+      states1 = tf.reshape(states1, (batch_size, statement1_len, hidden_size))
+      e = tf.reshape(e, (batch_size, statement1_len, hidden_size))
       e = tf.matmul(e, states2, transpose_b=True)
     else:
       e = tf.matmul(states1, states2, transpose_b=True)
@@ -158,7 +165,6 @@ class NLI(object):
 
     # output of tf.reduce_sum has dimensions batch_size x statement2_len
     # reshape to batch_size x statement2_len x 1 to prepare for broadcast
-    batch_size = tf.shape(states1)[0]
     magnitude1 = tf.reshape(tf.reduce_sum(e_exp, axis=1), (batch_size, -1, 1))
     # transpose to batch_size x 1 x statement2_len
     magnitude1 = tf.transpose(magnitude1, perm=[0, 2, 1])
