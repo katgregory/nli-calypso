@@ -123,9 +123,11 @@ class NLISystem(object):
       self.probs = tf.nn.softmax(preds)
       softmax_loss = tf.nn.softmax_cross_entropy_with_logits(logits=preds,
                                                              labels=self.output_ph, name="loss")
-      regularizer = tf.contrib.layers.l2_regularizer(reg_lambda)
-      reg_loss = tf.contrib.layers.apply_regularization(regularizer, weights_list=reg_list)
-      self.loss = tf.reduce_mean(softmax_loss) + reg_loss
+      self.loss = tf.reduce_mean(softmax_loss)
+      if reg_lambda >= 0:
+        regularizer = tf.contrib.layers.l2_regularizer(reg_lambda)
+        reg_loss = tf.contrib.layers.apply_regularization(regularizer, weights_list=reg_list)
+        self.loss += reg_loss
 
     with tf.name_scope("Optimizer"):
       tf.summary.scalar("mean_batch_loss", self.loss)
@@ -248,7 +250,7 @@ class NLISystem(object):
       epoch += 1
 
       # TEST FOR CONVERGENCE
-      if len(losses) >= 3 and (max(losses[-3:]) - min(losses[-3:])) <= 0.05:
+      if len(losses) >= 3 and (max(losses[-3:]) - min(losses[-3:])) <= 0.03:
         break # TODO: Replace everything with constants
 
       if epoch > 50: # HARD CUTOFF?

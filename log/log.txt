@@ -1,0 +1,3 @@
+Created model with fresh parameters.
+Num params: 562403
+Number of params: 562403 (retreival took 0.060059 secs)
