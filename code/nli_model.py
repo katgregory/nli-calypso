@@ -253,7 +253,7 @@ class NLISystem(object):
       epoch += 1
 
       # TEST FOR CONVERGENCE
-      if len(losses) >= 3 and (max(losses[-3:]) - min(losses[-3:])) <= 0.05:
+      if len(losses) >= 10 and (max(losses[-3:]) - min(losses[-3:])) <= 0.05:
         break # TODO: Replace everything with constants
 
       if epoch > 50: # HARD CUTOFF?
