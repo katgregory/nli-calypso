@@ -47,6 +47,7 @@ class NLISystem(object):
                bucket,
                stmt_processor,
                attention,
+               infer_embeddings,
                tboard_path = None,
                verbose = False):
 
@@ -92,14 +93,18 @@ class NLISystem(object):
     if attention:
       with tf.variable_scope("Context"):
         p_context, h_context = NLI.context_tensors(p_states, h_states)
-        p_inferred = NLI.infer(p_context, p_states)
-        h_inferred = NLI.infer(h_context, h_states)
+        if infer_embeddings:
+          p_merged = NLI.merge_context(p_context, p_states, premise_embed)
+          h_merged = NLI.merge_context(h_context, h_states, hypothesis_embed)
+        else:
+          p_merged = NLI.merge_context(p_context, p_states)
+          h_merged = NLI.merge_context(h_context, h_states)
 
-      post_process_stmt = NLI.processor(stmt_processor, lstm_hidden_size, reg_list)
-      with tf.variable_scope("Post-Process-Premise"):
-        _, p_last = post_process_stmt(p_inferred, self.premise_len_ph)
-      with tf.variable_scope("Post-Process-Hypothesis"):
-        _, h_last = post_process_stmt(h_inferred, self.hypothesis_len_ph)
+      infer_processor = NLI.processor(stmt_processor, lstm_hidden_size, reg_list)
+      with tf.variable_scope("Infer-Premise"):
+        _, p_last = infer_processor(p_merged, self.premise_len_ph)
+      with tf.variable_scope("Infer-Hypothesis"):
+        _, h_last = infer_processor(h_merged, self.hypothesis_len_ph)
 
     # Merge and feed-forward
     merged = NLI.merge_states(p_last, h_last, stmt_hidden_size, reg_list)

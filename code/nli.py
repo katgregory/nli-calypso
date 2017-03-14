@@ -175,13 +175,17 @@ class NLI(object):
   are batch_size x statement_len x hidden_size
   :param states: States vector of statement as output from an LSTM, biLSTM, etc. Dimensions are
   are batch_size x statement_len x hidden_size
+  :param states: Embeddings vector of statement as output from embedding_lookup. Dimensions are 
+  batch_size x statement_len x embedding_size. Optional.
 
   :return: A composed context/state inference vector of dimension batch_size x statement_len x 
-  (hidden_size * 4)
+  (hidden_size * 4 + embedding_size (if included))
   """
   @staticmethod
-  def infer(context, states):
-    return tf.concat(2, [context, states, states - context, tf.mul(states, context)])
+  def merge_context(context, states, embeddings=None):
+    if embeddings is not None:
+      return tf.concat(2, [context, states, states - context, tf.mul(states, context), embeddings])
+    else: return tf.concat(2, [context, states, states - context, tf.mul(states, context)])
 
   """
   Merge two hidden states through concatenation after weighting.
