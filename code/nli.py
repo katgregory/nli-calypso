@@ -11,11 +11,11 @@ class NLI(object):
   to the returned function will use the same cells.
 
   :param processor: String, either "lstm", "bilstm", or "bow"
-  :param reg_list: List of regularization varibles. Variables that need to be regularized 
+  :param reg_list: List of regularization varibles. Variables that need to be regularized
   will be appended as needed to this list.
 
   :return: function that takes 2 arguments: statement, stmt_len where statement is
-  of dimensions batch_size x statement_len x embedding_size and stmt_len is of dimensions 
+  of dimensions batch_size x statement_len x embedding_size and stmt_len is of dimensions
   batch_size x 1
   """
   @staticmethod
@@ -33,14 +33,12 @@ class NLI(object):
       process_stmt = lambda a, b: (None, process_stmt(a, b))
     return process_stmt
 
-
-
   """
   Returns bag of words mean of input statement
 
-  :param statement: Statement as list of embeddings of dimensions batch_size x statement_len 
+  :param statement: Statement as list of embeddings of dimensions batch_size x statement_len
    x embedding_size
-  :param reg_list: List of regularization varibles. Variables that need to be regularized 
+  :param reg_list: List of regularization varibles. Variables that need to be regularized
   will be appended as needed to this list.
   """
   # batch_size x statement_len x embedding_size
@@ -64,15 +62,15 @@ class NLI(object):
   """
   Run inputs through LSTM. Assumes that input statements are padded with zeros.
 
-  :param statement: Statement as list of embeddings of dimensions batch_size x statement_len 
+  :param statement: Statement as list of embeddings of dimensions batch_size x statement_len
    x embedding_size
   :param stmt_lens: Length of statements before padding as 1D list with dimension batch_size.
   Dimensions of batch_size x 1.
   :param cell: LSTM cell as returned from NLI.LSTM_cell
-  :param reg_list: List of regularization varibles. Variables that need to be regularized 
+  :param reg_list: List of regularization varibles. Variables that need to be regularized
   will be appended as needed to this list.
 
-  :return: A tuple of (outputs, last_output) where outputs represents all LSTM outputs and is 
+  :return: A tuple of (outputs, last_output) where outputs represents all LSTM outputs and is
   of dimensions batch_size x statement_len x hidden_size; and last_output represents the last
   output for each statement in the batch, of dimensions batch_size x hidden_size
   """
@@ -96,18 +94,18 @@ class NLI(object):
   Run inputs through Bi-LSTM and output concatonation of forward and backward
   final hidden state. Assumes that input statements are padded with zeros.
 
-  :param statement: Statement as list of embeddings of dimensions batch_size x statement_len 
+  :param statement: Statement as list of embeddings of dimensions batch_size x statement_len
    x embedding_size
   :param stmt_lens: Length of statements before padding as 1D list with dimension batch_size.
   Dimensions of batch_size x 1.
   :param cell_fw: Forward LSTM cell as returned from NLI.LSTM_cell
   :param cell_bw: Backwards LSTM cell as returned from NLI.LSTM_cell
-  :param reg_list: List of regularization varibles. Variables that need to be regularized 
+  :param reg_list: List of regularization varibles. Variables that need to be regularized
   will be appended as needed to this list.
 
-  :return: A tuple of (outputs, last_output) where outputs represents all biLSTM outputs and is 
+  :return: A tuple of (outputs, last_output) where outputs represents all biLSTM outputs and is
   of dimensions batch_size x statement_len x (hidden_size * 2); and last_output represents the last
-  hidden state for each statement in the batch, of dimensions batch_size x (hidden_size * 2). 
+  hidden state for each statement in the batch, of dimensions batch_size x (hidden_size * 2).
   Outputs are concatenations of forward and backward outputs.
   """
   @staticmethod
@@ -138,56 +136,57 @@ class NLI(object):
   :param weight_attention: If true, add weight in atention calculation
 
   :return: A tuple of (context1, context2) of context vectors for each of the words in statement 1
-  and statement 2 respectively. context1 and context2 have the same dimensions as states1 and 
+  and statement 2 respectively. context1 and context2 have the same dimensions as states1 and
   states2
   """
   @staticmethod
   def context_tensors(states1, states2, weight_attention):
-    # dimensions
-    batch_size = tf.shape(states1)[0]
-    statement1_len, hidden_size = states1.get_shape().as_list()[1:3]
+    with tf.name_scope("Context-Tensors"):
+      # dimensions
+      batch_size = tf.shape(states1)[0]
+      statement1_len, hidden_size = states1.get_shape().as_list()[1:3]
 
-    if weight_attention: 
-      # Reshape to 2D matrices for the first multiplication
-      W = tf.get_variable("W", shape=(hidden_size, hidden_size), initializer=xavier())
-      statement1_len = tf.shape(states1)[1]
+      if weight_attention:
+        # Reshape to 2D matrices for the first multiplication
+        W = tf.get_variable("W", shape=(hidden_size, hidden_size), initializer=xavier())
+        statement1_len = tf.shape(states1)[1]
 
-      # states1: batch_size * statement1_len x hidden_size
-      # e: batch_size * statement1_len x hidden_size
-      states1 = tf.reshape(states1, (batch_size * statement1_len, hidden_size))
-      e = tf.matmul(states1, W)
+        # states1: batch_size * statement1_len x hidden_size
+        # e: batch_size * statement1_len x hidden_size
+        states1 = tf.reshape(states1, (batch_size * statement1_len, hidden_size))
+        e = tf.matmul(states1, W)
 
-      # Reshape to 3D matrices for the second multiplication
-      # states1: batch_size x statement1_len x hidden_size
-      # e: batch_size x statement1_len x hidden_size
-      states1 = tf.reshape(states1, (batch_size, statement1_len, hidden_size))
-      e = tf.reshape(e, (batch_size, statement1_len, hidden_size))
+        # Reshape to 3D matrices for the second multiplication
+        # states1: batch_size x statement1_len x hidden_size
+        # e: batch_size x statement1_len x hidden_size
+        states1 = tf.reshape(states1, (batch_size, statement1_len, hidden_size))
+        e = tf.reshape(e, (batch_size, statement1_len, hidden_size))
 
-      # e: batch_size x statement1_len x statement2_len
-      e = tf.matmul(e, states2, transpose_b=True)
-    else:
-      # e: batch_size x statement1_len x statement2_len
-      e = tf.matmul(states1, states2, transpose_b=True)
+        # e: batch_size x statement1_len x statement2_len
+        e = tf.matmul(e, states2, transpose_b=True)
+      else:
+        # e: batch_size x statement1_len x statement2_len
+        e = tf.matmul(states1, states2, transpose_b=True)
 
-    e_exp = tf.exp(e)
+      e_exp = tf.exp(e)
 
-    # output of tf.reduce_sum has dimensions batch_size x statement2_len
-    # reshape to batch_size x statement2_len x 1 to prepare for broadcast
-    magnitude1 = tf.reshape(tf.reduce_sum(e_exp, axis=1), (batch_size, -1, 1))
-    # transpose to batch_size x 1 x statement2_len
-    magnitude1 = tf.transpose(magnitude1, perm=[0, 2, 1])
-    e_norm1 = tf.div(e_exp, magnitude1)
-    context1 = tf.matmul(states2, e_norm1, transpose_a=True, transpose_b=True)
-    context1 = tf.transpose(context1, perm=[0, 2, 1])
+      # output of tf.reduce_sum has dimensions batch_size x statement2_len
+      # reshape to batch_size x statement2_len x 1 to prepare for broadcast
+      magnitude1 = tf.reshape(tf.reduce_sum(e_exp, axis=1), (batch_size, -1, 1))
+      # transpose to batch_size x 1 x statement2_len
+      magnitude1 = tf.transpose(magnitude1, perm=[0, 2, 1])
+      e_norm1 = tf.div(e_exp, magnitude1)
+      context1 = tf.matmul(states2, e_norm1, transpose_a=True, transpose_b=True)
+      context1 = tf.transpose(context1, perm=[0, 2, 1])
 
-    # output of tf.reduce_sum has dimensions batch_size x statement1_len
-    # reshape to batch_size x statement1_len x 1 to prepare for broadcast
-    magnitude2 = tf.reshape(tf.reduce_sum(e_exp, axis=2), (batch_size, -1, 1))
-    e_norm2 = tf.div(e_exp, magnitude2)
-    context2 = tf.matmul(states1, e_norm2, transpose_a=True)
-    context2 = tf.transpose(context2, perm=[0, 2, 1])
+      # output of tf.reduce_sum has dimensions batch_size x statement1_len
+      # reshape to batch_size x statement1_len x 1 to prepare for broadcast
+      magnitude2 = tf.reshape(tf.reduce_sum(e_exp, axis=2), (batch_size, -1, 1))
+      e_norm2 = tf.div(e_exp, magnitude2)
+      context2 = tf.matmul(states1, e_norm2, transpose_a=True)
+      context2 = tf.transpose(context2, perm=[0, 2, 1])
 
-    return (context1, context2)
+      return (context1, context2)
 
   """
   Return a new vector that embodies inferred information from context and state vectors
@@ -197,17 +196,38 @@ class NLI(object):
   are batch_size x statement_len x hidden_size
   :param states: States vector of statement as output from an LSTM, biLSTM, etc. Dimensions are
   are batch_size x statement_len x hidden_size
-  :param states: Embeddings vector of statement as output from embedding_lookup. Dimensions are 
+  :param states: Embeddings vector of statement as output from embedding_lookup. Dimensions are
   batch_size x statement_len x embedding_size. Optional.
 
-  :return: A composed context/state inference vector of dimension batch_size x statement_len x 
+  :return: A context/state inference vector of dimension batch_size x statement_len x
   (hidden_size * 4 + embedding_size (if included))
   """
   @staticmethod
-  def merge_context(context, states, embeddings=None):
-    if embeddings is not None:
-      return tf.concat(2, [context, states, states - context, tf.mul(states, context), embeddings])
-    else: return tf.concat(2, [context, states, states - context, tf.mul(states, context)])
+  def infer(context, states, embeddings=None):
+    with tf.name_scope("Infer"):
+      if embeddings is not None:
+        return tf.concat(2, [context, states, states - context, tf.mul(states, context), embeddings])
+      else: return tf.concat(2, [context, states, states - context, tf.mul(states, context)])
+
+  """
+  Calculates Average and Max Pool for each composed vector and concatenates them in preparation
+  for classification.
+
+  :param composed: Composed vector of statement1 as returned from an LSTM, biLSTM of inferred
+  vector. Dimensions are batch_size x statement_len x hidden_size
+  :param composed: Composed vector of statement2 as returned from an LSTM, biLSTM of inferred
+  vector. Dimensions are batch_size x statement_len x hidden_size
+
+  :return: A merged vector of dimensions batch_size x (hidden_size * 4)
+  """
+  @staticmethod
+  def pool_merge(composed1, composed2):
+    with tf.name_scope("Pool-Merge"):
+      avg1 = tf.reduce_mean(composed1, axis=1)
+      avg2 = tf.reduce_mean(composed2, axis=1)
+      max_pool1 = tf.reduce_max(composed1, axis=1)
+      max_pool2 = tf.reduce_max(composed2, axis=1)
+      return tf.concat(1, [avg1, max_pool1, avg2, max_pool2])
 
   """
   Merge two hidden states through concatenation after weighting.
@@ -215,7 +235,7 @@ class NLI(object):
   :param state1: First hidden state to merge
   :param state2: Second hidden state to merge
   :param hidden_size: Output hidden size of each state
-  :param reg_list: List of regularization varibles. Variables that need to be regularized 
+  :param reg_list: List of regularization varibles. Variables that need to be regularized
   will be appended as needed to this list.
 
   :return: Merged hidden state of dimensions batch_size x (hidden_size * 2)
@@ -246,7 +266,7 @@ class NLI(object):
   :param hidden_size: Hidden size of each layer
   :param output_size: Size of output layer
   :param num_layers: Number >1 representing number of layers in network
-  :param reg_list: List of regularization varibles. Variables that need to be regularized 
+  :param reg_list: List of regularization varibles. Variables that need to be regularized
   will be appended as needed to this list.
 
   :return: Output state of dimensions batch_size x output_size
