@@ -25,10 +25,11 @@ tf.app.flags.DEFINE_integer("num_train", 10000, "")
 tf.app.flags.DEFINE_integer("num_dev", 1000, "")
 tf.app.flags.DEFINE_integer("num_test", 1000, "")
 tf.app.flags.DEFINE_bool("bucket", True, "")
-tf.app.flags.DEFINE_string("stmt_processor", "bilstm", "How to process statements. Options: 'bow', 'lstm', 'bilstm'")
+tf.app.flags.DEFINE_string("stmt_processor", "bilstm", "How to process statements. Options: 'bow', 'lstm', 'bilstm', 'stacked'")
 tf.app.flags.DEFINE_bool("attention", True, "")
 tf.app.flags.DEFINE_bool("infer_embeddings", False, "Include embeddings in inference step")
 tf.app.flags.DEFINE_bool("weight_attention", True, "Adds weight multiplication to attention calculation")
+tf.app.flags.DEFINE_bool("n_stacked_lstm_layers", 3, "Number of layers in the stacked bidirectional LSTM")
 
 # HYPERPARAMETERS
 tf.app.flags.DEFINE_float("lr", 0.0001, "Learning rate.")
@@ -142,7 +143,8 @@ def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dro
     stmt_processor = FLAGS.stmt_processor,
     attention = FLAGS.attention,
     infer_embeddings = FLAGS.infer_embeddings,
-    weight_attention = FLAGS.weight_attention)
+    weight_attention = FLAGS.weight_attention,
+    n_stacked_lstm_layers = FLAGS.n_stacked_lstm_layers)
 
   if not os.path.exists(FLAGS.log_dir):
     os.makedirs(FLAGS.log_dir)
@@ -191,8 +193,8 @@ def validate_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab):
 def main(_):
 
   assert(FLAGS.validation or ((FLAGS.dev and not FLAGS.test) or (FLAGS.test and not FLAGS.dev))), "When not validating, must set exaclty one of --dev or --test flag to specify evaluation dataset."
-  assert FLAGS.stmt_processor in ["bow", "lstm", "bilstm"], "Statement processor must be one of bow, lstm, or bilstm."
-  assert not FLAGS.attention or FLAGS.stmt_processor in ["lstm", "bilstm"], "Statement processor must be lstm or bilstm if attention is used."
+  assert FLAGS.stmt_processor in ["bow", "lstm", "bilstm", "stacked"], "Statement processor must be one of bow, lstm, or bilstm."
+  assert not FLAGS.attention or FLAGS.stmt_processor in ["lstm", "bilstm", "stacked"], "Statement processor must be lstm or bilstm if attention is used."
   assert not FLAGS.infer_embeddings or FLAGS.attention, "Attention must be enabled to infer embeddings"
     
   # SET RANDOM SEED
