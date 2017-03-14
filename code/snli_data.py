@@ -61,15 +61,18 @@ Loads the main glove file and creates matrix of only the embeddings in our vocab
 Saves trimmed glove matrix
 TODO -- Set default for size
 '''
-def process_glove(args, vocab_list, save_path, size=4e5):
+def process_glove(args, vocab_list, save_path, size=4e5, random_init=True):
     """
     :param vocab_list: [vocab]
     :return:
     """
     if not gfile.Exists(save_path + ".npz"):
         glove_path = os.path.join(args.glove_dir, "glove.6B.{}d.txt".format(args.glove_dim))
-        glove = np.zeros((len(vocab_list), args.glove_dim))
-        not_found = 0
+        if random_init:
+            glove = np.random.randn(len(vocab_list), args.glove_dim)
+        else:
+            glove = np.zeros((len(vocab_list), args.glove_dim))
+        found = 0
         with open(glove_path, 'r') as fh:
             for line in tqdm(fh, total=size):
                 array = line.lstrip().rstrip().split(" ")
@@ -78,18 +81,16 @@ def process_glove(args, vocab_list, save_path, size=4e5):
                 if word in vocab_list:
                     idx = vocab_list.index(word)
                     glove[idx, :] = vector
-                elif word.capitalize() in vocab_list:
+                    found += 1
+                if word.capitalize() in vocab_list:
                     idx = vocab_list.index(word.capitalize())
                     glove[idx, :] = vector
-                elif word.lower() in vocab_list:
-                    idx = vocab_list.index(word.lower())
-                    glove[idx, :] = vector
-                elif word.upper() in vocab_list:
+                    found += 1
+                if word.upper() in vocab_list:
                     idx = vocab_list.index(word.upper())
                     glove[idx, :] = vector
-                else:
-                    not_found += 1
-        found = size - not_found
+                    found += 1
+
         print("{}/{} of word vocab have corresponding vectors in {}".format(found, len(vocab_list), glove_path))
         np.savez_compressed(save_path, glove=glove)
         print("saved trimmed glove matrix at: {}".format(save_path))
