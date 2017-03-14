@@ -271,7 +271,7 @@ class NLI(object):
   :param dropout: Dropout keep probability
   :param hidden_size: Hidden size of each layer
   :param output_size: Size of output layer
-  :param num_layers: Number >1 representing number of layers in network
+  :param num_layers: Number >0 representing number of layers in network
   :param reg_list: List of regularization varibles. Variables that need to be regularized
   will be appended as needed to this list.
 
