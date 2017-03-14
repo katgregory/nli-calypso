@@ -402,7 +402,9 @@ def get_minibatches(data, minibatch_size, bucket=False, shuffle=True):
         indices = sorted(indices, key=lambda i: len(formatted_data[i][0]) + len(formatted_data[i][2]) + np.random.random())
     elif shuffle:
         np.random.shuffle(indices)
-    for minibatch_start in np.arange(0, data_size, minibatch_size):
+#    for minibatch_start in np.arange(0, data_size, minibatch_size): # TODO: CHANGE THIS BACK WHEN WE FIX STUPID ATTENTION WEIGHT ERROR
+    for minibatch_start in np.arange(0, data_size - minibatch_size, minibatch_size): 
+
         minibatch_indices = indices[minibatch_start:minibatch_start + minibatch_size]
         yield [minibatch(d, minibatch_indices) for d in data] if list_data \
             else minibatch(data, minibatch_indices)

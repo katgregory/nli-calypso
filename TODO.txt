@@ -1,7 +1,12 @@
 TODO
-- Paramter tuning for LSTMs
-- Stack LSTMs?
+- Set up LSTMs
+- Padding / Masking?
+- Paramter tuning <==
+- Checkpointing
 - Attention model
+- Run epochs to convergence <== (DONE)
+- Batch sizes for validation <== (DONE)
+- Set the random seed <== ?
 
 DIFFERENCES FROM LITERATURE
 - We use Adam, not Adadelta. Slower but better accuracy.
@@ -18,21 +23,9 @@ DONE
 - Actually run on dev set
 - Dropout
 - Regularization
-- Run epochs to convergence
-- Batch sizes for validation
-- Set the random seed
-- Set up LSTMs
-- Set up BiLSTMs
-- Pad/Mask LSTMs
 
 
 BEST HYPERPARAMETERS FOR:
-BOW (from grid3): Learning Rate: 0.001  Dropout Keep Rate: 0.9  Regularization lambda: 0.0001   TESTING RESULT: 0.657675081433 (50,000 train) 0.75641286645 (entire train, 0.787389850501 train accuracy) 
+BOW (from grid3): Learning Rate: 0.001  Dropout Keep Rate: 0.9  Regularization lambda: 0.0001   TESTING RESULT: 0.657675081433 (50,000 train) 0.75641286645 (entire train, 0.787389850501 train accuracy)
 
-BEST SCORES FOR:
-LSTM (10k train): Train %: 0.811. Dev %: 0.617. Dev Loss: 1.1198.
-
-
-GOOD RESOURCES:
-LSTMS + Bucketing:
-http://r2rt.com/recurrent-neural-networks-in-tensorflow-iii-variable-length-sequences.html
+python code/main.py --num_train=50000 --dev --lr=0.0001 --dropout=1.0 --reg_lambd
