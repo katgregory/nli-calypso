@@ -50,6 +50,7 @@ class NLISystem(object):
                infer_embeddings,
                weight_attention,
                n_bilstm_layers,
+               train_embed,
                tboard_path = None,
                verbose = False):
 
@@ -71,7 +72,9 @@ class NLISystem(object):
     self.hypothesis_ph = ph(tf.int32, shape=(batch_size, sen_len), name="Hypothesis-Placeholder")
     self.hypothesis_len_ph = ph(tf.int32, shape=(batch_size,), name="Hypothesis-Len-Placeholder")
     self.output_ph = ph(tf.int32, shape=(batch_size, num_classes), name="Output-Placeholder")
-    embeddings = tf.Variable(pretrained_embeddings, name="Embeddings", dtype=tf.float32)
+
+    embed_fn = tf.Variable if train_embed else tf.constant
+    embeddings = embed_fn(pretrained_embeddings, name="Embeddings", dtype=tf.float32)
 
     ##########################
     # Build neural net

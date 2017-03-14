@@ -29,6 +29,7 @@ tf.app.flags.DEFINE_string("stmt_processor", "bilstm", "How to process statement
 tf.app.flags.DEFINE_bool("attention", True, "")
 tf.app.flags.DEFINE_bool("infer_embeddings", False, "Include embeddings in inference step")
 tf.app.flags.DEFINE_bool("weight_attention", True, "Adds weight multiplication to attention calculation")
+tf.app.flags.DEFINE_bool("train_embed", False, "Train the embeddings")
 tf.app.flags.DEFINE_bool("restore", False, "Read in all parameters from file")
 tf.app.flags.DEFINE_integer("n_bilstm_layers", 1, "Number of layers in the stacked bidirectional LSTM")
 
@@ -160,7 +161,8 @@ def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dro
     attention = FLAGS.attention,
     infer_embeddings = FLAGS.infer_embeddings,
     weight_attention = FLAGS.weight_attention,
-    n_bilstm_layers = FLAGS.n_bilstm_layers)
+    n_bilstm_layers = FLAGS.n_bilstm_layers,
+    train_embed = FLAGS.train_embed)
   nli.saver = tf.train.Saver() # for saving
 
   if not os.path.exists(FLAGS.log_dir):
