@@ -49,6 +49,7 @@ class NLISystem(object):
                attention,
                infer_embeddings,
                weight_attention,
+               n_bilstm_layers,
                tboard_path = None,
                verbose = False):
 
@@ -82,7 +83,7 @@ class NLISystem(object):
     hypothesis_embed = tf.nn.embedding_lookup(embeddings, self.hypothesis_ph)
     
     # Configure LSTM and process_stmt functions based on flags
-    process_stmt = NLI.processor(stmt_processor, lstm_hidden_size, reg_list)
+    process_stmt = NLI.processor(stmt_processor, lstm_hidden_size, n_bilstm_layers, reg_list)
 
     # Process statements
     with tf.variable_scope("Process-Premise"):
@@ -92,23 +93,28 @@ class NLISystem(object):
 
     # Attention
     if attention:
-      with tf.variable_scope("Context"):
+      with tf.variable_scope("Attention"):
+        # Context generation
         p_context, h_context = NLI.context_tensors(p_states, h_states, weight_attention)
-        if infer_embeddings:
-          p_merged = NLI.merge_context(p_context, p_states, premise_embed)
-          h_merged = NLI.merge_context(h_context, h_states, hypothesis_embed)
-        else:
-          p_merged = NLI.merge_context(p_context, p_states)
-          h_merged = NLI.merge_context(h_context, h_states)
 
-      infer_processor = NLI.processor(stmt_processor, lstm_hidden_size, reg_list)
-      with tf.variable_scope("Infer-Premise"):
-        _, p_last = infer_processor(p_merged, self.premise_len_ph)
-      with tf.variable_scope("Infer-Hypothesis"):
-        _, h_last = infer_processor(h_merged, self.hypothesis_len_ph)
+        # Inference
+        p_inferred = NLI.infer(p_context, p_states, premise_embed if infer_embeddings else None)
+        h_inferred = NLI.infer(h_context, h_states, hypothesis_embed if infer_embeddings else None)
 
-    # Merge and feed-forward
-    merged = NLI.merge_states(p_last, h_last, stmt_hidden_size, reg_list)
+        # Composition
+        compose_processor = NLI.processor(stmt_processor, lstm_hidden_size, n_bilstm_layers, reg_list)
+        with tf.variable_scope("Infer-Premise"):
+          p_composed, _ = compose_processor(p_inferred, self.premise_len_ph)
+        with tf.variable_scope("Infer-Hypothesis"):
+          h_composed, _ = compose_processor(h_inferred, self.hypothesis_len_ph)
+
+        # Pooling
+        merged = NLI.pool_merge(p_composed, h_composed)
+
+    else: # merge for no attention
+      merged = NLI.merge_states(p_last, h_last, stmt_hidden_size, reg_list)
+
+    # Feed-Forward
     preds = NLI.feed_forward(merged, self.dropout_ph, ff_hidden_size, num_classes,
                              ff_num_layers, reg_list)
 

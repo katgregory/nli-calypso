@@ -30,6 +30,7 @@ tf.app.flags.DEFINE_bool("attention", True, "")
 tf.app.flags.DEFINE_bool("infer_embeddings", False, "Include embeddings in inference step")
 tf.app.flags.DEFINE_bool("weight_attention", True, "Adds weight multiplication to attention calculation")
 tf.app.flags.DEFINE_bool("restore", False, "Read in all parameters from file")
+tf.app.flags.DEFINE_integer("n_bilstm_layers", 1, "Number of layers in the stacked bidirectional LSTM")
 
 # HYPERPARAMETERS
 tf.app.flags.DEFINE_float("lr", 0.0004, "Learning rate.")
@@ -57,7 +58,7 @@ tf.app.flags.DEFINE_integer("keep", 0, "How many checkpoints to keep, 0 indicate
 tf.app.flags.DEFINE_string("vocab_path", "data/snli/vocab.dat", "Path to vocab file (default: ./data/snli/vocab.dat)")
 tf.app.flags.DEFINE_string("embed_path", "", "Path to the trimmed GLoVe embedding (default: ./data/snli/glove.trimmed.{embedding_size}.npz)")
 tf.app.flags.DEFINE_float("num_classes", 3, "Neutral, Entailment, Contradiction")
-tf.app.flags.DEFINE_float("ff_num_layers", 3, "Number of layers in final FF network")
+tf.app.flags.DEFINE_integer("ff_num_layers", 3, "Number of layers in final FF network")
 tf.app.flags.DEFINE_string("hyperparameter_grid_search_file", "data/hyperparams/grid.p", "Stores pickle file of search results")
 
 FLAGS = tf.app.flags.FLAGS
@@ -158,7 +159,8 @@ def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dro
     stmt_processor = FLAGS.stmt_processor,
     attention = FLAGS.attention,
     infer_embeddings = FLAGS.infer_embeddings,
-    weight_attention = FLAGS.weight_attention)
+    weight_attention = FLAGS.weight_attention,
+    n_bilstm_layers = FLAGS.n_bilstm_layers)
   nli.saver = tf.train.Saver() # for saving
 
   if not os.path.exists(FLAGS.log_dir):
@@ -219,8 +221,8 @@ def validate_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab):
 def main(_):
 
   assert(FLAGS.validation or ((FLAGS.dev and not FLAGS.test) or (FLAGS.test and not FLAGS.dev))), "When not validating, must set exaclty one of --dev or --test flag to specify evaluation dataset."
-  assert FLAGS.stmt_processor in ["bow", "lstm", "bilstm"], "Statement processor must be one of bow, lstm, or bilstm."
-  assert not FLAGS.attention or FLAGS.stmt_processor in ["lstm", "bilstm"], "Statement processor must be lstm or bilstm if attention is used."
+  assert FLAGS.stmt_processor in ["bow", "lstm", "bilstm", "stacked"], "Statement processor must be one of bow, lstm, or bilstm."
+  assert not FLAGS.attention or FLAGS.stmt_processor in ["lstm", "bilstm", "stacked"], "Statement processor must be lstm or bilstm if attention is used."
   assert not FLAGS.infer_embeddings or FLAGS.attention, "Attention must be enabled to infer embeddings"
     
   # SET RANDOM SEED
