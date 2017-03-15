@@ -31,7 +31,7 @@ tf.app.flags.DEFINE_bool("infer_embeddings", False, "Include embeddings in infer
 tf.app.flags.DEFINE_bool("weight_attention", True, "Adds weight multiplication to attention calculation")
 tf.app.flags.DEFINE_bool("train_embed", False, "Train the embeddings")
 tf.app.flags.DEFINE_bool("restore", False, "Read in all parameters from file")
-tf.app.flags.DEFINE_bool("pool_merge", False, "Use max pool and average to merge.")
+tf.app.flags.DEFINE_bool("pool_merge", True, "Use max pool and average to merge.")
 tf.app.flags.DEFINE_integer("n_bilstm_layers", 1, "Number of layers in the stacked bidirectional LSTM")
 
 # HYPERPARAMETERS
