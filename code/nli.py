@@ -20,13 +20,13 @@ class NLI(object):
   batch_size x 1
   """
   @staticmethod
-  def processor(processor, lstm_hidden_size, n_bilstm_layers, reg_list, dropout_keep):
+  def processor(processor, lstm_hidden_size, n_bilstm_layers, reg_list):
     if processor == "lstm":
-      lstm_cell = NLI.LSTM_cell(lstm_hidden_size, dropout_keep)
+      lstm_cell = NLI.LSTM_cell(lstm_hidden_size)
       process_stmt = partial(lambda c, d, a, b: NLI.LSTM(a, b, c, d), lstm_cell, reg_list)
     elif processor == "bilstm":
-      lstm_cell_fw = NLI.LSTM_cell(lstm_hidden_size, dropout_keep)
-      lstm_cell_bw = NLI.LSTM_cell(lstm_hidden_size, dropout_keep)
+      lstm_cell_fw = NLI.LSTM_cell(lstm_hidden_size)
+      lstm_cell_bw = NLI.LSTM_cell(lstm_hidden_size)
       process_stmt = partial(lambda c, d, e, f, a, b: NLI.biLSTM(a, b, c, d, e, f),
                              lstm_cell_fw, lstm_cell_bw, n_bilstm_layers, reg_list)
     elif processor == "bow": # artificially return (None, hidden_state)
@@ -56,10 +56,10 @@ class NLI(object):
   @hidden_size is scalar that specifies hidden size of LSTM cell
   """
   @staticmethod
-  def LSTM_cell(hidden_size, dropout_keep):
+  def LSTM_cell(hidden_size):
     with tf.name_scope("Process_Stmt_LSTM_cell"):
-      cell = tf.nn.rnn_cell.BasicLSTMCell(hidden_size)
-      return tf.nn.rnn_cell.DropoutWrapper(cell, output_keep_prob=dropout_keep)
+      return tf.nn.rnn_cell.BasicLSTMCell(hidden_size)
+      # return tf.nn.rnn_cell.DropoutWrapper(cell, output_keep_prob=dropout_keep)
 
   """
   Run inputs through LSTM. Assumes that input statements are padded with zeros.
