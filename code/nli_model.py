@@ -73,7 +73,7 @@ class NLISystem(object):
     ##########################
     # Build neural net
     ##########################
-    nli = NLI()
+    nli = NLI(tblog=True)
 
     ####################
     # Embedding lookup
@@ -146,6 +146,9 @@ class NLISystem(object):
       softmax_loss = tf.nn.softmax_cross_entropy_with_logits(logits=preds,
                                                              labels=self.output_ph, name="loss")
       self.loss = tf.reduce_mean(softmax_loss)
+
+      tf.summary.histogram("preds", preds)
+      tf.summary.histogram("probs", self.probs)
 
       # Regularization
       if reg_lambda >= 0:
