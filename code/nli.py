@@ -212,20 +212,19 @@ class NLI(object):
   """
   @staticmethod
   def infer(context, states, dropout, reg_list, embeddings=None):
-
-    batch_size = tf.shape(context)[0]
-    stmt_len = tf.shape(context)[1]
-    hidden_size = tf.shape(context)[2]
-
     with tf.name_scope("Infer"):
+      batch_size = tf.shape(context)[0]
+      stmt_len = tf.shape(context)[1]
+
       if embeddings is not None:
         m = tf.concat(2, [context, states, states - context, tf.mul(states, context), embeddings])
       else: m = tf.concat(2, [context, states, states - context, tf.mul(states, context)])
 
-      with tf.variable_scope("Infer-FF") as scope:
-        m_reshaped = tf.reshape(m, [batch_size * stmt_len, hidden_size])
-        m_ff = NLI.feed_forward(m_reshaped, dropout, hidden_size, hidden_size, 1, reg_list)
-        return tf.reshape(m_ff, [batch_size, stmt_len, hidden_size])
+      m_size = m.get_shape().as_list()[2]
+
+      m_reshaped = tf.reshape(m, [batch_size * stmt_len, m_size])
+      m_ff = NLI.feed_forward(m_reshaped, dropout, m_size, m_size, 1, reg_list)
+      return tf.reshape(m_ff, [batch_size, stmt_len, m_size])
 
   """
   Calculates Average and Max Pool for each composed vector and concatenates them in preparation
@@ -292,7 +291,7 @@ class NLI(object):
   """
   @staticmethod
   def feed_forward(input, dropout, hidden_size, output_size, num_layers, reg_list):
-    with tf.variable_scope("Feed-Forward"):
+    with tf.name_scope("Feed-Forward"):
       input_size = input.get_shape().as_list()[1]
       r = input
 

@@ -102,10 +102,13 @@ class NLISystem(object):
         p_context, h_context = NLI.context_tensors(p_states, h_states, weight_attention)
 
         # Inference
-        p_inferred = NLI.infer(p_context, p_states, self.dropout_ph, reg_list,
-                               premise_embed if infer_embeddings else None)
-        h_inferred = NLI.infer(h_context, h_states, self.dropout_ph, reg_list,
-                               hypothesis_embed if infer_embeddings else None)
+
+        with tf.variable_scope("Attention") as scope:
+          p_inferred = NLI.infer(p_context, p_states, self.dropout_ph, reg_list,
+                                 premise_embed if infer_embeddings else None)
+          scope.reuse_variables()
+          h_inferred = NLI.infer(h_context, h_states, self.dropout_ph, reg_list,
+                                 hypothesis_embed if infer_embeddings else None)
 
         # Composition
         compose_processor = NLI.processor(stmt_processor, lstm_hidden_size, n_bilstm_layers, reg_list)
