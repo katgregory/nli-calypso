@@ -129,7 +129,7 @@ class NLISystem(object):
 
       # Feed-Forward
       preds = NLI.feed_forward(merged, self.dropout_ph, ff_hidden_size, num_classes,
-                               ff_num_layers, reg_list)
+                               ff_num_layers, tf.nn.tanh, reg_list)
 
       # Softmax
       self.probs = tf.nn.softmax(preds)
