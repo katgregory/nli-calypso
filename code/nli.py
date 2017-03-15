@@ -5,8 +5,9 @@ xavier = tf.contrib.layers.xavier_initializer
 
 class NLI(object):
 
-  def __init__(self):
+  def __init__(self, tblog=False):
     self.reg_list = []
+    self.tblog = tblog
 
   """
   Returns bag of words mean of input statement
@@ -20,7 +21,7 @@ class NLI(object):
     with tf.name_scope("Process_Stmt_BOW"):
       # batch_size x embedding_size
       hidden = tf.reduce_mean(statement, 1)
-      tf.summary.histogram("hidden", hidden)
+      if self.tblog: tf.summary.histogram("hidden", hidden)
       return hidden
 
   """
@@ -249,11 +250,11 @@ class NLI(object):
 
         W1 = tf.get_variable("W1", shape=(state1_size, hidden_size), initializer=xavier())
         r1 = tf.matmul(state1, W1)
-        tf.summary.histogram("r1", r1)
+        if self.tblog: tf.summary.histogram("r1", r1)
 
         W2 = tf.get_variable("W2", shape=(state2_size, hidden_size), initializer=xavier())
         r2 = tf.matmul(state2, W2)
-        tf.summary.histogram("r2", r2)
+        if self.tblog: tf.summary.histogram("r2", r2)
 
       return tf.concat(1, [r1, r2], name="merged")
 
@@ -289,9 +290,9 @@ class NLI(object):
             r = fn(r, name="r-nonlin")
             r = tf.nn.dropout(r, dropout, name="r-dropout")
 
-          tf.summary.histogram("W", W)
-          tf.summary.histogram("b", b)
-          tf.summary.histogram("r", r)
+          if self.tblog: tf.summary.histogram("W", W)
+          if self.tblog: tf.summary.histogram("b", b)
+          if self.tblog: tf.summary.histogram("r", r)
         self.reg_list.append(W)
 
       return r
