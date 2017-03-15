@@ -1,0 +1,87 @@
+Epoch 1
+549376it [14:18, 185.03it/s]                            
+Amount of time to run this epoch: 858.427822828 secs
+Training accuracy for this epoch: 0.701742186917
+Mean loss for this epoch: 0.686022102336
+        NEW BEST
+
+Epoch 2
+549376it [13:41, 181.43it/s]                             
+Amount of time to run this epoch: 821.992258072 secs
+Training accuracy for this epoch: 0.770725216476
+Mean loss for this epoch: 0.552440522594
+        NEW BEST
+
+Epoch 3
+549376it [13:39, 166.69it/s]
+Amount of time to run this epoch: 819.495297194 secs
+Training accuracy for this epoch: 0.791283422557
+Mean loss for this epoch: 0.505813443759
+NEW BEST  
+
+Epoch 4
+549376it [13:40, 196.36it/s]                            
+Amount of time to run this epoch: 820.235013008 secs
+Training accuracy for this epoch: 0.80582743412
+Mean loss for this epoch: 0.473013307099
+        NEW BEST
+
+Epoch 5
+549376it [13:37, 176.01it/s]                             
+Amount of time to run this epoch: 817.661174059 secs
+Training accuracy for this epoch: 0.817202343788
+Mean loss for this epoch: 0.445828788502
+        NEW BEST
+
+Epoch 6
+549376it [13:36, 175.77it/s]                             
+Amount of time to run this epoch: 816.387959003 secs
+Training accuracy for this epoch: 0.827676216445
+Mean loss for this epoch: 0.423192834501
+        NEW BEST
+
+Epoch 7
+92%|#########2| 507520/549367 [11:47<01:34, 444.28it/s]I tensorflow/core/common
+_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 230660782 get requests,
+ put_count=230660779 evicted_count=17000 eviction_rate=7.37013e-05 and unsatisfi
+ed allocation rate=7.67707e-05
+Amount of time to run this epoch: 816.526345968 secs
+Training accuracy for this epoch: 0.833959811929
+Mean loss for this epoch: 0.405388307462
+        NEW BEST
+
+Epoch 8
+549376it [13:37, 192.14it/s]                             
+Amount of time to run this epoch: 817.096603155 secs
+Training accuracy for this epoch: 0.839631794411
+Mean loss for this epoch: 0.38950403082
+        NEW BEST
+
+Epoch 9
+549376it [13:35, 184.27it/s]                             
+Amount of time to run this epoch: 816.004379034 secs
+Training accuracy for this epoch: 0.666843840274
+Mean loss for this epoch: nan
+
+Epoch 10
+Amount of time to run this epoch: 820.365453005 secs
+Training accuracy for this epoch: 0.351773950747
+Mean loss for this epoch: nan
+
+EVALUATING
+Accuracy: 0.328693355009
+Average Loss: nan
+Token-level confusion matrix:
+go\gu           entailment      neutral         contradiction
+entailment      0.00            3329.00         0.00         
+neutral         0.00            3235.00         0.00         
+contradiction   0.00            3278.00         0.00         
+
+Token-level scores:
+label           acc             prec            rec             f1           
+entailment      0.00            0.00            0.00            0.00         
+neutral         0.33            0.33            1.00            0.49         
+contradiction   0.00            0.00            0.00            0.00         
+micro           0.55            0.33            0.33            0.33         
+macro           0.11            0.11            0.33            0.16         
+not-O           0.50            0.33            0.49            0.39    

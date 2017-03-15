@@ -95,6 +95,9 @@ data/snli/snli_1.0_*
 # Mac Temp Files
 .DS_Store
 
+# Other logs
+log/
+log/*
+
 # Tensorboard logs
 logs/
-log/
