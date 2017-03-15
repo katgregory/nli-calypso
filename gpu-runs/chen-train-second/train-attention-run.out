@@ -1,0 +1,48 @@
+
+Epoch 1
+Amount of time to run this epoch: 2887.37228203 secs
+Training accuracy for this epoch: 0.571140967696
+Mean loss for this epoch: 0.858914840244
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 2893.72324586 secs
+Training accuracy for this epoch: 0.396940478769
+Mean loss for this epoch: 1.08280172125
+
+Epoch 3
+Amount of time to run this epoch: 2917.58289409 secs
+Training accuracy for this epoch: 0.398374856881
+Mean loss for this epoch: 1.08239719711
+
+Epoch 4
+Amount of time to run this epoch: 2919.44214487 secs
+Training accuracy for this epoch: 0.398990110436
+Mean loss for this epoch: 1.08211698957
+
+Epoch 5
+Amount of time to run this epoch: 2942.61986613 secs
+Training accuracy for this epoch: 0.400235179761
+Mean loss for this epoch: 1.08169412622
+
+Epoch 6
+Amount of time to run this epoch: 2937.37064505 secs
+Training accuracy for this epoch: 0.399406953821
+Mean loss for this epoch: 1.08169784022
+
+Epoch 7
+Amount of time to run this epoch: 2962.50886297 secs
+Training accuracy for this epoch: 0.399883866341
+Mean loss for this epoch: 1.08157125505
+
+Epoch 8
+Amount of time to run this epoch: 2960.66261792 secs
+Training accuracy for this epoch: 0.399539834027
+Mean loss for this epoch: 1.08174191459
+
+Epoch 9
+Amount of time to run this epoch: 2963.82792282 secs
+Training accuracy for this epoch: 0.399701838662
+Mean loss for this epoch: 1.0818852062
+
+Epoch 10
