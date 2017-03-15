@@ -105,7 +105,8 @@ class NLISystem(object):
     if attention:
       with tf.name_scope("Attention"):
         # Context generation
-        p_context, h_context = nli.context_tensors(p_states, h_states, weight_attention)
+        with tf.variable_scope("Context") as scope:
+          p_context, h_context = nli.context_tensors(p_states, h_states, weight_attention)
 
         # Inference
         with tf.variable_scope("Inference") as scope:
