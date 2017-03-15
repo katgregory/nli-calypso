@@ -1,0 +1,13 @@
+
+Epoch 1
+Amount of time to run this epoch: 2986.55047297 secs
+Training accuracy for this epoch: 0.559964468197
+Mean loss for this epoch: 0.871854513859
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 3009.28302407 secs
+Training accuracy for this epoch: 0.397708635575
+Mean loss for this epoch: 1.08252660106
+
+Epoch 3
