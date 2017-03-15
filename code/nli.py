@@ -5,46 +5,18 @@ xavier = tf.contrib.layers.xavier_initializer
 
 class NLI(object):
 
-  """
-  Binds processor function as specified by @processor to a function that takes in 2 arguments:
-  a statements and the lengths of its sentences. Creates cells as needed such that every call
-  to the returned function will use the same cells.
-
-  :param processor: String, either "lstm", "bilstm", or "bow"
-  :param n_bilstm_layers: Number of layers in bilstm. Only applicable if processor=bilstm
-  :param reg_list: List of regularization varibles. Variables that need to be regularized
-  will be appended as needed to this list.
-
-  :return: function that takes 2 arguments: statement, stmt_len where statement is
-  of dimensions batch_size x statement_len x embedding_size and stmt_len is of dimensions
-  batch_size x 1
-  """
-  @staticmethod
-  def processor(processor, lstm_hidden_size, n_bilstm_layers, reg_list):
-    if processor == "lstm":
-      lstm_cell = NLI.LSTM_cell(lstm_hidden_size)
-      process_stmt = partial(lambda c, d, a, b: NLI.LSTM(a, b, c, d), lstm_cell, reg_list)
-    elif processor == "bilstm":
-      lstm_cell_fw = NLI.LSTM_cell(lstm_hidden_size)
-      lstm_cell_bw = NLI.LSTM_cell(lstm_hidden_size)
-      process_stmt = partial(lambda c, d, e, f, a, b: NLI.biLSTM(a, b, c, d, e, f),
-                             lstm_cell_fw, lstm_cell_bw, n_bilstm_layers, reg_list)
-    elif processor == "bow": # artificially return (None, hidden_state)
-      bow_fn = partial(lambda c, a, b: NLI.BOW(a, b, c), reg_list)
-      process_stmt = lambda a, b: (None, bow_fn(a, b))
-    return process_stmt
+  def __init__(self):
+    self.reg_list = []
 
   """
   Returns bag of words mean of input statement
 
   :param statement: Statement as list of embeddings of dimensions batch_size x statement_len
    x embedding_size
-  :param reg_list: List of regularization varibles. Variables that need to be regularized
   will be appended as needed to this list.
   """
   # batch_size x statement_len x embedding_size
-  @staticmethod
-  def BOW(statement, hidden_size, reg_list):
+  def BOW(self, statement, hidden_size):
     with tf.name_scope("Process_Stmt_BOW"):
       # batch_size x embedding_size
       hidden = tf.reduce_mean(statement, 1)
@@ -55,46 +27,52 @@ class NLI(object):
   Returns LSTM cell for use with NLI.LSTM and NLI.biLSTM methods
   @hidden_size is scalar that specifies hidden size of LSTM cell
   """
-  @staticmethod
-  def LSTM_cell(hidden_size):
+  def LSTM_cell(self, hidden_size):
     with tf.name_scope("Process_Stmt_LSTM_cell"):
       return tf.nn.rnn_cell.BasicLSTMCell(hidden_size)
       # return tf.nn.rnn_cell.DropoutWrapper(cell, output_keep_prob=dropout_keep)
 
   """
-  Run inputs through LSTM. Assumes that input statements are padded with zeros.
+  Run inputs through LSTM. Assumes that input statements are padded with zeros. Binds cells with 
+  closure.
 
   :param statement: Statement as list of embeddings of dimensions batch_size x statement_len
    x embedding_size
   :param stmt_lens: Length of statements before padding as 1D list with dimension batch_size.
   Dimensions of batch_size x 1.
   :param cell: LSTM cell as returned from NLI.LSTM_cell
-  :param reg_list: List of regularization varibles. Variables that need to be regularized
-  will be appended as needed to this list.
 
-  :return: A tuple of (outputs, last_output) where outputs represents all LSTM outputs and is
-  of dimensions batch_size x statement_len x hidden_size; and last_output represents the last
-  output for each statement in the batch, of dimensions batch_size x hidden_size
+  :return: function fn that takes 2 arguments: statement, stmt_len where statement is
+  of dimensions batch_size x statement_len x embedding_size and stmt_len is of dimensions
+  batch_size x 1. 
+
+  fn returns A tuple of (outputs, last_output) where outputs represents all 
+  LSTM outputs and is of dimensions batch_size x statement_len x hidden_size; and last_output 
+  represents the last output for each statement in the batch, of dimensions batch_size x hidden_size
   """
-  @staticmethod
-  def LSTM(statement, stmt_lens, cell, reg_list):
-    with tf.name_scope("Process_Stmt_LSTM"):
-      # dimensions
-      batch_size = tf.shape(statement)[0]
+  def LSTM(self, lstm_hidden_size):
+    cell = self.LSTM_cell(lstm_hidden_size)
 
-      initial_state = cell.zero_state(batch_size, tf.float32)
+    def run(statement, stmt_lens):
+      with tf.name_scope("Process_Stmt_LSTM"):
+        # dimensions
+        batch_size = tf.shape(statement)[0]
 
-      # batch_size x statement_len x hidden_size
-      rnn_outputs, fin_state = tf.nn.dynamic_rnn(cell, statement,
-                                              sequence_length=stmt_lens,
-                                              initial_state=initial_state)
-      last_rnn_output = tf.gather_nd(rnn_outputs,
-                                     tf.pack([tf.range(batch_size), stmt_lens-1], axis=1))
-    return rnn_outputs, last_rnn_output
+        initial_state = cell.zero_state(batch_size, tf.float32)
+        # batch_size x statement_len x hidden_size
+        rnn_outputs, fin_state = tf.nn.dynamic_rnn(cell, statement,
+                                                sequence_length=stmt_lens,
+                                                initial_state=initial_state)
+        last_rnn_output = tf.gather_nd(rnn_outputs,
+                                       tf.pack([tf.range(batch_size), stmt_lens-1], axis=1))
+      return rnn_outputs, last_rnn_output
+
+    return run
 
   """
-  Run inputs through stacked Bi-LSTM and output concatonation of forward and backward
-  final hidden state. Assumes that input statements are padded with zeros.
+  Create biLSTM that can run inputs through stacked Bi-LSTM and output concatenation of 
+  forward and backward final hidden state. Assumes that input statements are padded with zeros.
+  Binds cells with closure.
 
   :param statement: Statement as list of embeddings of dimensions batch_size x statement_len
    x embedding_size
@@ -103,36 +81,43 @@ class NLI(object):
   :param cell_fw: Forward LSTM cell as returned from NLI.LSTM_cell
   :param cell_bw: Backwards LSTM cell as returned from NLI.LSTM_cell
   :param n_layers: Number of LSTM layers
-  :param reg_list: List of regularization varibles. Variables that need to be regularized 
-  will be appended as needed to this list.
 
-  :return: A tuple of (outputs, last_output) where outputs represents all biLSTM outputs and is
+  :return: function fn that takes 2 arguments: statement, stmt_len where statement is
+  of dimensions batch_size x statement_len x embedding_size and stmt_len is of dimensions
+  batch_size x 1. 
+
+  fn returns a tuple of (outputs, last_output) where outputs represents all biLSTM outputs and is
   of dimensions batch_size x statement_len x (hidden_size * 2); and last_output represents the last
   hidden state for each statement in the batch, of dimensions batch_size x (hidden_size * 2).
-  Outputs are concatenations of forward and backward outputs.
+  Outputs are concatenations of forward and backward outputs
   """
-  @staticmethod
-  def biLSTM(statement, stmt_lens, cell_fw, cell_bw, n_layers, reg_list):
-    with tf.name_scope("Process_Stmt_Bi-LSTM"):
-      # dimensions
-      batch_size = tf.shape(statement)[0]
+  def biLSTM(self, lstm_hidden_size, n_layers):
+    cell_fw = self.LSTM_cell(lstm_hidden_size)
+    cell_bw = self.LSTM_cell(lstm_hidden_size)
 
-      rnn_inputs = statement
-      for layer_i in xrange(n_layers):
-        with tf.variable_scope("Process_Stmt_Stacked_Bi-LSTM-Layer%d" % layer_i):
-          initial_state_fw = cell_fw.zero_state(batch_size, tf.float32)
-          initial_state_bw = cell_bw.zero_state(batch_size, tf.float32)
+    def run(statement, stmt_lens):
+      with tf.name_scope("Process_Stmt_Bi-LSTM"):
+        # dimensions
+        batch_size = tf.shape(statement)[0]
 
-          rnn_outputs, fin_state = tf.nn.bidirectional_dynamic_rnn(cell_fw, cell_bw, rnn_inputs,
-                                                sequence_length=stmt_lens,
-                                                initial_state_fw=initial_state_fw,
-                                                initial_state_bw=initial_state_bw)
-          rnn_outputs = tf.concat(2, rnn_outputs)
-          rnn_inputs = rnn_outputs
+        rnn_inputs = statement
+        for layer_i in xrange(n_layers):
+          with tf.variable_scope("Process_Stmt_Stacked_Bi-LSTM-Layer%d" % layer_i):
+            initial_state_fw = cell_fw.zero_state(batch_size, tf.float32)
+            initial_state_bw = cell_bw.zero_state(batch_size, tf.float32)
 
-      last_rnn_output = tf.gather_nd(rnn_outputs,
-                                     tf.pack([tf.range(batch_size), stmt_lens-1], axis=1))
-    return rnn_outputs, last_rnn_output
+            rnn_outputs, fin_state = tf.nn.bidirectional_dynamic_rnn(cell_fw, cell_bw, rnn_inputs,
+                                                  sequence_length=stmt_lens,
+                                                  initial_state_fw=initial_state_fw,
+                                                  initial_state_bw=initial_state_bw)
+            rnn_outputs = tf.concat(2, rnn_outputs)
+            rnn_inputs = rnn_outputs
+
+        last_rnn_output = tf.gather_nd(rnn_outputs,
+                                       tf.pack([tf.range(batch_size), stmt_lens-1], axis=1))
+      return rnn_outputs, last_rnn_output
+
+    return run
 
   """
   Calculates context vectors for two statements by using weighted similarity.
@@ -147,8 +132,7 @@ class NLI(object):
   and statement 2 respectively. context1 and context2 have the same dimensions as states1 and
   states2
   """
-  @staticmethod
-  def context_tensors(states1, states2, weight_attention):
+  def context_tensors(self, states1, states2, weight_attention):
     with tf.name_scope("Context-Tensors"):
       # dimensions
       batch_size = tf.shape(states1)[0]
@@ -210,8 +194,7 @@ class NLI(object):
   :return: A context/state inference vector of dimension batch_size x statement_len x
   hidden_size
   """
-  @staticmethod
-  def infer(context, states, hidden_size, dropout, reg_list, embeddings=None):
+  def infer(self, context, states, hidden_size, dropout, embeddings=None):
     with tf.name_scope("Infer"):
       batch_size = tf.shape(context)[0]
       stmt_len = tf.shape(context)[1]
@@ -223,7 +206,7 @@ class NLI(object):
       m_size = m.get_shape().as_list()[2]
 
       m_reshaped = tf.reshape(m, [batch_size * stmt_len, m_size])
-      m_ff = NLI.feed_forward(m_reshaped, dropout, m_size, hidden_size, 1, tf.nn.relu, reg_list)
+      m_ff = self.feed_forward(m_reshaped, dropout, m_size, hidden_size, 1, tf.nn.relu)
       return tf.reshape(m_ff, [batch_size, stmt_len, hidden_size])
 
   """
@@ -237,8 +220,7 @@ class NLI(object):
 
   :return: A merged vector of dimensions batch_size x (hidden_size * 4)
   """
-  @staticmethod
-  def pool_merge(composed1, composed2):
+  def pool_merge(self, composed1, composed2):
     with tf.name_scope("Pool-Merge"):
       avg1 = tf.reduce_mean(composed1, axis=1)
       avg2 = tf.reduce_mean(composed2, axis=1)
@@ -252,13 +234,12 @@ class NLI(object):
   :param state1: First hidden state to merge
   :param state2: Second hidden state to merge
   :param hidden_size: Output hidden size of each state
-  :param reg_list: List of regularization varibles. Variables that need to be regularized
-  will be appended as needed to this list.
 
   :return: Merged hidden state of dimensions batch_size x (hidden_size * 2)
   """
-  @staticmethod
-  def merge_states(state1, state2, hidden_size, reg_list):
+
+  
+  def merge_states(self, state1, state2, hidden_size):
     with tf.variable_scope("Merge-States"):
       state1_size = state1.get_shape().as_list()[1]
       state2_size = state2.get_shape().as_list()[1]
@@ -285,28 +266,32 @@ class NLI(object):
   :param output_size: Size of output layer
   :param fn: nonlinearity to use between the layers
   :param num_layers: Number >0 representing number of layers in network
-  :param reg_list: List of regularization varibles. Variables that need to be regularized
-  will be appended as needed to this list.
 
   :return: Output state of dimensions batch_size x output_size
   """
-  @staticmethod
-  def feed_forward(input, dropout, hidden_size, output_size, num_layers, fn, reg_list):
+  def feed_forward(self, input, dropout, hidden_size, output_size, num_layers, fn):
     with tf.name_scope("Feed-Forward"):
       input_size = input.get_shape().as_list()[1]
       r = input
 
       for i in range(num_layers):
-        i_size = input_size if i == 0 else hidden_size
-        o_size = output_size if i == num_layers - 1 else hidden_size
+        first = (i == 0)
+        last = (i == num_layers - 1)
+
         with tf.variable_scope("FF-Layer-" + str(i)):
+          i_size = input_size if first else hidden_size
+          o_size = output_size if last else hidden_size
           W = tf.get_variable("W", shape=(i_size, o_size), initializer=xavier())
           b = tf.Variable(tf.zeros([o_size,]), name="b")
-          r = fn(tf.matmul(r, W) + b, name="r")
-          r = tf.nn.dropout(r, dropout)
+          r = tf.add(tf.matmul(r, W), b, name="r")
+          
+          if not last:
+            r = fn(r, name="r-nonlin")
+            r = tf.nn.dropout(r, dropout, name="r-dropout")
+
           tf.summary.histogram("W", W)
           tf.summary.histogram("b", b)
           tf.summary.histogram("r", r)
-        reg_list.append(W)
+        self.reg_list.append(W)
 
       return r

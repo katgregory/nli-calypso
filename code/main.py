@@ -29,7 +29,7 @@ tf.app.flags.DEFINE_string("stmt_processor", "bilstm", "How to process statement
 tf.app.flags.DEFINE_bool("attention", True, "")
 tf.app.flags.DEFINE_bool("infer_embeddings", False, "Include embeddings in inference step")
 tf.app.flags.DEFINE_bool("weight_attention", True, "Adds weight multiplication to attention calculation")
-tf.app.flags.DEFINE_bool("train_embed", False, "Train the embeddings")
+tf.app.flags.DEFINE_bool("train_embed", True, "Train the embeddings")
 tf.app.flags.DEFINE_bool("restore", False, "Read in all parameters from file")
 tf.app.flags.DEFINE_bool("pool_merge", True, "Use max pool and average to merge.")
 tf.app.flags.DEFINE_integer("n_bilstm_layers", 1, "Number of layers in the stacked bidirectional LSTM")
@@ -132,7 +132,7 @@ def get_save_filename(lr, dropout_keep):
   ntrain_str = str(FLAGS.num_train) if not FLAGS.num_train == -1 else 'all'
   return ('dev' if FLAGS.dev else 'test') + '_numtrain' + ntrain_str + \
                                             '_lr' + str(lr) + \
-                                            '_dropoutkeep' + str(dropout_keep) 
+                                            '_dropoutkeep' + str(dropout_keep)
 
 def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dropout_keep, reg_lambda):
 
@@ -183,7 +183,7 @@ def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dro
       epoch_number, train_accuracy, train_loss = (-1, -1, -1) # Placeholders
     else:
       epoch_number, train_accuracy, train_loss = nli.train(sess, train_dataset, rev_vocab, FLAGS.train_dir, FLAGS.batch_size)
-   
+
       # Save the parameters to file
       if not FLAGS.validation:
         nli.saver.save(sess, pjoin(FLAGS.train_dir, get_save_filename(lr, dropout_keep)))
@@ -195,8 +195,8 @@ def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dro
 
 def validate_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab):
   lr_range = [.001, .0001, .00001] # np.array([10**lr_exp for lr_exp in range(-8, -1, 1)])
-  dropout_range = [.6, .8, 1.0] # np.arange(0.5, 1.1, 0.1) 
-  reg_lambda_range = [.1, .001, .00001] # np.array([10**lr_exp for lr_exp in range(-4, 1, 1)]) 
+  dropout_range = [.6, .8, 1.0] # np.arange(0.5, 1.1, 0.1)
+  reg_lambda_range = [.1, .001, .00001] # np.array([10**lr_exp for lr_exp in range(-4, 1, 1)])
 
   results_map = {}
   best_train_accuracy = 0
@@ -227,7 +227,7 @@ def main(_):
   assert FLAGS.stmt_processor in ["bow", "lstm", "bilstm", "stacked"], "Statement processor must be one of bow, lstm, or bilstm."
   assert not FLAGS.attention or FLAGS.stmt_processor in ["lstm", "bilstm", "stacked"], "Statement processor must be lstm or bilstm if attention is used."
   assert not FLAGS.infer_embeddings or FLAGS.attention, "Attention must be enabled to infer embeddings"
-    
+
   # SET RANDOM SEED
   np.random.seed(244)
 
