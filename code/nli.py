@@ -249,21 +249,22 @@ class NLI(object):
   """
   @staticmethod
   def merge_states(state1, state2, hidden_size, reg_list):
-    state1_size = state1.get_shape().as_list()[1]
-    state2_size = state2.get_shape().as_list()[1]
+    with tf.variable_scope("Merge-States"):
+      state1_size = state1.get_shape().as_list()[1]
+      state2_size = state2.get_shape().as_list()[1]
 
-    # weight hidden layers before merging
-    with tf.variable_scope("Hidden-Weights"):
+      # weight hidden layers before merging
+      with tf.variable_scope("Hidden-Weights"):
 
-      W1 = tf.get_variable("W1", shape=(state1_size, hidden_size), initializer=xavier())
-      r1 = tf.matmul(state1, W1)
-      tf.summary.histogram("r1", r1)
+        W1 = tf.get_variable("W1", shape=(state1_size, hidden_size), initializer=xavier())
+        r1 = tf.matmul(state1, W1)
+        tf.summary.histogram("r1", r1)
 
-      W2 = tf.get_variable("W2", shape=(state2_size, hidden_size), initializer=xavier())
-      r2 = tf.matmul(state2, W2)
-      tf.summary.histogram("r2", r2)
+        W2 = tf.get_variable("W2", shape=(state2_size, hidden_size), initializer=xavier())
+        r2 = tf.matmul(state2, W2)
+        tf.summary.histogram("r2", r2)
 
-    return tf.concat(1, [r1, r2], name="merged")
+      return tf.concat(1, [r1, r2], name="merged")
 
   """
   Implementation of multi-layer Feed forward network with dropout

@@ -51,6 +51,7 @@ class NLISystem(object):
                weight_attention,
                n_bilstm_layers,
                train_embed,
+               pool_merge,
                tboard_path = None,
                verbose = False):
 
@@ -107,13 +108,13 @@ class NLISystem(object):
         # Composition
         compose_processor = NLI.processor(stmt_processor, lstm_hidden_size, n_bilstm_layers, reg_list)
         with tf.variable_scope("Infer-Premise"):
-          p_composed, _ = compose_processor(p_inferred, self.premise_len_ph)
+          p_composed, p_last = compose_processor(p_inferred, self.premise_len_ph)
         with tf.variable_scope("Infer-Hypothesis"):
-          h_composed, _ = compose_processor(h_inferred, self.hypothesis_len_ph)
+          h_composed, p_last = compose_processor(h_inferred, self.hypothesis_len_ph)
 
-        # Pooling
-        merged = NLI.pool_merge(p_composed, h_composed)
-
+    # Merge
+    if pool_merge:
+      merged = NLI.pool_merge(p_composed, h_composed)
     else: # merge for no attention
       merged = NLI.merge_states(p_last, h_last, stmt_hidden_size, reg_list)
 
