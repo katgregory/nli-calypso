@@ -73,7 +73,7 @@ class NLISystem(object):
     ##########################
     # Build neural net
     ##########################
-    nli = NLI()
+    nli = NLI(tblog=True)
 
     ####################
     # Embedding lookup
@@ -105,7 +105,8 @@ class NLISystem(object):
     if attention:
       with tf.name_scope("Attention"):
         # Context generation
-        p_context, h_context = nli.context_tensors(p_states, h_states, weight_attention)
+        with tf.variable_scope("Context") as scope:
+          p_context, h_context = nli.context_tensors(p_states, h_states, weight_attention)
 
         # Inference
         with tf.variable_scope("Inference") as scope:
@@ -145,6 +146,9 @@ class NLISystem(object):
       softmax_loss = tf.nn.softmax_cross_entropy_with_logits(logits=preds,
                                                              labels=self.output_ph, name="loss")
       self.loss = tf.reduce_mean(softmax_loss)
+
+      tf.summary.histogram("preds", preds)
+      tf.summary.histogram("probs", self.probs)
 
       # Regularization
       if reg_lambda >= 0:
@@ -197,11 +201,8 @@ class NLISystem(object):
 
     if self.tboard_path is not None:
       output_feed = [self.summary_op, self.train_op, self.loss, self.probs]
-
       summary, _, loss, probs = session.run(output_feed, input_feed)
-      if not hasattr(self, "iteration"): self.iteration = 0
       self.summary_writer.add_summary(summary, self.iteration)
-      self.iteration += 1
 
     else:
       output_feed = [self.train_op, self.loss, self.probs]
@@ -218,6 +219,7 @@ class NLISystem(object):
 
     with tqdm(total=int(len(dataset[0]))) as pbar:
       for i, batch in enumerate(minibatches(dataset, batch_size, bucket=self.bucket)):
+        self.iteration += batch_size # for tensorboard
         if self.verbose and (i % 10 == 0):
           sys.stdout.write(str(i) + "...")
           sys.stdout.flush()
@@ -260,9 +262,11 @@ class NLISystem(object):
     toc = time.time()
     logging.info("Number of params: %d (retreival took %f secs)" % (num_params, toc - tic))
 
+    self.iteration = 0
     self.summary_op = tf.summary.merge_all()
     if self.tboard_path is not None:
       self.summary_writer = tf.summary.FileWriter('%s/%s' % (self.tboard_path, time.time()), graph=session.graph)
+
     losses = []
     best_epoch = (-1, 0)
     epoch = 1

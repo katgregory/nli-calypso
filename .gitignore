@@ -98,6 +98,8 @@ data/snli/snli_1.0_*
 # Other logs
 log/
 log/*
+train_params/
+train_params/*
 
 # Tensorboard logs
 logs/
