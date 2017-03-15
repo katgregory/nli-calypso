@@ -103,10 +103,10 @@ class NLISystem(object):
 
         # Inference
         with tf.variable_scope("Inference") as scope:
-          p_inferred = NLI.infer(p_context, p_states, self.dropout_ph, reg_list,
+          p_inferred = NLI.infer(p_context, p_states, lstm_hidden_size, self.dropout_ph, reg_list,
                                  premise_embed if infer_embeddings else None)
           scope.reuse_variables()
-          h_inferred = NLI.infer(h_context, h_states, self.dropout_ph, reg_list,
+          h_inferred = NLI.infer(h_context, h_states, lstm_hidden_size, self.dropout_ph, reg_list,
                                  hypothesis_embed if infer_embeddings else None)
 
         # Composition
