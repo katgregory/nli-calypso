@@ -86,7 +86,7 @@ class NLISystem(object):
     hypothesis_embed = tf.nn.embedding_lookup(embeddings, self.hypothesis_ph)
     
     # Configure LSTM and process_stmt functions based on flags
-    process_stmt = NLI.processor(stmt_processor, lstm_hidden_size, n_bilstm_layers, reg_list)
+    process_stmt = NLI.processor(stmt_processor, lstm_hidden_size, n_bilstm_layers, reg_list, dropout_keep)
 
     # Process statements
     with tf.variable_scope("Process-Premise"):
@@ -105,7 +105,7 @@ class NLISystem(object):
         h_inferred = NLI.infer(h_context, h_states, hypothesis_embed if infer_embeddings else None)
 
         # Composition
-        compose_processor = NLI.processor(stmt_processor, lstm_hidden_size, n_bilstm_layers, reg_list)
+        compose_processor = NLI.processor(stmt_processor, lstm_hidden_size, n_bilstm_layers, reg_list, dropout_keep)
         with tf.variable_scope("Infer-Premise"):
           p_composed, _ = compose_processor(p_inferred, self.premise_len_ph)
         with tf.variable_scope("Infer-Hypothesis"):
@@ -253,7 +253,7 @@ class NLISystem(object):
       epoch += 1
 
       # TEST FOR CONVERGENCE
-      if len(losses) >= 3 and (max(losses[-3:]) - min(losses[-3:])) <= 0.03:
+      if len(losses) >= 10 and (max(losses[-3:]) - min(losses[-3:])) <= 0.05:
         break # TODO: Replace everything with constants
 
       if epoch > 50: # HARD CUTOFF?
