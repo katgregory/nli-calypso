@@ -1,0 +1,2 @@
+model_checkpoint_path: "dev_numtrainall_lr0.0004_dropoutkeep0.5"
+all_model_checkpoint_paths: "dev_numtrainall_lr0.0004_dropoutkeep0.5"
