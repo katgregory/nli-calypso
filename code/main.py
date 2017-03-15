@@ -39,7 +39,6 @@ tf.app.flags.DEFINE_float("lr", 0.0004, "Learning rate.")
 tf.app.flags.DEFINE_float("dropout_keep", 0.5, "Keep_prob")
 tf.app.flags.DEFINE_float("reg_lambda", -1, "Regularization")
 
-
 tf.app.flags.DEFINE_integer("batch_size", 32, "Batch size to use during training.")
 tf.app.flags.DEFINE_integer("epochs", 10, "Number of epochs to train.")
 

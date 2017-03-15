@@ -198,7 +198,7 @@ class NLI(object):
 
   """
   Return a new vector that embodies inferred information from context and state vectors
-  of a statement.
+  of a statement. Concatenates the context as needed + runs through FF network.
 
   :param context: Context vector of statement as returned from NLI.context_tensors. Dimensions
   are batch_size x statement_len x hidden_size
@@ -211,11 +211,21 @@ class NLI(object):
   (hidden_size * 4 + embedding_size (if included))
   """
   @staticmethod
-  def infer(context, states, embeddings=None):
+  def infer(context, states, dropout, reg_list, embeddings=None):
+
+    batch_size = tf.shape(context)[0]
+    stmt_len = tf.shape(context)[1]
+    hidden_size = tf.shape(context)[2]
+
     with tf.name_scope("Infer"):
       if embeddings is not None:
-        return tf.concat(2, [context, states, states - context, tf.mul(states, context), embeddings])
-      else: return tf.concat(2, [context, states, states - context, tf.mul(states, context)])
+        m = tf.concat(2, [context, states, states - context, tf.mul(states, context), embeddings])
+      else: m = tf.concat(2, [context, states, states - context, tf.mul(states, context)])
+
+      with tf.variable_scope("Infer-FF") as scope:
+        m_reshaped = tf.reshape(m, [batch_size * stmt_len, hidden_size])
+        m_ff = NLI.feed_forward(m_reshaped, dropout, hidden_size, hidden_size, 1, reg_list)
+        return tf.reshape(m_ff, [batch_size, stmt_len, hidden_size])
 
   """
   Calculates Average and Max Pool for each composed vector and concatenates them in preparation

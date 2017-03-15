@@ -102,20 +102,24 @@ class NLISystem(object):
         p_context, h_context = NLI.context_tensors(p_states, h_states, weight_attention)
 
         # Inference
-        p_inferred = NLI.infer(p_context, p_states, premise_embed if infer_embeddings else None)
-        h_inferred = NLI.infer(h_context, h_states, hypothesis_embed if infer_embeddings else None)
+        p_inferred = NLI.infer(p_context, p_states, self.dropout_ph, reg_list,
+                               premise_embed if infer_embeddings else None)
+        h_inferred = NLI.infer(h_context, h_states, self.dropout_ph, reg_list,
+                               hypothesis_embed if infer_embeddings else None)
 
         # Composition
         compose_processor = NLI.processor(stmt_processor, lstm_hidden_size, n_bilstm_layers, reg_list)
-        with tf.variable_scope("Infer-Premise"):
+        with tf.variable_scope("Compose-Premise"):
           p_composed, p_last = compose_processor(p_inferred, self.premise_len_ph)
-        with tf.variable_scope("Infer-Hypothesis"):
+        with tf.variable_scope("Compose-Hypothesis"):
           h_composed, p_last = compose_processor(h_inferred, self.hypothesis_len_ph)
 
-    # Merge
-    if pool_merge:
-      merged = NLI.pool_merge(p_composed, h_composed)
-    else: # merge for no attention
+      # Merge with pool if enabled
+      if pool_merge:
+        merged = NLI.pool_merge(p_composed, h_composed)
+
+    # Merge last states for no attention or no pool
+    if not attention or not pool_merge:
       merged = NLI.merge_states(p_last, h_last, stmt_hidden_size, reg_list)
 
     # Feed-Forward
