@@ -39,14 +39,13 @@ tf.app.flags.DEFINE_float("lr", 0.0004, "Learning rate.")
 tf.app.flags.DEFINE_float("dropout_keep", 0.5, "Keep_prob")
 tf.app.flags.DEFINE_float("reg_lambda", -1, "Regularization")
 
-
-tf.app.flags.DEFINE_integer("batch_size", 64, "Batch size to use during training.")
+tf.app.flags.DEFINE_integer("batch_size", 32, "Batch size to use during training.")
 tf.app.flags.DEFINE_integer("epochs", 10, "Number of epochs to train.")
 
 tf.app.flags.DEFINE_float("max_gradient_norm", 10.0, "Clip gradients to this norm.")
 tf.app.flags.DEFINE_integer("ff_hidden_size", 100, "Size of each model layer.")
-tf.app.flags.DEFINE_integer("stmt_hidden_size", 100, "Size of hidden layer between LSTMs and FF.")
-tf.app.flags.DEFINE_integer("lstm_hidden_size", 100, "Size of hidden layers in LSTM.")
+tf.app.flags.DEFINE_integer("stmt_hidden_size", 100, "Size of hidden layer between LSTMs and FF when no attention.")
+tf.app.flags.DEFINE_integer("lstm_hidden_size", 300, "Size of hidden layers in LSTM.")
 tf.app.flags.DEFINE_integer("output_size", 3, "The output size of your model.")
 tf.app.flags.DEFINE_integer("embedding_size", 300, "Size of the pretrained vocabulary.")
 tf.app.flags.DEFINE_string("data_dir", "data/snli", "snli directory (default ./data/snli)")
@@ -60,7 +59,7 @@ tf.app.flags.DEFINE_integer("keep", 0, "How many checkpoints to keep, 0 indicate
 tf.app.flags.DEFINE_string("vocab_path", "data/snli/vocab.dat", "Path to vocab file (default: ./data/snli/vocab.dat)")
 tf.app.flags.DEFINE_string("embed_path", "", "Path to the trimmed GLoVe embedding (default: ./data/snli/glove.trimmed.{embedding_size}.npz)")
 tf.app.flags.DEFINE_float("num_classes", 3, "Neutral, Entailment, Contradiction")
-tf.app.flags.DEFINE_integer("ff_num_layers", 3, "Number of layers in final FF network")
+tf.app.flags.DEFINE_integer("ff_num_layers", 2, "Number of layers in final FF network")
 tf.app.flags.DEFINE_string("hyperparameter_grid_search_file", "data/hyperparams/grid.p", "Stores pickle file of search results")
 
 FLAGS = tf.app.flags.FLAGS

@@ -198,7 +198,7 @@ class NLI(object):
 
   """
   Return a new vector that embodies inferred information from context and state vectors
-  of a statement.
+  of a statement. Concatenates the context as needed + runs through FF network.
 
   :param context: Context vector of statement as returned from NLI.context_tensors. Dimensions
   are batch_size x statement_len x hidden_size
@@ -208,14 +208,23 @@ class NLI(object):
   batch_size x statement_len x embedding_size. Optional.
 
   :return: A context/state inference vector of dimension batch_size x statement_len x
-  (hidden_size * 4 + embedding_size (if included))
+  hidden_size
   """
   @staticmethod
-  def infer(context, states, embeddings=None):
+  def infer(context, states, hidden_size, dropout, reg_list, embeddings=None):
     with tf.name_scope("Infer"):
+      batch_size = tf.shape(context)[0]
+      stmt_len = tf.shape(context)[1]
+
       if embeddings is not None:
-        return tf.concat(2, [context, states, states - context, tf.mul(states, context), embeddings])
-      else: return tf.concat(2, [context, states, states - context, tf.mul(states, context)])
+        m = tf.concat(2, [context, states, states - context, tf.mul(states, context), embeddings])
+      else: m = tf.concat(2, [context, states, states - context, tf.mul(states, context)])
+
+      m_size = m.get_shape().as_list()[2]
+
+      m_reshaped = tf.reshape(m, [batch_size * stmt_len, m_size])
+      m_ff = NLI.feed_forward(m_reshaped, dropout, m_size, hidden_size, 1, tf.nn.relu, reg_list)
+      return tf.reshape(m_ff, [batch_size, stmt_len, hidden_size])
 
   """
   Calculates Average and Max Pool for each composed vector and concatenates them in preparation
@@ -274,6 +283,7 @@ class NLI(object):
   :param dropout: Dropout keep probability
   :param hidden_size: Hidden size of each layer
   :param output_size: Size of output layer
+  :param fn: nonlinearity to use between the layers
   :param num_layers: Number >0 representing number of layers in network
   :param reg_list: List of regularization varibles. Variables that need to be regularized
   will be appended as needed to this list.
@@ -281,8 +291,8 @@ class NLI(object):
   :return: Output state of dimensions batch_size x output_size
   """
   @staticmethod
-  def feed_forward(input, dropout, hidden_size, output_size, num_layers, reg_list):
-    with tf.variable_scope("Feed-Forward"):
+  def feed_forward(input, dropout, hidden_size, output_size, num_layers, fn, reg_list):
+    with tf.name_scope("Feed-Forward"):
       input_size = input.get_shape().as_list()[1]
       r = input
 
@@ -292,7 +302,7 @@ class NLI(object):
         with tf.variable_scope("FF-Layer-" + str(i)):
           W = tf.get_variable("W", shape=(i_size, o_size), initializer=xavier())
           b = tf.Variable(tf.zeros([o_size,]), name="b")
-          r = tf.nn.relu(tf.matmul(r, W) + b, name="r")
+          r = fn(tf.matmul(r, W) + b, name="r")
           r = tf.nn.dropout(r, dropout)
           tf.summary.histogram("W", W)
           tf.summary.histogram("b", b)

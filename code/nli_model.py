@@ -90,40 +90,48 @@ class NLISystem(object):
     process_stmt = NLI.processor(stmt_processor, lstm_hidden_size, n_bilstm_layers, reg_list)
 
     # Process statements
-    with tf.variable_scope("Process-Premise"):
+    with tf.variable_scope("Process") as scope:
       p_states, p_last = process_stmt(premise_embed, self.premise_len_ph)
-    with tf.variable_scope("Process-Hypothesis"):
+      scope.reuse_variables()
       h_states, h_last = process_stmt(hypothesis_embed, self.hypothesis_len_ph)
 
     # Attention
     if attention:
-      with tf.variable_scope("Attention"):
+      with tf.name_scope("Attention"):
         # Context generation
         p_context, h_context = NLI.context_tensors(p_states, h_states, weight_attention)
 
         # Inference
-        p_inferred = NLI.infer(p_context, p_states, premise_embed if infer_embeddings else None)
-        h_inferred = NLI.infer(h_context, h_states, hypothesis_embed if infer_embeddings else None)
+        with tf.variable_scope("Inference") as scope:
+          p_inferred = NLI.infer(p_context, p_states, lstm_hidden_size, self.dropout_ph, reg_list,
+                                 premise_embed if infer_embeddings else None)
+          scope.reuse_variables()
+          h_inferred = NLI.infer(h_context, h_states, lstm_hidden_size, self.dropout_ph, reg_list,
+                                 hypothesis_embed if infer_embeddings else None)
 
         # Composition
         compose_processor = NLI.processor(stmt_processor, lstm_hidden_size, n_bilstm_layers, reg_list)
-        with tf.variable_scope("Infer-Premise"):
+        with tf.variable_scope("Composition") as scope:
           p_composed, p_last = compose_processor(p_inferred, self.premise_len_ph)
-        with tf.variable_scope("Infer-Hypothesis"):
+          scope.reuse_variables()
           h_composed, p_last = compose_processor(h_inferred, self.hypothesis_len_ph)
 
-    # Merge
-    if pool_merge:
-      merged = NLI.pool_merge(p_composed, h_composed)
-    else: # merge for no attention
-      merged = NLI.merge_states(p_last, h_last, stmt_hidden_size, reg_list)
+      # Merge with pool if enabled
+      if pool_merge:
+        merged = NLI.pool_merge(p_composed, h_composed)
 
-    # Feed-Forward
-    preds = NLI.feed_forward(merged, self.dropout_ph, ff_hidden_size, num_classes,
-                             ff_num_layers, reg_list)
+    # Merge last states for no attention or no pool
+    if not attention or not pool_merge:
+      merged = NLI.merge_states(p_last, h_last, stmt_hidden_size, reg_list)
 
     # Loss, optimization
     with tf.variable_scope("FF-Softmax"):
+
+      # Feed-Forward
+      preds = NLI.feed_forward(merged, self.dropout_ph, ff_hidden_size, num_classes,
+                               ff_num_layers, tf.nn.tanh, reg_list)
+
+      # Softmax
       self.probs = tf.nn.softmax(preds)
       softmax_loss = tf.nn.softmax_cross_entropy_with_logits(logits=preds,
                                                              labels=self.output_ph, name="loss")
