@@ -1,0 +1,24 @@
+python -u code/main.py --dev --num_train=-1 --num_dev=-1 --bucket --stmt_processor=bilstm --attention --lr=.0004 --dropout=0.5 --ff_num_layers=1 --n_bilstm_layers=3  > >(tee train-attention-run.out) 2> >(tee train-attention-run.err >&2)
+
+Best TRAINING accuracy:
+Amount of time to run this epoch: 5542.01719785 secs                    [15/697]
+Training accuracy for this epoch: 0.59374516489
+Mean loss for this epoch: 0.761496655995
+
+EVALUATION (dev):
+Accuracy: 0.82828693355
+Average Loss: 0.52556993106
+Token-level confusion matrix:
+go\gu           entailment      neutral         contradiction
+entailment      2840.00         340.00          149.00       
+neutral         315.00          2515.00         405.00       
+contradiction   168.00          313.00          2797.00      
+
+Token-level scores:
+label           acc             prec            rec             f1           
+entailment      0.90            0.85            0.85            0.85         
+neutral         0.86            0.79            0.78            0.79         
+contradiction   0.89            0.83            0.85            0.84         
+micro           0.89            0.83            0.83            0.83         
+macro           0.89            0.83            0.83            0.83         
+not-O           0.88            0.82            0.82            0.82   
