@@ -108,7 +108,7 @@ class NLISystem(object):
       with tf.name_scope("Attention"):
         # Context generation
         with tf.variable_scope("Context") as scope:
-          p_context, h_context, self.e_exp, self.mag1, self.enorm1, self.mag2, self.enorm2 = nli.context_tensors(p_states, h_states, weight_attention)
+          p_context, h_context = nli.context_tensors(p_states, h_states, weight_attention)
 
         # Inference
         with tf.variable_scope("Inference") as scope:
@@ -215,23 +215,22 @@ class NLISystem(object):
       self.summary_writer.add_summary(summary, self.iteration)
 
     else:
-      output_feed = [self.train_op, self.loss, self.probs, self.e_exp, self.mag1, self.e_norm1, self.mag2, self.e_norm2]
-      _, loss, probs, e_exp, mag1, e_norm1, mag2, e_norm2 = session.run(output_feed, input_feed)
+      output_feed = [self.train_op, self.loss, self.probs]
+      _, loss, probs = session.run(output_feed, input_feed)
 
     if loss != loss: # Nan - aka we f-ed up.
       print('\nBATCH LOSS IS NAN!! Printing out...')
 
-      f = open("vars", 'w')
-
-      allVars = [e_exp, mag1, e_norm1, mag2, e_norm2]
-      names = ["e_exp", "mag1", "e_norm1", "mag2", "e_norm2"]
-      for i, varp in enumerate(allVars):
-        print("NAN")
-        print(names[i] + str(np.argwhere(np.isnan(varp))))
-        print("INF")
-        print(names[i] + str(np.argwhere(np.isinf(varp))))
-        pickle.dump(varp, f)
-      f.close()
+      # f = open("vars", 'w')
+      # allVars = [e_exp, mag1, e_norm1, mag2, e_norm2]
+      # names = ["e_exp", "mag1", "e_norm1", "mag2", "e_norm2"]
+      # for i, varp in enumerate(allVars):
+      #   print("NAN")
+      #   print(names[i] + str(np.argwhere(np.isnan(varp))))
+      #   print("INF")
+      #   print(names[i] + str(np.argwhere(np.isinf(varp))))
+      #   pickle.dump(varp, f)
+      # f.close()
 
       print('Loss:', loss, '\n')
       # for i,x in enumerate(probs):

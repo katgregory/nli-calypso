@@ -161,7 +161,7 @@ class NLI(object):
         # e: batch_size x statement1_len x statement2_len
         e = tf.matmul(states1, states2, transpose_b=True)
 
-      e = tf.clip_by_value(e, clip_value_min=-80, clip_value_max=80) # Fixes NaN error
+      e = tf.clip_by_value(e, clip_value_min=-40, clip_value_max=40) # Fixes NaN error
       e_exp = tf.exp(e)
 
       # output of tf.reduce_sum has dimensions batch_size x statement2_len
@@ -169,6 +169,7 @@ class NLI(object):
       magnitude1 = tf.reshape(tf.reduce_sum(e_exp, axis=1), (batch_size, -1, 1))
       # transpose to batch_size x 1 x statement2_len
       magnitude1 = tf.transpose(magnitude1, perm=[0, 2, 1])
+
       e_norm1 = tf.div(e_exp, magnitude1)
       context1 = tf.matmul(states2, e_norm1, transpose_a=True, transpose_b=True)
       context1 = tf.transpose(context1, perm=[0, 2, 1])
@@ -180,7 +181,7 @@ class NLI(object):
       context2 = tf.matmul(states1, e_norm2, transpose_a=True)
       context2 = tf.transpose(context2, perm=[0, 2, 1])
 
-      return context1, context2, e_exp, magnitude1, e_norm1, magnitude2, e_norm2
+      return context1, context2 
 
   """
   Return a new vector that embodies inferred information from context and state vectors
