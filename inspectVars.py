@@ -12,7 +12,7 @@ names = ['e', 'e_exp']
 #     var = pickle.load(f)
 #     print("H " + names[i] + ': ' + len(np.argwhere(np.isnan(var))) + " out of " + var.shape())
 
-with open("mvars") as f:
+with open("vars") as f:
   variables = []
   for _ in xrange(len(names)):
     variables.append(pickle.load(f))

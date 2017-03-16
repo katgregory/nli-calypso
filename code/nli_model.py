@@ -109,6 +109,8 @@ class NLISystem(object):
         # Context generation
         with tf.variable_scope("Context") as scope:
           p_context, h_context, self.e, self.e_exp = nli.context_tensors(p_states, h_states, weight_attention)
+          self.p_context = p_context
+          self.h_context = h_context
 
         # Inference
         with tf.variable_scope("Inference") as scope:
@@ -215,15 +217,15 @@ class NLISystem(object):
       self.summary_writer.add_summary(summary, self.iteration)
 
     else:
-      output_feed = [self.train_op, self.loss, self.probs, self.e, self.e_exp] # TODO: should be four only
-      _, loss, probs, e, e_exp = session.run(output_feed, input_feed)
+      output_feed = [self.train_op, self.loss, self.probs, self.e, self.e_exp, self.p_context, self.h_context] # TODO: should be four only
+      _, loss, probs, e, e_exp, p_context, h_context = session.run(output_feed, input_feed)
 
     if loss != loss: # Nan - aka we f-ed up.
       print('\nBATCH LOSS IS NAN!! Printing out...')
 
-      f = open("mvars", 'w')
+      f = open("vars", 'w')
 
-      allVars = [e, e_exp]
+      allVars = [e, e_exp, p_context, h_context]
       names = ["e", "e_exp"]
       for i, varp in enumerate(allVars):
         print("NAN")
