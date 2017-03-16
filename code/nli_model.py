@@ -168,7 +168,7 @@ class NLISystem(object):
       grads_and_vars = optimizer.compute_gradients(self.loss)
       self.gradients = [x[0] for x in grads_and_vars]
 
-      if (max_grad_norm):
+      if (max_grad_norm >= 0):
           self.gradients, _ = tf.clip_by_global_norm(self.gradients, max_grad_norm)
       self.train_op = optimizer.apply_gradients([(self.gradients[i], grads_and_vars[i][1]) for i in xrange(len(grads_and_vars))])
 
@@ -246,6 +246,13 @@ class NLISystem(object):
           print('\nBATCH LOSS IS NAN!! Printing out...')
           print('Loss:', loss, '\n')
           print('Probs:', probs, '\n')
+          for i,x in enumerate(probs):
+            if x[0] != x[0] or x[1] != x[1] or x[2] != x[2]:
+              print('\n\tCulprit:')
+              print('\t\tPremise:', premises[i])
+              print('\t\tPremiseLen:', premise_lens[i])
+              print('\t\tHypothesis:', hypotheses[i])
+              print('\t\tHypothesisLen:', hypothesis_lens[i])
           print('correct_predictions', correct_predictions, '\n')
           print('gradients:', gradients, '\n')
           return -1, -1, True
