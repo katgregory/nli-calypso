@@ -110,7 +110,6 @@ class NLISystem(object):
         with tf.variable_scope("Context") as scope:
           self.p_states = p_states
           self.h_states = h_states
-          self.weight_attention = weight_attention
           p_context, h_context = nli.context_tensors(p_states, h_states, weight_attention)
 
         # Inference
@@ -219,16 +218,16 @@ class NLISystem(object):
       self.summary_writer.add_summary(summary, self.iteration)
 
     else:
-      output_feed = [self.train_op, self.loss, self.probs, self.p_states, self.h_states, self.weight_attention] # TODO: should be four only
-      _, loss, probs, p_states, h_states, weight_attention = session.run(output_feed, input_feed)
+      output_feed = [self.train_op, self.loss, self.probs, self.p_states, self.h_states] # TODO: should be four only
+      _, loss, probs, p_states, h_states = session.run(output_feed, input_feed)
 
     if loss != loss: # Nan - aka we f-ed up.
       print('\nBATCH LOSS IS NAN!! Printing out...')
 
       f = open("mvars", 'w')
 
-      allVars = [p_states, h_states, weight_attention]
-      names = ["p_states", "h_states", "weight_attention"]
+      allVars = [p_states, h_states]
+      names = ["p_states", "h_states"]
       for i, varp in enumerate(allVars):
         print(names[i] + str(np.argwhere(np.isnan(varp))))
         pickle.dump(varp, f)
