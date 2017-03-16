@@ -126,7 +126,7 @@ class NLISystem(object):
 
           p_composed, p_last = compose(p_inferred, self.premise_len_ph)
           scope.reuse_variables()
-          h_composed, p_last = compose(h_inferred, self.hypothesis_len_ph)
+          h_composed, h_last = compose(h_inferred, self.hypothesis_len_ph)
 
     ####################
     # Merge
