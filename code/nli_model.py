@@ -134,16 +134,18 @@ class NLISystem(object):
     if pool_merge and attention: merged = nli.pool_merge(p_composed, h_composed)
     else: merged = nli.merge_states(p_last, h_last, stmt_hidden_size)
 
+    self.merged = merged #TODO: Remove
+
     ####################
     # Loss
     ####################
     with tf.variable_scope("FF-Softmax"):
       # Feed-Forward
-      preds = nli.feed_forward(merged, self.dropout_ph, ff_hidden_size, num_classes,
+      self.preds = nli.feed_forward(merged, self.dropout_ph, ff_hidden_size, num_classes,
                                ff_num_layers, tf.nn.tanh)
 
       # Softmax
-      self.probs = tf.nn.softmax(preds)
+      self.probs = tf.nn.softmax(self.preds)
       softmax_loss = tf.nn.softmax_cross_entropy_with_logits(logits=preds,
                                                              labels=self.output_ph, name="loss")
       self.loss = tf.reduce_mean(softmax_loss)
@@ -214,8 +216,25 @@ class NLISystem(object):
       self.summary_writer.add_summary(summary, self.iteration)
 
     else:
-      output_feed = [self.train_op, self.loss, self.probs, self.gradients]
-      _, loss, probs, gradients = session.run(output_feed, input_feed)
+      output_feed = [self.train_op, self.loss, self.probs, self.gradients, self.merged] # TODO: should be four only
+      _, loss, probs, gradients, merged = session.run(output_feed, input_feed)
+
+    if loss != loss: # Nan - aka we f-ed up.
+      print('\nBATCH LOSS IS NAN!! Printing out...')
+      print('Merged: ', merged, '\n')
+      print('Loss:', loss, '\n')
+      print('Probs:', probs, '\n')
+      # for i,x in enumerate(probs):
+      #   if x[0] != x[0] or x[1] != x[1] or x[2] != x[2]:
+      #     print('\n\tCulprit:')
+      #     print('\t\tPremise:', premises[i])
+      #     print('\t\tPremiseLen:', premise_lens[i])
+      #     print('\t\tHypothesis:', hypotheses[i])
+      #     print('\t\tHypothesisLen:', hypothesis_lens[i])
+      # print('correct_predictions', correct_predictions, '\n')
+      # print('gradients:', gradients, '\n')
+      return -1, -1, True
+
 
     return loss, probs, gradients
 
@@ -241,21 +260,6 @@ class NLISystem(object):
         correct_predictions = np.equal(np.argmax(probs, axis=1), np.argmax(goldlabels, axis=1))
         num_correct += np.sum(correct_predictions)
         pbar.update(batch_size)
-
-        if loss != loss: # Nan - aka we f-ed up.
-          print('\nBATCH LOSS IS NAN!! Printing out...')
-          print('Loss:', loss, '\n')
-          print('Probs:', probs, '\n')
-          for i,x in enumerate(probs):
-            if x[0] != x[0] or x[1] != x[1] or x[2] != x[2]:
-              print('\n\tCulprit:')
-              print('\t\tPremise:', premises[i])
-              print('\t\tPremiseLen:', premise_lens[i])
-              print('\t\tHypothesis:', hypotheses[i])
-              print('\t\tHypothesisLen:', hypothesis_lens[i])
-          print('correct_predictions', correct_predictions, '\n')
-          print('gradients:', gradients, '\n')
-          return -1, -1, True
 
     toc = time.time()
 

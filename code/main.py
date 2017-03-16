@@ -44,7 +44,7 @@ tf.app.flags.DEFINE_integer("batch_size", 32, "Batch size to use during training
 tf.app.flags.DEFINE_integer("epochs", 10, "Number of epochs to train.")
 
 tf.app.flags.DEFINE_float("max_gradient_norm", 10.0, "Clip gradients to this norm.")
-tf.app.flags.DEFINE_integer("ff_hidden_size", 100, "Size of each model layer.")
+tf.app.flags.DEFINE_integer("ff_hidden_size", 300, "Size of each model layer.")
 tf.app.flags.DEFINE_integer("stmt_hidden_size", 100, "Size of hidden layer between LSTMs and FF when no attention.")
 tf.app.flags.DEFINE_integer("lstm_hidden_size", 300, "Size of hidden layers in LSTM.")
 tf.app.flags.DEFINE_integer("output_size", 3, "The output size of your model.")
@@ -135,7 +135,7 @@ def get_save_filename(lr, dropout_keep):
                                             '_lr' + str(lr) + \
                                             '_dropoutkeep' + str(dropout_keep)
 
-def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dropout_keep, reg_lambda):
+def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dropout_keep, reg_lambda=-1):
 
   logging.info(FLAGS.__flags)
   logging.info("Learning rate: " + str(lr))
@@ -200,32 +200,39 @@ def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dro
     return (epoch_number, train_accuracy, train_loss, test_accuracy, avg_test_loss, cm)
 
 def validate_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab):
-  lr_range = [.001, .0001, .00001] # np.array([10**lr_exp for lr_exp in range(-8, -1, 1)])
-  dropout_range = [.6, .8, 1.0] # np.arange(0.5, 1.1, 0.1)
-  reg_lambda_range = [.1, .001, .00001] # np.array([10**lr_exp for lr_exp in range(-4, 1, 1)])
+  # Define ranges to randomly sample over
+  lr_bounds = [0.00001, 0.001]
+  dropout_bounds = [0.5, 1.0]
+  num_validation_samples = 20
 
   results_map = {}
   best_train_accuracy = 0
   best_test_accuracy = 0
-  for reg_lambda in reg_lambda_range:
-    for dropout_keep in dropout_range:
-      for lr in lr_range:
-        print("########################################################")
-        print("\nRUNNING TRIAL: ", "\tlr:", lr, "\tdropout:", dropout_keep, "\treg_lambda:", reg_lambda, "\n")
-        idx_tup = (lr, dropout_keep, reg_lambda)
-        results_map[idx_tup] = run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab,
-                                         lr, dropout_keep, reg_lambda)
-        pickle.dump(results_map, open(FLAGS.hyperparameter_grid_search_file, "wb"))
-        print("############################")
-        print("TRIAL RESULTS: ", "\tlr:", lr, "\tdropout:", dropout_keep, "\treg_lambda:", reg_lambda, "\n")
-        print("\tACCURACY: \ttrain:", results_map[idx_tup][1], "\ttest:", results_map[idx_tup][3])
-        if results_map[idx_tup][1] > best_train_accuracy:
-          best_train_accuracy = results_map[idx_tup][1]
-          print("\t\tNew best TRAIN")
-        if results_map[idx_tup][3] > best_test_accuracy:
-          best_test_accuracy = results_map[idx_tup][3]
-          print("\t\tNew best TEST")
-        print("########################################################")
+  for i in xrange(num_validation_samples):
+    lr = np.random.uniform(lr_bounds[0], lr_bounds[1])
+    dropout_keep = np.random.uniform(dropout_bounds[0], dropout_bounds[1])
+
+    # TODO REMOVE THIS
+    results_map[(lr, dropout_keep)] = (-1, -1, [-1, -1, -1], np.random.random(), -1, -1)
+    pickle.dump(results_map, open(FLAGS.hyperparameter_grid_search_file, "wb"))
+    continue
+
+    print("########################################################")
+    print("\nRUNNING TRIAL: ", "\tlr:", lr, "\tdropout:", dropout_keep, "\n")
+    idx_tup = (lr, dropout_keep)
+    results_map[idx_tup] = run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab,
+                                     lr, dropout_keep)
+    pickle.dump(results_map, open(FLAGS.hyperparameter_grid_search_file, "wb"))
+    print("############################")
+    print("TRIAL RESULTS: ", "\tlr:", lr, "\tdropout:", dropout_keep)
+    print("\tACCURACY: \ttrain:", results_map[idx_tup][1], "\ttest:", results_map[idx_tup][3])
+    if results_map[idx_tup][1] > best_train_accuracy:
+      best_train_accuracy = results_map[idx_tup][1]
+      print("\t\tNew best TRAIN")
+    if results_map[idx_tup][3] > best_test_accuracy:
+      best_test_accuracy = results_map[idx_tup][3]
+      print("\t\tNew best TEST")
+    print("########################################################")
 
 def main(_):
 
