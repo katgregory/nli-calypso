@@ -272,25 +272,8 @@ class NLI(object):
   """
   def feed_forward(self, input, dropout, hidden_size, output_size, num_layers, fn):
     with tf.name_scope("Feed-Forward"):
-       input_size = input.get_shape().as_list()[1]
-       r = input
-
-    #    W1 = tf.get_variable("W1", shape=(input_size, hidden_size))
-    #    b1 = tf.Variable(tf.zeros([hidden_size,]), name="b1")
-    #    mul1 = tf.matmul(r, W1)
-    #    r1 = tf.add(mul1, b1, name="r1")
-    #    fn(r1, name="r-nonlin")
-    #    r1 = tf.nn.dropout(r1, dropout, name="r-dropout")
-    #    self.reg_list.append(W1)
-
-    #    W2 = tf.get_variable("W2", shape=(hidden_size, output_size))
-    #    b2 = tf.Variable(tf.zeros([output_size,]), name="b2")
-    #    mul2 = tf.matmul(r1, W2)
-    #    r2 = tf.add(mul2, b2, name="r2")
-    #    self.reg_list.append(W2)
-
-    #    return W1, b1, mul1, r1, W2, b2, mul2, r2
-
+      input_size = input.get_shape().as_list()[1]
+      r = input
 
       for i in range(num_layers):
         first = (i == 0)
@@ -314,3 +297,22 @@ class NLI(object):
         self.reg_list.append(W)
 
       return r
+
+    #    W1 = tf.get_variable("W1", shape=(input_size, hidden_size))
+    #    b1 = tf.Variable(tf.zeros([hidden_size,]), name="b1")
+    #    mul1 = tf.matmul(r, W1)
+    #    r1 = tf.add(mul1, b1, name="r1")
+    #    fn(r1, name="r-nonlin")
+    #    r1 = tf.nn.dropout(r1, dropout, name="r-dropout")
+    #    self.reg_list.append(W1)
+
+    #    W2 = tf.get_variable("W2", shape=(hidden_size, output_size))
+    #    b2 = tf.Variable(tf.zeros([output_size,]), name="b2")
+    #    mul2 = tf.matmul(r1, W2)
+    #    r2 = tf.add(mul2, b2, name="r2")
+    #    self.reg_list.append(W2)
+
+    #    return W1, b1, mul1, r1, W2, b2, mul2, r2
+
+
+
