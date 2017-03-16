@@ -225,7 +225,7 @@ class NLISystem(object):
 
       # W1p, b1p, mul1p, r1p, W2p, b2p, mul2p, r2p = ff_vars_p
       # W1h, b1h, mul1h, r1h, W2h, b2h, mul2h, r2h = ff_vars_h
-      names = ['W1', 'b1', 'mul1', 'r1', 'W2', 'b2', 'mul2', 'r2']
+      names = ['input', 'W1', 'b1', 'mul1', 'r1', 'W2', 'b2', 'mul2', 'r2']
       print("FOR P: ################################################")
       for i, varp in enumerate(ff_vars_p):
         print(names[i] + str(np.argwhere(np.isnan(varp))))
