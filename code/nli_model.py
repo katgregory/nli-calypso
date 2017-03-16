@@ -164,8 +164,8 @@ class NLISystem(object):
       tf.summary.scalar("mean_batch_loss", self.loss)
 
       # Gradient clipping
-      optimizer = tf.train.AdamOptimizer(lr).minimize(self.loss)
-      grads_and_vars = optimizer.computer_gradients(self.loss)
+      optimizer = tf.train.AdamOptimizer(lr)
+      grads_and_vars = optimizer.compute_gradients(self.loss)
       gradients = [x[0] for x in grads_and_vars]
 
       if (max_grad_norm):
