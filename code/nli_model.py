@@ -166,11 +166,11 @@ class NLISystem(object):
       # Gradient clipping
       optimizer = tf.train.AdamOptimizer(lr)
       grads_and_vars = optimizer.compute_gradients(self.loss)
-      gradients = [x[0] for x in grads_and_vars]
+      self.gradients = [x[0] for x in grads_and_vars]
 
-      if (max_grad_norm > 0):
-          gradients, _ = tf.clip_by_global_norm(gradients, max_grad_norm)
-      self.train_op = optimizer.apply_gradients([(gradients[i], grads_and_vars[i][1]) for i in xrange(len(grads_and_vars))])
+      if (max_grad_norm >= 0):
+          self.gradients, _ = tf.clip_by_global_norm(self.gradients, max_grad_norm)
+      self.train_op = optimizer.apply_gradients([(self.gradients[i], grads_and_vars[i][1]) for i in xrange(len(grads_and_vars))])
 
   #############################
   # TRAINING
@@ -214,10 +214,10 @@ class NLISystem(object):
       self.summary_writer.add_summary(summary, self.iteration)
 
     else:
-      output_feed = [self.train_op, self.loss, self.probs]
-      _, loss, probs = session.run(output_feed, input_feed)
+      output_feed = [self.train_op, self.loss, self.probs, self.gradients]
+      _, loss, probs, gradients = session.run(output_feed, input_feed)
 
-    return loss, probs
+    return loss, probs, gradients
 
   def run_epoch(self, session, dataset, rev_vocab, train_dir, batch_size):
     tic = time.time()
@@ -233,7 +233,7 @@ class NLISystem(object):
           sys.stdout.write(str(i) + "...")
           sys.stdout.flush()
         premises, premise_lens, hypotheses, hypothesis_lens, goldlabels = batch
-        loss, probs = self.optimize(session, rev_vocab, premises, premise_lens, hypotheses, hypothesis_lens, goldlabels)
+        loss, probs, gradients = self.optimize(session, rev_vocab, premises, premise_lens, hypotheses, hypothesis_lens, goldlabels)
         total_loss += loss
         num_batches += 1
 
@@ -241,6 +241,21 @@ class NLISystem(object):
         correct_predictions = np.equal(np.argmax(probs, axis=1), np.argmax(goldlabels, axis=1))
         num_correct += np.sum(correct_predictions)
         pbar.update(batch_size)
+
+        if loss != loss: # Nan - aka we f-ed up.
+          print('\nBATCH LOSS IS NAN!! Printing out...')
+          print('Loss:', loss, '\n')
+          print('Probs:', probs, '\n')
+          for i,x in enumerate(probs):
+            if x[0] != x[0] or x[1] != x[1] or x[2] != x[2]:
+              print('\n\tCulprit:')
+              print('\t\tPremise:', premises[i])
+              print('\t\tPremiseLen:', premise_lens[i])
+              print('\t\tHypothesis:', hypotheses[i])
+              print('\t\tHypothesisLen:', hypothesis_lens[i])
+          print('correct_predictions', correct_predictions, '\n')
+          print('gradients:', gradients, '\n')
+          return -1, -1, True
 
     toc = time.time()
 
@@ -250,10 +265,16 @@ class NLISystem(object):
         # print("Loss: " + str(loss))
     train_accuracy = num_correct / float(len(dataset[0]))
     epoch_mean_loss = total_loss / float(num_batches)
+
+    if epoch_mean_loss != epoch_mean_loss: # Nan - aka we f-ed up.
+      print('\nMEAN LOSS IS NAN!! Printing out...')
+      print('Mean Loss:', epoch_mean_loss, '\n')
+      return -1, -1, True
+
     print("Amount of time to run this epoch: " + str(toc - tic) + " secs")
     print("Training accuracy for this epoch: " + str(train_accuracy))
     print("Mean loss for this epoch: " + str(epoch_mean_loss))
-    return train_accuracy, epoch_mean_loss
+    return train_accuracy, epoch_mean_loss, False
 
 
   """
@@ -281,7 +302,9 @@ class NLISystem(object):
     epoch = 1
     while True:
       print("\nEpoch", epoch)
-      curr_accuracy, curr_loss = self.run_epoch(session, dataset, rev_vocab, train_dir, batch_size)
+      curr_accuracy, curr_loss, error = self.run_epoch(session, dataset, rev_vocab, train_dir, batch_size)
+      if error:
+        return (-1, -1, -1, True)
       if curr_accuracy > best_epoch[1]:
         print("\tNEW BEST")
         best_epoch = (epoch, curr_accuracy)
@@ -295,7 +318,7 @@ class NLISystem(object):
       if epoch > 50: # HARD CUTOFF?
         break
 
-    return (best_epoch[0], best_epoch[1], losses)
+    return (best_epoch[0], best_epoch[1], losses, False)
 
   #############################
   # VALIDATION

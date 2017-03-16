@@ -184,7 +184,11 @@ def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dro
       nli.saver.restore(sess, pjoin(FLAGS.train_dir, get_save_filename(lr, dropout_keep)))
       epoch_number, train_accuracy, train_loss = (-1, -1, -1) # Placeholders
     else:
-      epoch_number, train_accuracy, train_loss = nli.train(sess, train_dataset, rev_vocab, FLAGS.train_dir, FLAGS.batch_size)
+      epoch_number, train_accuracy, train_loss, error = nli.train(sess, train_dataset, rev_vocab, FLAGS.train_dir, FLAGS.batch_size)
+
+      if error:
+        nli.saver.save(sess, "train_params/nan_model")
+        assert(False)
 
       # Save the parameters to file
       if not FLAGS.validation:
