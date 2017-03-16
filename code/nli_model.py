@@ -119,6 +119,8 @@ class NLISystem(object):
           scope.reuse_variables()
           h_inferred = nli.infer(h_context, h_states, lstm_hidden_size, self.dropout_ph,
                                  hypothesis_embed if infer_embeddings else None)
+          self.p_inferred = p_inferred
+          self.h_inferred = h_inferred
 
         # Composition
         with tf.variable_scope("Composition") as scope:
@@ -130,6 +132,9 @@ class NLISystem(object):
           p_composed, p_last = compose(p_inferred, self.premise_len_ph)
           scope.reuse_variables()
           h_composed, h_last = compose(h_inferred, self.hypothesis_len_ph)
+
+          self.p_composed = p_composed
+          self.h_composed = h_composed
 
     ####################
     # Merge
@@ -217,16 +222,18 @@ class NLISystem(object):
       self.summary_writer.add_summary(summary, self.iteration)
 
     else:
-      output_feed = [self.train_op, self.loss, self.probs, self.e, self.e_exp, self.p_context, self.h_context] # TODO: should be four only
-      _, loss, probs, e, e_exp, p_context, h_context = session.run(output_feed, input_feed)
+      output_feed = [self.train_op, self.loss, self.probs, self.e, self.e_exp, 
+                    self.p_context, self.h_context, self.p_inferred, self.h_inferred,
+                    self.p_composed, self.h_composed] # TODO: should be four only
+      _, loss, probs, e, e_exp, p_context, h_context, p_inferred, h_inferred, p_composed, h_composed = session.run(output_feed, input_feed)
 
     if loss != loss: # Nan - aka we f-ed up.
       print('\nBATCH LOSS IS NAN!! Printing out...')
 
       f = open("vars", 'w')
 
-      allVars = [e, e_exp, p_context, h_context]
-      names = ["e", "e_exp"]
+      allVars = [e, e_exp, p_context, h_context, p_inferred, h_inferred, p_composed, h_composed]
+      names = ["e", "e_exp", "p_context", "h_context", "p_inferred", "h_inferred", "p_composed", "h_composed"]
       for i, varp in enumerate(allVars):
         print("NAN")
         print(names[i] + str(np.argwhere(np.isnan(varp))))
