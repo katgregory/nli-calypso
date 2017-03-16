@@ -14,7 +14,7 @@ names = ['magnitude', 'e_norm']
 
 with open("mvars") as f:
   variables = []
-  for _ in xrange(len(names) * 2):
+  for _ in xrange(len(names)):
     variables.append(pickle.load(f))
   print("Variables loaded!")
 
