@@ -148,7 +148,6 @@ class NLI(object):
         # e: batch_size * statement1_len x hidden_size
         states1 = tf.reshape(states1, (batch_size * statement1_len, hidden_size))
         e = tf.matmul(states1, W)
-        e = tf.clip_by_value(e, clip_value_min=-80, clip_value_max=80)
 
         # Reshape to 3D matrices for the second multiplication
         # states1: batch_size x statement1_len x hidden_size
@@ -162,6 +161,7 @@ class NLI(object):
         # e: batch_size x statement1_len x statement2_len
         e = tf.matmul(states1, states2, transpose_b=True)
 
+      e = tf.clip_by_value(e, clip_value_min=-80, clip_value_max=80) # Fixes NaN error
       e_exp = tf.exp(e)
 
       # output of tf.reduce_sum has dimensions batch_size x statement2_len
