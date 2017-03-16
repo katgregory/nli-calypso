@@ -247,7 +247,7 @@ class NLISystem(object):
       return -1, -1, True
 
 
-    return loss, probs
+    return loss, probs, False
 
   def run_epoch(self, session, dataset, rev_vocab, train_dir, batch_size):
     tic = time.time()
@@ -263,7 +263,7 @@ class NLISystem(object):
           sys.stdout.write(str(i) + "...")
           sys.stdout.flush()
         premises, premise_lens, hypotheses, hypothesis_lens, goldlabels = batch
-        loss, probs = self.optimize(session, rev_vocab, premises, premise_lens, hypotheses, hypothesis_lens, goldlabels)
+        loss, probs, error = self.optimize(session, rev_vocab, premises, premise_lens, hypotheses, hypothesis_lens, goldlabels)
         total_loss += loss
         num_batches += 1
 
