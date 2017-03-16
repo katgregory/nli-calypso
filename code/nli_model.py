@@ -168,7 +168,7 @@ class NLISystem(object):
       grads_and_vars = optimizer.compute_gradients(self.loss)
       gradients = [x[0] for x in grads_and_vars]
 
-      if (max_grad_norm):
+      if (max_grad_norm > 0):
           gradients, _ = tf.clip_by_global_norm(gradients, max_grad_norm)
       self.train_op = optimizer.apply_gradients([(gradients[i], grads_and_vars[i][1]) for i in xrange(len(grads_and_vars))])
 
