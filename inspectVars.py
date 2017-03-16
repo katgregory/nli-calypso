@@ -2,7 +2,7 @@ import cPickle as pickle
 import numpy as np
 
 # indexes = []
-names = ['context', 'states', 'states-context', 'tf.mul(states, context)', 'embeddings']
+names = ['context', 'states', 'states-context', 'tf.mul(states, context)']
 # with open("ff_vars") as f:
 #   for i, name in enumerate(names):
 #     var = pickle.load(f)
