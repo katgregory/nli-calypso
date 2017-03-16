@@ -33,6 +33,7 @@ tf.app.flags.DEFINE_bool("train_embed", True, "Train the embeddings")
 tf.app.flags.DEFINE_bool("restore", False, "Read in all parameters from file")
 tf.app.flags.DEFINE_bool("pool_merge", True, "Use max pool and average to merge.")
 tf.app.flags.DEFINE_integer("n_bilstm_layers", 1, "Number of layers in the stacked bidirectional LSTM")
+tf.app.flags.DEFINE_integer("max_grad_norm", -1, "For clipping")
 
 # HYPERPARAMETERS
 tf.app.flags.DEFINE_float("lr", 0.0004, "Learning rate.")
@@ -163,7 +164,8 @@ def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dro
     weight_attention = FLAGS.weight_attention,
     n_bilstm_layers = FLAGS.n_bilstm_layers,
     pool_merge = FLAGS.pool_merge,
-    train_embed = FLAGS.train_embed)
+    train_embed = FLAGS.train_embed,
+    max_grad_norm = FLAGS.max_grad_norm)
   nli.saver = tf.train.Saver() # for saving
 
   if not os.path.exists(FLAGS.log_dir):

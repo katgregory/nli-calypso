@@ -45,6 +45,7 @@ class NLISystem(object):
                n_bilstm_layers,
                train_embed,
                pool_merge,
+               max_grad_norm,
                tboard_path = None,
                verbose = False):
 
@@ -161,7 +162,15 @@ class NLISystem(object):
     ####################
     with tf.name_scope("Optimizer"):
       tf.summary.scalar("mean_batch_loss", self.loss)
-      self.train_op = tf.train.AdamOptimizer(lr).minimize(self.loss)
+
+      # Gradient clipping
+      optimizer = tf.train.AdamOptimizer(lr).minimize(self.loss)
+      grads_and_vars = optimizer.computer_gradients(self.loss)
+      gradients = [x[0] for x in grads_and_vars]
+
+      if (max_grad_norm):
+          gradients, _ = tf.clip_by_global_norm(gradients, max_grad_norm)
+      self.train_op = optimizer.apply_gradients([(gradients[i], grads_and_vars[i][1]) for i in xrange(len(grads_and_vars))])
 
   #############################
   # TRAINING
