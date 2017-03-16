@@ -2,7 +2,7 @@ import cPickle as pickle
 import numpy as np
 
 # indexes = []
-names = ['context', 'states', 'states-context', 'tf.mul(states, context)']
+names = ['magnitude', 'e_norm']
 # with open("ff_vars") as f:
 #   for i, name in enumerate(names):
 #     var = pickle.load(f)
@@ -19,22 +19,19 @@ with open("mvars") as f:
   print("Variables loaded!")
 
   while True:
-    P_H = raw_input("P or H? ")
     name = raw_input("What variable would you like to inspect: ")
     if name == '':
       break
 
     var_idx = names.index(name)
-    if P_H == "H":
-      var_idx += len(names)
 
     while True:
       indexTup = raw_input("Index: ")
       if indexTup == '':
         break
-      x, y = indexTup.strip().split(',')
+      x, y, z = indexTup.strip().split(',')
 
-      print("Value: " + str(variables[var_idx][int(x), int(y)]))
+      print("Value: " + str(variables[var_idx][int(x), int(y), int(z)]))
 
 # f = open("ff_vars", "w")
 
