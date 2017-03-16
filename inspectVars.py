@@ -2,7 +2,7 @@ import cPickle as pickle
 import numpy as np
 
 # indexes = []
-names = ['magnitude', 'e_norm']
+names = ['e', 'e_exp']
 # with open("ff_vars") as f:
 #   for i, name in enumerate(names):
 #     var = pickle.load(f)

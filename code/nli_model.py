@@ -223,8 +223,8 @@ class NLISystem(object):
 
       f = open("mvars", 'w')
 
-      allVars = [magnitude, e_norm]
-      names = ["magnitude", "e_norm"]
+      allVars = [e, e_exp]
+      names = ["e", "e_exp"]
       for i, varp in enumerate(allVars):
         print("NAN")
         print(names[i] + str(np.argwhere(np.isnan(varp))))
