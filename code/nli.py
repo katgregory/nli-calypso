@@ -207,8 +207,8 @@ class NLI(object):
       m_size = m.get_shape().as_list()[2]
 
       m_reshaped = tf.reshape(m, [batch_size * stmt_len, m_size])
-      m_ff = self.feed_forward(m_reshaped, dropout, m_size, hidden_size, 1, tf.nn.relu)
-      return tf.reshape(m_ff, [batch_size, stmt_len, hidden_size])
+      W1, b1, mul1, r1, W2, b2, mul2, m_ff = self.feed_forward(m_reshaped, dropout, m_size, hidden_size, 1, tf.nn.relu)
+      return tf.reshape(m_ff, [batch_size, stmt_len, hidden_size]), [W1, b1, mul1, r1, W2, b2, mul2, m_ff]
 
   """
   Calculates Average and Max Pool for each composed vector and concatenates them in preparation
@@ -272,27 +272,45 @@ class NLI(object):
   """
   def feed_forward(self, input, dropout, hidden_size, output_size, num_layers, fn):
     with tf.name_scope("Feed-Forward"):
-      input_size = input.get_shape().as_list()[1]
-      r = input
+       input_size = input.get_shape().as_list()[1]
+       r = input
 
-      for i in range(num_layers):
-        first = (i == 0)
-        last = (i == num_layers - 1)
+       W1 = tf.get_variable("W1", shape=(input_size, hidden_size))
+       b1 = tf.Variable(tf.zeros([hidden_size,]), name="b1")
+       mul1 = tf.matmul(r, W1)
+       r1 = tf.add(mul1, b1, name="r1")
+       fn(r1, name="r-nonlin")
+       r1 = tf.nn.dropout(r1, dropout, name="r-dropout")
+       self.reg_list.append(W1)
 
-        with tf.variable_scope("FF-Layer-" + str(i)):
-          i_size = input_size if first else hidden_size
-          o_size = output_size if last else hidden_size
-          W = tf.get_variable("W", shape=(i_size, o_size), initializer=xavier())
-          b = tf.Variable(tf.zeros([o_size,]), name="b")
-          r = tf.add(tf.matmul(r, W), b, name="r")
+       W2 = tf.get_variable("W2", shape=(hidden_size, output_size))
+       b2 = tf.Variable(tf.zeros([output_size,]), name="b2")
+       mul2 = tf.matmul(r1, W2)
+       r2 = tf.add(mul2, b2, name="r2")
+       self.reg_list.append(W2)
+
+       return W1, b1, mul1, r1, W2, b2, mul2, r2
+
+
+    #   for i in range(num_layers):
+    #     first = (i == 0)
+    #     last = (i == num_layers - 1)
+
+    #     with tf.variable_scope("FF-Layer-" + str(i)):
+    #       i_size = input_size if first else hidden_size
+    #       o_size = output_size if last else hidden_size
+    #       W = tf.get_variable("W", shape=(i_size, o_size), initializer=xavier())
+    #       b = tf.Variable(tf.zeros([o_size,]), name="b")
+    #       mul = tf.matmul(r, W)
+    #       r = tf.add(mul, b, name="r")
           
-          if not last:
-            r = fn(r, name="r-nonlin")
-            r = tf.nn.dropout(r, dropout, name="r-dropout")
+    #       if not last:
+    #         r = fn(r, name="r-nonlin")
+    #         r = tf.nn.dropout(r, dropout, name="r-dropout")
 
-          if self.tblog: tf.summary.histogram("W", W)
-          if self.tblog: tf.summary.histogram("b", b)
-          if self.tblog: tf.summary.histogram("r", r)
-        self.reg_list.append(W)
+    #       if self.tblog: tf.summary.histogram("W", W)
+    #       if self.tblog: tf.summary.histogram("b", b)
+    #       if self.tblog: tf.summary.histogram("r", r)
+    #     self.reg_list.append(W)
 
-      return r
+      # return r
