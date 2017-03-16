@@ -140,7 +140,7 @@ class NLISystem(object):
     ####################
     with tf.variable_scope("FF-Softmax"):
       # Feed-Forward
-      _, _, _, _, _, _, _, preds = nli.feed_forward(merged, self.dropout_ph, ff_hidden_size, num_classes,
+      preds = nli.feed_forward(merged, self.dropout_ph, ff_hidden_size, num_classes,
                                ff_num_layers, tf.nn.tanh)
 
       # Softmax
