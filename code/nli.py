@@ -179,7 +179,7 @@ class NLI(object):
       context2 = tf.matmul(states1, e_norm2, transpose_a=True)
       context2 = tf.transpose(context2, perm=[0, 2, 1])
 
-      return (context1, context2)
+      return (context1, context2), e, e_exp
 
   """
   Return a new vector that embodies inferred information from context and state vectors
