@@ -208,7 +208,7 @@ class NLI(object):
 
       m_reshaped = tf.reshape(m, [batch_size * stmt_len, m_size])
       W1, b1, mul1, r1, W2, b2, mul2, m_ff = self.feed_forward(m_reshaped, dropout, m_size, hidden_size, 1, tf.nn.relu)
-      return tf.reshape(m_ff, [batch_size, stmt_len, hidden_size]), [m_reshaped, W1, b1, mul1, r1, W2, b2, mul2, m_ff]
+      return tf.reshape(m_ff, [batch_size, stmt_len, hidden_size]), [context, states, states-context, tf.mul(states, context), embeddings, m_reshaped, W1, b1, mul1, r1, W2, b2, mul2, m_ff]
 
   """
   Calculates Average and Max Pool for each composed vector and concatenates them in preparation

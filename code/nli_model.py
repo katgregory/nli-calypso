@@ -225,7 +225,7 @@ class NLISystem(object):
 
       # W1p, b1p, mul1p, r1p, W2p, b2p, mul2p, r2p = ff_vars_p
       # W1h, b1h, mul1h, r1h, W2h, b2h, mul2h, r2h = ff_vars_h
-      names = ['input', 'W1', 'b1', 'mul1', 'r1', 'W2', 'b2', 'mul2', 'r2']
+      names = ['context', 'states', 'states-context', 'tf.mul(states, context)', 'embeddings','input', 'W1', 'b1', 'mul1', 'r1', 'W2', 'b2', 'mul2', 'r2']
       print("FOR P: ################################################")
       for i, varp in enumerate(ff_vars_p):
         print(names[i] + str(np.argwhere(np.isnan(varp))))
@@ -249,7 +249,7 @@ class NLISystem(object):
       return -1, -1, True
 
 
-    return loss, probs
+    return loss, probs, False
 
   def run_epoch(self, session, dataset, rev_vocab, train_dir, batch_size):
     tic = time.time()
@@ -265,7 +265,7 @@ class NLISystem(object):
           sys.stdout.write(str(i) + "...")
           sys.stdout.flush()
         premises, premise_lens, hypotheses, hypothesis_lens, goldlabels = batch
-        loss, probs = self.optimize(session, rev_vocab, premises, premise_lens, hypotheses, hypothesis_lens, goldlabels)
+        loss, probs, error = self.optimize(session, rev_vocab, premises, premise_lens, hypotheses, hypothesis_lens, goldlabels)
         total_loss += loss
         num_batches += 1
 
