@@ -2,7 +2,7 @@ import cPickle as pickle
 import numpy as np
 
 # indexes = []
-names = ['inputs', 'W1', 'b1', 'mul1', 'r1', 'W2', 'b2', 'mul2', 'r2']
+names = ['context', 'states', 'states-context', 'tf.mul(states, context)', 'embeddings']
 # with open("ff_vars") as f:
 #   for i, name in enumerate(names):
 #     var = pickle.load(f)
@@ -12,7 +12,7 @@ names = ['inputs', 'W1', 'b1', 'mul1', 'r1', 'W2', 'b2', 'mul2', 'r2']
 #     var = pickle.load(f)
 #     print("H " + names[i] + ': ' + len(np.argwhere(np.isnan(var))) + " out of " + var.shape())
 
-with open("ff_vars") as f:
+with open("mvars") as f:
   variables = []
   for _ in xrange(len(names) * 2):
     variables.append(pickle.load(f))

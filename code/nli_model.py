@@ -112,10 +112,10 @@ class NLISystem(object):
 
         # Inference
         with tf.variable_scope("Inference") as scope:
-          p_inferred, self.ff_vars_p = nli.infer(p_context, p_states, lstm_hidden_size, self.dropout_ph,
+          p_inferred, self.mvars_p = nli.infer(p_context, p_states, lstm_hidden_size, self.dropout_ph,
                                  premise_embed if infer_embeddings else None)
           scope.reuse_variables()
-          h_inferred, self.ff_vars_h = nli.infer(h_context, h_states, lstm_hidden_size, self.dropout_ph,
+          h_inferred, self.mvars_h = nli.infer(h_context, h_states, lstm_hidden_size, self.dropout_ph,
                                  hypothesis_embed if infer_embeddings else None)
 
         # Composition
@@ -215,23 +215,21 @@ class NLISystem(object):
       self.summary_writer.add_summary(summary, self.iteration)
 
     else:
-      output_feed = [self.train_op, self.loss, self.probs, self.ff_vars_p, self.ff_vars_h] # TODO: should be four only
-      _, loss, probs, ff_vars_p, ff_vars_h = session.run(output_feed, input_feed)
+      output_feed = [self.train_op, self.loss, self.probs, self.mvars_p, self.mvars_h] # TODO: should be four only
+      _, loss, probs, mvars_p, mvars_h = session.run(output_feed, input_feed)
 
     if loss != loss: # Nan - aka we f-ed up.
       print('\nBATCH LOSS IS NAN!! Printing out...')
 
-      f = open("ff_vars", 'w')
+      f = open("mvars", 'w')
 
-      # W1p, b1p, mul1p, r1p, W2p, b2p, mul2p, r2p = ff_vars_p
-      # W1h, b1h, mul1h, r1h, W2h, b2h, mul2h, r2h = ff_vars_h
-      names = ['input', 'W1', 'b1', 'mul1', 'r1', 'W2', 'b2', 'mul2', 'r2']
+      names = ['context', 'states', 'states-context', 'tf.mul(states, context)', 'embeddings']
       print("FOR P: ################################################")
-      for i, varp in enumerate(ff_vars_p):
+      for i, varp in enumerate(mvars_p):
         print(names[i] + str(np.argwhere(np.isnan(varp))))
         pickle.dump(varp, f)
       print("FOR H: ################################################")
-      for i, varh in enumerate(ff_vars_h):
+      for i, varh in enumerate(mvars_h):
         print(names[i] + str(np.argwhere(np.isnan(varh))))
         pickle.dump(varh, f)
       f.close()
