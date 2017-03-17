@@ -218,7 +218,7 @@ def validate_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab):
     continue
 
     print("########################################################")
-    print("\nRUNNING TRIAL: ", "\tlr:", lr, "\tdropout:", dropout_keep, "\n")
+    print("\nRUNNING TRIAL: ", str(i), "\tlr:", lr, "\tdropout:", dropout_keep, "\n")
     idx_tup = (lr, dropout_keep)
     results_map[idx_tup] = run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab,
                                      lr, dropout_keep)
