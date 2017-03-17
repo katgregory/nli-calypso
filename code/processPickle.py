@@ -6,6 +6,7 @@ from mpl_toolkits.mplot3d import Axes3D, axes3d
 import numpy as np
 import matplotlib.ticker as mticker
 import matplotlib.patches as mpatches
+from scipy.interpolate import griddata
 
 
 file_path = 'data/hyperparams/grid.p'
@@ -59,38 +60,46 @@ for key in keys:
   else:
     test_accuracy.append(results_map[key][3])
 
+# OVERWRITES DATA WITH SOMETHING FOR TESTING
+test_accuracy = [lr[i] + dropout_keep[i] for i in xrange(len(test_accuracy))]
+
 def log_tick_formatter(val, pos=None):
     return "{:.2e}".format(10**val)
-
 
 # sp = ax.scatter(np.log10(lr), dropout_keep, test_accuracy, c=reg_lambda, cmap=cm.coolwarm)
 # sp = ax.scatter(np.log10(lr), dropout_keep, test_accuracy)
 
-# PROCESS DATA FOR PLOTTING
-# lr = np.log10(lr)
-graph_map = {}
-for i in xrange(len(lr)):
-  graph_map[(lr[i], dropout_keep[i])] = test_accuracy[i]
+######## INTERPOLATION ##################
+points = np.random.rand(20, 2) * 10
+values = [x*(1-x)*np.cos(4*np.pi*x) * np.sin(4*np.pi*y**2)**2 for x, y in points]
+grid_x, grid_y = np.mgrid[0.00001:0.001:100j, 0.51:0.99:100j]
+grid_z = griddata(points, values, (grid_x, grid_y), method='cubic')
 
+
+#(Unnecessary?)
+######### Create Map for Z-Axis ################
+# graph_map = {}
+# for i in xrange(len(lr)):
+#   graph_map[(lr[i], dropout_keep[i])] = test_accuracy[i]
+
+####### GRIDDING ########################
 # X = np.unique(np.array(sorted(lr)))
 # Y = np.unique(np.array(sorted(dropout_keep)))
 # X, Y = np.meshgrid(X, Y)
-
-# For each reg_lambda
 # Z = np.empty(np.shape(X))
 # for i in xrange(np.shape(Z)[0]):
-  # for j in xrange(np.shape(Z)[1]):
-    # if (X[i, j], Y[i, j]) in graph_map:
-      # Z[i, j] = graph_map[(X[i, j], Y[i, j])]
-Z = [graph_map[(lr[i], dropout_keep[i])] for i in range(len(lr))]
+#   for j in xrange(np.shape(Z)[1]):
+#     if (X[i, j], Y[i, j]) in graph_map:
+#       Z[i, j] = graph_map[(X[i, j], Y[i, j])]
+# Z = [graph_map[(lr[i], dropout_keep[i])] for i in range(len(lr))]
 
 
 #### PLOTTING CODE ###########
 fig = plt.figure()
 # ax = fig.add_subplot(111, projection='3d')
 ax = fig.gca(projection='3d')
-ax.plot_trisurf(lr, dropout_keep, Z, linewidth=0.2, antialiased=True)
-# surf = ax.plot_surface(X, Y, Z, cmap=cm.coolwarm, linewidth=0, antialiased=False)
+# ax.plot_trisurf(lr, dropout_keep, Z, linewidth=0.2, antialiased=True)
+surf = ax.plot_surface(grid_x, grid_y, grid_z, cmap=cm.coolwarm, linewidth=0, antialiased=False)
 # fig.colorbar(surf, shrink=0.5, aspect=5) 
 # ax.plot_wireframe(X, Y, Zs[i], color=colors[i])
 

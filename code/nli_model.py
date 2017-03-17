@@ -218,8 +218,8 @@ class NLISystem(object):
       output_feed = [self.train_op, self.loss, self.probs]
       _, loss, probs = session.run(output_feed, input_feed)
 
-    if loss != loss: # Nan - aka we f-ed up.
-      print('\nBATCH LOSS IS NAN!! Printing out...')
+    # if loss != loss: # Nan - aka we f-ed up.
+      # print('\nBATCH LOSS IS NAN!! Printing out...')
 
       # f = open("vars", 'w')
       # allVars = [e_exp, mag1, e_norm1, mag2, e_norm2]
@@ -232,7 +232,7 @@ class NLISystem(object):
       #   pickle.dump(varp, f)
       # f.close()
 
-      print('Loss:', loss, '\n')
+      # print('Loss:', loss, '\n')
       # for i,x in enumerate(probs):
       #   if x[0] != x[0] or x[1] != x[1] or x[2] != x[2]:
       #     print('\n\tCulprit:')
@@ -242,7 +242,7 @@ class NLISystem(object):
       #     print('\t\tHypothesisLen:', hypothesis_lens[i])
       # print('correct_predictions', correct_predictions, '\n')
       # print('gradients:', gradients, '\n')
-      return -1, -1, True
+      # return -1, -1, True
 
 
     return loss, probs, False
@@ -323,6 +323,12 @@ class NLISystem(object):
         best_epoch = (epoch, curr_accuracy)
       losses.append(curr_loss)
       epoch += 1
+
+      if curr_loss != curr_loss: # Nan - aka we f-ed up.
+        print('\nBATCH LOSS IS NAN!! Printing out...')
+        print('Loss:', curr_loss, '\n')
+        return -1, -1, -1, True
+      self.saver.save(session, 'train_params/epoch_model') # Only save parameters if we don't crash
 
       # TEST FOR CONVERGENCE
       if len(losses) >= 10 and (max(losses[-3:]) - min(losses[-3:])) <= 0.05:

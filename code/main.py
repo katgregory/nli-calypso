@@ -190,11 +190,11 @@ def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dro
         nli.saver.save(sess, "train_params/nan_model")
         assert(False)
 
-      # Save the parameters to file
-      if not FLAGS.validation:
-        nli.saver.save(sess, pjoin(FLAGS.train_dir, get_save_filename(lr, dropout_keep)))
-      else:
-        nli.saver.save(sess, pjoin(FLAGS.validation_dir, get_save_filename(lr, dropout_keep)))
+      # Save the parameters to filej
+      # if not FLAGS.validation:
+        # nli.saver.save(sess, pjoin(FLAGS.train_dir, get_save_filename(lr, dropout_keep)))
+      # else:
+        # nli.saver.save(sess, pjoin(FLAGS.validation_dir, get_save_filename(lr, dropout_keep)))
 
     test_accuracy, avg_test_loss, cm = nli.evaluate_prediction(sess, FLAGS.batch_size, eval_dataset)
     return (epoch_number, train_accuracy, train_loss, test_accuracy, avg_test_loss, cm)
