@@ -291,7 +291,8 @@ class NLI(object):
           
           if not last:
             r = fn(r, name="r-nonlin")
-            r = tf.nn.dropout(r, dropout, name="r-dropout")
+
+          r = tf.nn.dropout(r, dropout, name="r-dropout")
 
           if self.tblog: tf.summary.histogram("W", W)
           if self.tblog: tf.summary.histogram("b", b)
