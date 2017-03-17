@@ -203,7 +203,7 @@ def validate_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab):
   # Define ranges to randomly sample over
   lr_bounds = [0.00001, 0.001]
   dropout_bounds = [0.5, 1.0]
-  num_validation_samples = 20
+  num_validation_samples = 10
 
   results_map = {}
   best_train_accuracy = 0
