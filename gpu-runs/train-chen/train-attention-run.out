@@ -1,0 +1,61 @@
+
+Epoch 1
+Amount of time to run this epoch: 2046.031703 secs
+Training accuracy for this epoch: 0.791996971059
+Mean loss for this epoch: 0.524290918352
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 2064.11176896 secs
+Training accuracy for this epoch: 0.851916842475
+Mean loss for this epoch: 0.394484486438
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 2070.03038406 secs
+Training accuracy for this epoch: 0.878001408894
+Mean loss for this epoch: 0.335691024561
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 2085.83236599 secs
+Training accuracy for this epoch: 0.895960259717
+Mean loss for this epoch: 0.293291473504
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 2089.89699292 secs
+Training accuracy for this epoch: 0.90930106832
+Mean loss for this epoch: 0.260814557991
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 2079.33143806 secs
+Training accuracy for this epoch: 0.919676646031
+Mean loss for this epoch: 0.235244142907
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 2093.27126598 secs
+Training accuracy for this epoch: 0.926932269321
+Mean loss for this epoch: 0.216157619781
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.85602519813
+Average Loss: 0.492877002733
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	2850.00      	388.00       	91.00        
+neutral      	216.00       	2707.00      	312.00       
+contradiction	100.00       	310.00       	2868.00      
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.92         	0.90         	0.86         	0.88         
+neutral      	0.88         	0.80         	0.84         	0.82         
+contradiction	0.92         	0.88         	0.87         	0.88         
+micro        	0.90         	0.86         	0.86         	0.86         
+macro        	0.90         	0.86         	0.86         	0.86         
+not-O        	0.90         	0.85         	0.85         	0.85         
+
