@@ -212,11 +212,6 @@ def validate_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab):
     lr = np.random.uniform(lr_bounds[0], lr_bounds[1])
     dropout_keep = np.random.uniform(dropout_bounds[0], dropout_bounds[1])
 
-    # TODO REMOVE THIS
-    results_map[(lr, dropout_keep)] = (-1, -1, [-1, -1, -1], np.random.random(), -1, -1)
-    pickle.dump(results_map, open(FLAGS.hyperparameter_grid_search_file, "wb"))
-    continue
-
     print("########################################################")
     print("\nRUNNING TRIAL: ", str(i), "\tlr:", lr, "\tdropout:", dropout_keep, "\n")
     idx_tup = (lr, dropout_keep)
