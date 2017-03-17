@@ -190,11 +190,11 @@ def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dro
         nli.saver.save(sess, "train_params/nan_model")
         assert(False)
 
-      # Save the parameters to file
-      if not FLAGS.validation:
-        nli.saver.save(sess, pjoin(FLAGS.train_dir, get_save_filename(lr, dropout_keep)))
-      else:
-        nli.saver.save(sess, pjoin(FLAGS.validation_dir, get_save_filename(lr, dropout_keep)))
+      # Save the parameters to filej
+      # if not FLAGS.validation:
+        # nli.saver.save(sess, pjoin(FLAGS.train_dir, get_save_filename(lr, dropout_keep)))
+      # else:
+        # nli.saver.save(sess, pjoin(FLAGS.validation_dir, get_save_filename(lr, dropout_keep)))
 
     test_accuracy, avg_test_loss, cm = nli.evaluate_prediction(sess, FLAGS.batch_size, eval_dataset)
     return (epoch_number, train_accuracy, train_loss, test_accuracy, avg_test_loss, cm)
@@ -203,7 +203,7 @@ def validate_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab):
   # Define ranges to randomly sample over
   lr_bounds = [0.00001, 0.001]
   dropout_bounds = [0.5, 1.0]
-  num_validation_samples = 20
+  num_validation_samples = 10
 
   results_map = {}
   best_train_accuracy = 0
@@ -212,13 +212,8 @@ def validate_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab):
     lr = np.random.uniform(lr_bounds[0], lr_bounds[1])
     dropout_keep = np.random.uniform(dropout_bounds[0], dropout_bounds[1])
 
-    # TODO REMOVE THIS
-    results_map[(lr, dropout_keep)] = (-1, -1, [-1, -1, -1], np.random.random(), -1, -1)
-    pickle.dump(results_map, open(FLAGS.hyperparameter_grid_search_file, "wb"))
-    continue
-
     print("########################################################")
-    print("\nRUNNING TRIAL: ", "\tlr:", lr, "\tdropout:", dropout_keep, "\n")
+    print("\nRUNNING TRIAL: ", str(i), "\tlr:", lr, "\tdropout:", dropout_keep, "\n")
     idx_tup = (lr, dropout_keep)
     results_map[idx_tup] = run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab,
                                      lr, dropout_keep)
