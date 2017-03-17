@@ -181,8 +181,9 @@ def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dro
     initialize_model(sess, nli)
 
     if FLAGS.restore:
-      nli.saver.restore(sess, pjoin(FLAGS.train_dir, get_save_filename(lr, dropout_keep)))
-      epoch_number, train_accuracy, train_loss = (-1, -1, -1) # Placeholders
+      # nli.saver.restore(sess, pjoin(FLAGS.train_dir, get_save_filename(lr, dropout_keep)))
+      nli.saver.restore(sess, 'train_params/epoch_model')
+      epoch_number, train_accuracy, train_loss = nli.train(sess, train_dataset, rev_vocab, FLAGS.train_dir, FLAGS.batch_size) 
     else:
       epoch_number, train_accuracy, train_loss, error = nli.train(sess, train_dataset, rev_vocab, FLAGS.train_dir, FLAGS.batch_size)
 
