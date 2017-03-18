@@ -47,6 +47,7 @@ class NLISystem(object):
                train_embed,
                pool_merge,
                max_grad_norm,
+               analytic_mode = False,
                tboard_path = None,
                verbose = False):
 
@@ -56,6 +57,7 @@ class NLISystem(object):
     self.dropout_keep = dropout_keep
     self.LBLS = ['entailment', 'neutral', 'contradiction']
     self.bucket = bucket
+    self.analytic_mode = analytic_mode
 
     # Dimensions
     batch_size = None
@@ -75,7 +77,7 @@ class NLISystem(object):
     ##########################
     # Build neural net
     ##########################
-    nli = NLI(tblog=True)
+    nli = NLI(tblog=True, analytic_mode=analytic_mode)
 
     ####################
     # Embedding lookup
@@ -108,7 +110,10 @@ class NLISystem(object):
       with tf.name_scope("Attention"):
         # Context generation
         with tf.variable_scope("Context") as scope:
-          p_context, h_context = nli.context_tensors(p_states, h_states, weight_attention)
+          if nli.analytic_mode:
+            self.e, ret = nli.context_tensors(p_states, h_states, weight_attention)
+          else: ret = nli.context_tensors(p_states, h_states, weight_attention)
+          p_context, h_context = ret
 
         # Inference
         with tf.variable_scope("Inference") as scope:
@@ -289,6 +294,40 @@ class NLISystem(object):
     print("Mean loss for this epoch: " + str(epoch_mean_loss))
     return train_accuracy, epoch_mean_loss, False
 
+
+  def analyze(self, session, dataset, rev_vocab, batch_size):
+    assert self.analytic_mode, "Analytic mode must be enabled to call analyze"
+    with tqdm(total=int(len(dataset[0]))) as pbar:
+      premise_analysis = []
+      hypothesis_analysis = []
+      e_analysis = []
+      for i, batch in enumerate(minibatches(dataset, batch_size, bucket=self.bucket)):
+        premises, premise_lens, hypotheses, hypothesis_lens, goldlabels = batch
+
+        premise_max = len(max(premises, key=len))
+        hypothesis_max = len(max(hypotheses, key=len))
+        premise_arr = np.array(self.pad_sequences(premises, premise_max))
+        hypothesis_arr = np.array(self.pad_sequences(hypotheses, hypothesis_max))
+
+        input_feed = {
+          self.premise_ph: premise_arr,
+          self.premise_len_ph: premise_lens,
+          self.hypothesis_ph: hypothesis_arr,
+          self.hypothesis_len_ph: hypothesis_lens,
+          self.output_ph: goldlabels,
+          self.dropout_ph: self.dropout_keep
+        }
+
+        output_feed = [self.loss, self.probs, self.e]
+        loss, probs, e = session.run(output_feed, input_feed)
+
+        premise_analysis.append([[rev_vocab[i] for i in premise] for premise in premises])
+        hypothesis_analysis.append([[rev_vocab[i] for i in hypothesis] for hypothesis in hypotheses])
+        e_analysis.append(e)
+
+        pbar.update(batch_size)
+
+    return (premise_analysis, hypothesis_analysis, e_analysis)
 
   """
   Loop through dataset and call optimize() to train model

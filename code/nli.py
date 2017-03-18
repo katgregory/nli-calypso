@@ -5,9 +5,10 @@ xavier = tf.contrib.layers.xavier_initializer
 
 class NLI(object):
 
-  def __init__(self, tblog=False):
+  def __init__(self, tblog=False, analytic_mode=False):
     self.reg_list = []
     self.tblog = tblog
+    self.analytic_mode = analytic_mode
 
   """
   Returns bag of words mean of input statement
@@ -131,7 +132,9 @@ class NLI(object):
 
   :return: A tuple of (context1, context2) of context vectors for each of the words in statement 1
   and statement 2 respectively. context1 and context2 have the same dimensions as states1 and
-  states2
+  states2.
+
+  If in analytic_mode, this function returns a tuple of (e, r) where r is the original return value.
   """
   def context_tensors(self, states1, states2, weight_attention):
     with tf.name_scope("Context-Tensors"):
@@ -181,7 +184,9 @@ class NLI(object):
       context2 = tf.matmul(states1, e_norm2, transpose_a=True)
       context2 = tf.transpose(context2, perm=[0, 2, 1])
 
-      return context1, context2 
+      ret = context1, context2 
+      if self.analytic_mode: return (e, ret)
+      else: return ret
 
   """
   Return a new vector that embodies inferred information from context and state vectors
