@@ -8,8 +8,7 @@ import matplotlib.ticker as mticker
 import matplotlib.patches as mpatches
 from scipy.interpolate import griddata
 
-
-file_path = 'data/hyperparams/grid.p'
+file_path = 'gpu-runs/chen-validation/grid.p'
 output_file_name = 'search'
 
 results_map = pickle.load(open(file_path, 'rb'))
@@ -51,6 +50,23 @@ lr = []
 dropout_keep = []
 test_accuracy = []
 
+with open('gpu-runs/chen-validation/chen-validation-terminal-output-formatted') as f:
+  cnt = 0
+  for line in f.readlines():
+    if cnt == 6:
+      cnt = 0
+    else:
+      readValue = float(line.strip().split()[-1])
+      if cnt == 0:
+        lr.append(readValue)
+      elif cnt == 1:
+        dropout_keep.append(readValue)
+      elif cnt == 3 and GRAPH_LOSS:
+        test_accuracy.append(readValue)
+      elif cnt == 4 and not GRAPH_LOSS:
+        test_accuracy.append(readValue)
+      cnt += 1
+
 keys = results_map.keys()
 for key in keys:
   lr.append(key[0])
@@ -61,20 +77,22 @@ for key in keys:
     test_accuracy.append(results_map[key][3])
 
 # OVERWRITES DATA WITH SOMETHING FOR TESTING
-test_accuracy = [lr[i] + dropout_keep[i] for i in xrange(len(test_accuracy))]
+# test_accuracy = [lr[i] + dropout_keep[i] for i in xrange(len(test_accuracy))]
 
-def log_tick_formatter(val, pos=None):
-    return "{:.2e}".format(10**val)
+# def log_tick_formatter(val, pos=None):
+    # return "{:.2e}".format(10**val)
 
 # sp = ax.scatter(np.log10(lr), dropout_keep, test_accuracy, c=reg_lambda, cmap=cm.coolwarm)
 # sp = ax.scatter(np.log10(lr), dropout_keep, test_accuracy)
 
-######## INTERPOLATION ##################
-points = np.random.rand(20, 2) * 10
-values = [x*(1-x)*np.cos(4*np.pi*x) * np.sin(4*np.pi*y**2)**2 for x, y in points]
-grid_x, grid_y = np.mgrid[0.00001:0.001:100j, 0.51:0.99:100j]
-grid_z = griddata(points, values, (grid_x, grid_y), method='cubic')
+# everything = [(lr[i], dropout_keep[i], test_accuracy[i]) for i in xrange(len(lr))]
+# for e in sorted(everything):
+  # print e
 
+######## INTERPOLATION ##################
+points = np.array([(lr[i], dropout_keep[i]) for i in xrange(len(lr))])
+grid_x, grid_y = np.mgrid[0.00001:0.001:100j, 0.5:1.0:100j]
+grid_z = griddata(points, test_accuracy, (grid_x, grid_y), method='cubic')
 
 #(Unnecessary?)
 ######### Create Map for Z-Axis ################
@@ -98,10 +116,9 @@ grid_z = griddata(points, values, (grid_x, grid_y), method='cubic')
 fig = plt.figure()
 # ax = fig.add_subplot(111, projection='3d')
 ax = fig.gca(projection='3d')
-# ax.plot_trisurf(lr, dropout_keep, Z, linewidth=0.2, antialiased=True)
-surf = ax.plot_surface(grid_x, grid_y, grid_z, cmap=cm.coolwarm, linewidth=0, antialiased=False)
-# fig.colorbar(surf, shrink=0.5, aspect=5) 
-# ax.plot_wireframe(X, Y, Zs[i], color=colors[i])
+surf = ax.plot_surface(grid_x, grid_y, grid_z, cmap=cm.coolwarm, linewidth=0, antialiased=False, vmin=min(test_accuracy), vmax=max(test_accuracy))
+fig.colorbar(surf, shrink=0.5, aspect=5) 
+_ = ax.scatter(lr, dropout_keep, test_accuracy)
 
 # lr is on a log scale (not anymore)
 # ax.xaxis.set_major_formatter(mticker.FuncFormatter(log_tick_formatter))

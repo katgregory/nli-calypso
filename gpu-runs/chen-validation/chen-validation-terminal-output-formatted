@@ -1,0 +1,98 @@
+lr: 0.000256622354093   
+dropout: 0.50896483195 
+Training accuracy for this epoch: 0.96956
+Mean loss for this epoch: 0.0922223076136
+Accuracy: 0.761
+Average Loss: 1.13796563633
+########################################################
+lr: 0.000466360529413   
+dropout: 0.706463052025
+Training accuracy for this epoch: 0.96802
+Mean loss for this epoch: 0.0989620608417
+Accuracy: 0.769
+Average Loss: 1.03106633388
+########################################################
+lr: 0.000247977177766   
+dropout: 0.708407520877
+Training accuracy for this epoch: 0.96798
+Mean loss for this epoch: 0.0921862257763
+Accuracy: 0.764
+Average Loss: 1.15201049298
+########################################################
+lr: 0.000134610981711   
+dropout: 0.708086100662
+Training accuracy for this epoch: 0.97002
+Mean loss for this epoch: 0.0860172911151
+Accuracy: 0.731
+Average Loss: 1.34733156487
+########################################################
+lr: 0.000958364912631   
+dropout: 0.72307487992
+Training accuracy for this epoch: 0.94522
+Mean loss for this epoch: 0.164884934938
+Accuracy: 0.747
+Average Loss: 1.04553265497
+########################################################
+lr: 0.000481899217199   
+dropout: 0.778312511689
+Training accuracy for this epoch: 0.96682
+Mean loss for this epoch: 0.101000798026
+Accuracy: 0.756
+Average Loss: 1.05045479815
+########################################################
+lr: 0.000377895111547   
+dropout: 0.589141648219
+Training accuracy for this epoch: 0.96762
+Mean loss for this epoch: 0.0955378972639
+Accuracy: 0.77
+Average Loss: 1.17446951661
+########################################################
+lr: 0.000360365515808   
+dropout: 0.513323310868
+Training accuracy for this epoch: 0.96636
+Mean loss for this epoch: 0.100754259638
+Accuracy: 0.773
+Average Loss: 1.08409131877
+########################################################
+lr: 0.000292753908187   
+dropout: 0.744750470038
+Training accuracy for this epoch: 0.96954
+Mean loss for this epoch: 0.0904091005593
+Accuracy: 0.747
+Average Loss: 1.10747098364
+########################################################
+lr: 0.000603026955665   
+dropout: 0.807158986724
+Training accuracy for this epoch: 0.9577
+Mean loss for this epoch: 0.128980405874
+Accuracy: 0.757
+Average Loss: 1.07136554644
+########################################################
+lr: 0.000925831095658   
+dropout: 0.551510090351
+Training accuracy for this epoch: 0.9387
+Mean loss for this epoch: 0.181463140555
+Accuracy: 0.743
+Average Loss: 1.01289466396
+########################################################
+lr: 0.000837756270667   
+dropout: 0.833538295147
+Training accuracy for this epoch: 0.94658
+Mean loss for this epoch: 0.161913085885
+Accuracy: 0.769
+Average Loss: 0.9009840535
+########################################################
+lr: 0.000609295998544   
+dropout: 0.965468101138
+Training accuracy for this epoch: 0.96018
+Mean loss for this epoch: 0.118564981929
+Accuracy: 0.779
+Average Loss: 0.980831369758
+########################################################
+lr: 0.000815105284894   
+dropout: 0.967937769695
+Training accuracy for this epoch: 0.9497
+Mean loss for this epoch: 0.151287062517
+Accuracy: 0.753
+Average Loss: 1.00767538976
+########################################################
