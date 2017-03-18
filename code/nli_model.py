@@ -367,11 +367,11 @@ class NLISystem(object):
         print('\nBATCH LOSS IS NAN!! Printing out...')
         print('Loss:', curr_loss, '\n')
         return -1, -1, -1, True
-      self.saver.save(session, 'train_params/epoch_model') # Only save parameters if we don't crash
+      self.saver.save(session, 'train_params/epoch_model' + str(epoch)) # Only save parameters if we don't crash
 
       # TEST FOR CONVERGENCE
-      if len(losses) >= 10 and (max(losses[-3:]) - min(losses[-3:])) <= 0.01:
-        break # TODO: Replace everything with constants
+      if len(losses) >= 10 and (max(losses[-3:]) - min(losses[-3:])) <= 0.03:
+        break 
 
       if epoch > 50: # HARD CUTOFF?
         break
