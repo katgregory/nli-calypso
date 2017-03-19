@@ -40,7 +40,7 @@ class NLISystem(object):
                dropout_keep,
                bucket,
                stmt_processor,
-               attention,
+               attentive_matching,
                infer_embeddings,
                weight_attention,
                n_bilstm_layers,
@@ -106,7 +106,7 @@ class NLISystem(object):
     ####################
     # Attention
     ####################
-    if attention:
+    if attentive_matching:
       with tf.name_scope("Attention"):
         # Context generation
         with tf.variable_scope("Context") as scope:
@@ -137,7 +137,7 @@ class NLISystem(object):
     ####################
     # Merge
     ####################
-    if pool_merge and attention: merged = nli.pool_merge(p_composed, h_composed)
+    if pool_merge and attentive_matching: merged = nli.pool_merge(p_composed, h_composed)
     else: merged = nli.merge_states(p_last, h_last, stmt_hidden_size)
 
     ####################
