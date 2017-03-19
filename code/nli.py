@@ -226,70 +226,97 @@ class NLI(object):
   states2.
   """
   def max_matching(self, states1, states2, e):
-    # dimensions
-    batch_size = tf.shape(states1)[0]
+    with tf.name_scope("max_matching"):
+      # dimensions
+      batch_size = tf.shape(states1)[0]
 
-    # batch_size x statement1_len x 1: reshape for broadcasting
-    max1 = tf.reshape(tf.reduce_max(e, axis=2), (batch_size, -1, 1))
-    # one hot vectors of batch_size x statement1_len x statement2_len
-    indices1 = tf.cast(tf.equal(e, max1), tf.float32)
-    # average the best if there are multiple
-    indices1 = indices1 / tf.reshape(tf.reduce_sum(indices1, axis=2), (batch_size, -1, 1))
-    # batch_size x statement1_len x hidden_size
-    context1 = tf.matmul(indices1, states2)
+      # batch_size x statement1_len x 1: reshape for broadcasting
+      max1 = tf.reshape(tf.reduce_max(e, axis=2), (batch_size, -1, 1))
+      # one hot vectors of batch_size x statement1_len x statement2_len
+      indices1 = tf.cast(tf.equal(e, max1), tf.float32)
+      # average the best if there are multiple
+      indices1 = indices1 / tf.reshape(tf.reduce_sum(indices1, axis=2), (batch_size, -1, 1))
+      # batch_size x statement1_len x hidden_size
+      context1 = tf.matmul(indices1, states2)
 
-    # batch_size x 1 x statement2_len: reshape for broadcasting
-    max2 = tf.reshape(tf.reduce_max(e, axis=1), (batch_size, 1, -1))
-    # one hot vectors of batch_size x statement1_len x statement2_len
-    indices2 = tf.cast(tf.equal(e, max2), tf.float32)
-    # average the best if there are multiple
-    indices2 = indices2 / tf.reshape(tf.reduce_sum(indices2, axis=1), (batch_size, 1, -1))
-    # batch_size x statement2_len x hidden_size
-    context2 = tf.matmul(indices2, states1, transpose_a=True)
+      # batch_size x 1 x statement2_len: reshape for broadcasting
+      max2 = tf.reshape(tf.reduce_max(e, axis=1), (batch_size, 1, -1))
+      # one hot vectors of batch_size x statement1_len x statement2_len
+      indices2 = tf.cast(tf.equal(e, max2), tf.float32)
+      # average the best if there are multiple
+      indices2 = indices2 / tf.reshape(tf.reduce_sum(indices2, axis=1), (batch_size, 1, -1))
+      # batch_size x statement2_len x hidden_size
+      context2 = tf.matmul(indices2, states1, transpose_a=True)
 
-    return (context1, context2)
+      return (context1, context2)
 
+  """
+  Multi-perspective similarity of two vectors.
+
+  :param W: Tensor representing multi-perspective extraction. Dimensions are hidden_size x K
+  :param v1: Tensor of dimensions batch_size x statement1_len x hidden_size. statement1_len can 
+  be omitted if it is 1, giving dimensions of batch_size x hidden_size.
+  :param v2: Tensor of dimensions batch_size x statement2_len x hidden_size. statement2_len can 
+  be omitted if it is 1, giving dimensions of batch_size x hidden_size.
+
+  :return: A tensor of dimensions batch_size x statement1_len x statement2_len x k representing
+  the multi-perspective similarity between v1 and v2
+  """
   def multi_perspective(self, W, v1, v2):
-    # W: hidden_size x K
-    # v1: batch_size x statement1_len x hidden_size
-    # v2: batch_size x statement2_len x hidden_size
-    batch_size = tf.shape(v1)[0]
-    hidden_size = v1.get_shape().as_list()[2]
-    K = tf.shape(W)[1]
+    with tf.name_scope("multi_perspective"):
+      batch_size = tf.shape(v1)[0]
+      hidden_size = v1.get_shape().as_list()[2]
+      K = tf.shape(W)[1]
 
-    # reshape for broadcast
-    v1 = tf.reshape(v1, (batch_size, -1, 1, hidden_size, 1))
-    v2 = tf.reshape(v2, (batch_size, 1, -1, hidden_size, 1))
-    W = tf.reshape(W, (1, 1, 1, hidden_size, K))
+      # reshape for broadcast
+      v1 = tf.reshape(v1, (batch_size, -1, 1, hidden_size, 1))
+      v2 = tf.reshape(v2, (batch_size, 1, -1, hidden_size, 1))
+      W = tf.reshape(W, (1, 1, 1, hidden_size, K))
 
-    # batch_size x statement1_len x 1 x hidden_size x k
-    k1 = tf.mul(v1, W)
-    k1 = tf.nn.l2_normalize(k1, 4)
+      # batch_size x statement1_len x 1 x hidden_size x k
+      k1 = tf.mul(v1, W)
+      k1 = tf.nn.l2_normalize(k1, 4)
 
-    # batch_size x 1 x statement2_len x hidden_size x k
-    k2 = tf.mul(v2, W)
-    k2 = tf.nn.l2_normalize(k2, 4)
+      # batch_size x 1 x statement2_len x hidden_size x k
+      k2 = tf.mul(v2, W)
+      k2 = tf.nn.l2_normalize(k2, 4)
 
-    # batch_size x statement1_len x statement2_len x hidden_size x k
-    r = tf.mul(k1, k2)
+      # batch_size x statement1_len x statement2_len x hidden_size x k
+      r = tf.mul(k1, k2)
 
-    # batch_size x statement1_len x statement2_len x k
-    r = tf.reduce_sum(r, axis=3)
-    return r
+      # batch_size x statement1_len x statement2_len x k
+      r = tf.reduce_sum(r, axis=3)
+      return r
 
+
+  """
+  Calculates context vectors for two statements by using full-matching
+
+  :param states1: States of statement 1 as output from an LSTM, biLSTM, etc. Dimensions are
+  batch_size x statement1_len x hidden_size
+  :param states2: States of statement 2 as output from an LSTM, biLSTM, etc. Dimensions are
+  batch_size x statement2_len x hidden_size
+
+  :return: A tuple of (context1, context2) of context vectors for each of the words in statement 1
+  and statement 2 respectively. context1 and context2 have the same dimensions as states1 and
+  states2.
+  """
   def full_matching(self, states1, states2, p_last, h_last, K):
     with tf.variable_scope("Full-Matching"):
+      # dimensions
       batch_size = tf.shape(states1)[0]
       hidden_size = states1.get_shape().as_list()[2]
-      W = tf.get_variable('W', shape=(hidden_size, K))
 
-      full_context1 = self.multi_perspective(W, states1, h_last)
-      full_context2 = self.multi_perspective(W, states2, p_last)
+      W = tf.get_variable('W', shape=(hidden_size, K))
+      # batch_size x statement1_len x 1 x k
+      context1 = self.multi_perspective(W, states1, h_last)
+      # batch_size x 1 x statement2_len x k
+      context2 = self.multi_perspective(W, states2, p_last)
 
       # batch_size x statement1_len x k
-      context1 = tf.reshape(full_context1, (batch_size, -1, K))
+      context1 = tf.reshape(context1, (batch_size, -1, K))
       # batch_size x statement2_len x k
-      context2 = tf.reshape(full_context2, (batch_size, -1, K))
+      context2 = tf.reshape(context2, (batch_size, -1, K))
 
       return context1, context2
 
@@ -307,9 +334,10 @@ class NLI(object):
   """
   def maxpool_matching(self, states1, states2, K):
     with tf.variable_scope("Maxpool-Matching"):
+      # dimensions
       hidden_size = states1.get_shape().as_list()[2]
-      W = tf.get_variable('W', shape=(hidden_size, K))
 
+      W = tf.get_variable('W', shape=(hidden_size, K))
       # batch_size x statement1_len x statement2_len x k
       context = self.multi_perspective(W, states1, states2)
 
@@ -319,7 +347,6 @@ class NLI(object):
       context2 = tf.reduce_max(context, axis=1)
 
       return context1, context2
-
   
   """
   Return a new vector that embodies inferred information from context and state vectors
@@ -435,19 +462,3 @@ class NLI(object):
         self.reg_list.append(W)
 
       return r
-
-    #    W1 = tf.get_variable("W1", shape=(input_size, hidden_size))
-    #    b1 = tf.Variable(tf.zeros([hidden_size,]), name="b1")
-    #    mul1 = tf.matmul(r, W1)
-    #    r1 = tf.add(mul1, b1, name="r1")
-    #    fn(r1, name="r-nonlin")
-    #    r1 = tf.nn.dropout(r1, dropout, name="r-dropout")
-    #    self.reg_list.append(W1)
-
-    #    W2 = tf.get_variable("W2", shape=(hidden_size, output_size))
-    #    b2 = tf.Variable(tf.zeros([output_size,]), name="b2")
-    #    mul2 = tf.matmul(r1, W2)
-    #    r2 = tf.add(mul2, b2, name="r2")
-    #    self.reg_list.append(W2)
-
-    #    return W1, b1, mul1, r1, W2, b2, mul2, r2
