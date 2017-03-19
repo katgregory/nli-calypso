@@ -300,7 +300,10 @@ class NLISystem(object):
     with tqdm(total=int(len(dataset[0]))) as pbar:
       premise_analysis = []
       hypothesis_analysis = []
+      goldlabels_analysis = []
+      predicted_labels_analysis = []
       e_analysis = []
+      correct_analysis = []
       for i, batch in enumerate(minibatches(dataset, batch_size, bucket=self.bucket)):
         premises, premise_lens, hypotheses, hypothesis_lens, goldlabels = batch
 
@@ -323,11 +326,16 @@ class NLISystem(object):
 
         premise_analysis.append([[rev_vocab[i] for i in premise] for premise in premises])
         hypothesis_analysis.append([[rev_vocab[i] for i in hypothesis] for hypothesis in hypotheses])
+        goldlabels_analysis.append(goldlabels)
+        predicted_labels_analysis.append(np.argmax(probs, axis=1))
         e_analysis.append(e)
+
+        correct = np.equal(np.argmax(probs, axis=1), np.argmax(goldlabels, axis=1))
+        correct_analysis.append(correct)
 
         pbar.update(batch_size)
 
-    return (premise_analysis, hypothesis_analysis, e_analysis)
+    return (premise_analysis, hypothesis_analysis, e_analysis, correct_analysis, goldlabels_analysis, predicted_labels_analysis)
 
   """
   Loop through dataset and call optimize() to train model
