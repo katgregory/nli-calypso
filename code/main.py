@@ -28,10 +28,8 @@ tf.app.flags.DEFINE_bool("bucket", True, "")
 tf.app.flags.DEFINE_string("stmt_processor", "bilstm", "How to process statements. Options: 'bow', 'lstm', 'bilstm'")
 tf.app.flags.DEFINE_bool("infer_embeddings", False, "Include embeddings in inference step")
 tf.app.flags.DEFINE_bool("train_embed", True, "Train the embeddings")
-tf.app.flags.DEFINE_bool("analyze", False, "Perform analysis on model params")
-tf.app.flags.DEFINE_string("analysis_path", "./analysis.out", "Analysis output file")
-tf.app.flags.DEFINE_bool("restore", False, "Read in all parameters from file")
-tf.app.flags.DEFINE_string("restore_path", "train_params/epoch_model", "Path from which to restore params")
+tf.app.flags.DEFINE_string("analysis_path", None, "Analysis output file")
+tf.app.flags.DEFINE_string("restore_path", None, "Path from which to restore params")
 tf.app.flags.DEFINE_bool("pool_merge", True, "Use max pool and average to merge.")
 tf.app.flags.DEFINE_integer("n_bilstm_layers", 1, "Number of layers in the stacked bidirectional LSTM")
 tf.app.flags.DEFINE_integer("max_grad_norm", -1, "For clipping")
@@ -173,7 +171,7 @@ def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dro
     pool_merge = FLAGS.pool_merge,
     train_embed = FLAGS.train_embed,
     max_grad_norm = FLAGS.max_grad_norm,
-    analytic_mode = FLAGS.analyze)
+    analytic_mode = FLAGS.analysis_path is not None)
   nli.saver = tf.train.Saver() # for saving
 
   if not os.path.exists(FLAGS.log_dir):
@@ -189,19 +187,19 @@ def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dro
     initialize_model(sess, nli)
 
     # Just get analytic data
-    if FLAGS.analyze:
-      assert FLAGS.restore, "Without data to restore, analytics can't be done"
+    if FLAGS.analysis_path is not None:
+      assert FLAGS.restore_path is not None, "Without data to restore, analytics can't be done"
       nli.saver.restore(sess, FLAGS.restore_path)
-      analysis = nli.analyze(sess, train_dataset, rev_vocab, FLAGS.batch_size)      
+      analysis = nli.analyze(sess, eval_dataset, rev_vocab, FLAGS.batch_size)
       pickle.dump(analysis, open(FLAGS.analysis_path, "wb"))
       print("Done.")
 
     # Run and train model
     else:
-      if FLAGS.restore:
+      if FLAGS.restore_path is not None:
         # nli.saver.restore(sess, pjoin(FLAGS.train_dir, get_save_filename(lr, dropout_keep)))
         nli.saver.restore(sess, FLAGS.restore_path)
-        epoch_number, train_accuracy, train_loss = nli.train(sess, train_dataset, rev_vocab, FLAGS.train_dir, FLAGS.batch_size) 
+        epoch_number, train_accuracy, train_loss = nli.train(sess, train_dataset, rev_vocab, FLAGS.train_dir, FLAGS.batch_size)
       else:
         epoch_number, train_accuracy, train_loss, error = nli.train(sess, train_dataset, rev_vocab, FLAGS.train_dir, FLAGS.batch_size)
 
