@@ -288,14 +288,16 @@ class NLI(object):
       r = tf.reduce_sum(r, axis=3)
       return r
 
+
   def reduce_last_dim(self, inputs, output_size):
     with tf.variable_scope("Reduce_Last_Dimension"):
       shape = tf.shape(inputs)
-      first_dim = reduce(lambda x, y: x * y, shape[:-1])
-      inputs = tf.reshape(inputs, shape=(first_dim, shape[-1])) # Reshape to 2 dimensions
+      last_dim = inputs.get_shape().as_list()[-1]
+      first_dim = tf.reduce_prod(shape[:-1])
+      inputs = tf.reshape(inputs, shape=(first_dim, last_dim)) # Reshape to 2 dimensions
       
       # Multiply by W
-      W = tf.get_variable('W', shape=(shape[-1], output_size))
+      W = tf.get_variable('W', shape=(last_dim, output_size))
       inputs = tf.matmul(inputs, W)
       inputs = tf.reshape(inputs, shape=(shape[:-1] + [output_size]))
       return inputs
