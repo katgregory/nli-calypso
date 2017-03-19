@@ -226,15 +226,23 @@ class NLI(object):
   states2.
   """
   def max_matching(self, states1, states2, e):
-    # Batch_size x statement1_len
-    max_indices1 = tf.argmax(e, axis=2)
-    # Batch_size x statement1_len x hidden_size
-    max_context1 = tf.nn.embedding_lookup(state2, max_indices1)
+    # dimensions
+    batch_size = tf.shape(states1)[0]
 
-    # Batch_size x statement2_len
-    max_indices2 = tf.argmax(e, axis=1)
-    # Batch_size x statement2_len x hidden_size
-    max_context2 = tf.nn.embedding_lookup(state1, max_indices2)
+    # batch_size x statement1_len x 1: reshape for broadcasting
+    max1 = tf.reshape(tf.reduce_max(e, axis=2), (batch_size, -1, 1))
+    # boolean mask of batch_size x statement1_len x statement2_len
+    indices1 = tf.cast(tf.equal(e, max1), tf.float32)
+    # batch_size x statement1_len x hidden_size
+    context1 = tf.matmul(indices1, states2)
+
+
+    # batch_size x 1 x statement2_len: reshape for broadcasting
+    max2 = tf.reshape(tf.reduce_max(e, axis=1), (batch_size, 1, -1))
+    # boolean mask of batch_size x statement1_len x statement2_len
+    indices2 = tf.cast(tf.equal(e, max2), tf.float32)
+    # batch_size x statement2_len x hidden_size
+    context2 = tf.matmul(indices2, states1, transpose_a=True)
 
     return (context1, context2)
 
