@@ -307,12 +307,12 @@ class NLI(object):
   :return: Merged hidden state of dimensions batch_size x (hidden_size * 2)
   """
   def merge_states(self, state1, state2, hidden_size):
-    with tf.variable_scope("Merge-States"):
+    with tf.name_scope("Merge-States"):
       state1_size = state1.get_shape().as_list()[1]
       state2_size = state2.get_shape().as_list()[1]
 
       # weight hidden layers before merging
-      with tf.variable_scope("Hidden-Weights"):
+      with tf.name_scope("Hidden-Weights"):
 
         W1 = tf.get_variable("W1", shape=(state1_size, hidden_size), initializer=xavier())
         r1 = tf.matmul(state1, W1)
