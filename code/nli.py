@@ -288,6 +288,18 @@ class NLI(object):
       r = tf.reduce_sum(r, axis=3)
       return r
 
+  def reduce_last_dim(self, inputs, output_size):
+    with tf.variable_scope("Reduce_Last_Dimension"):
+      shape = tf.shape(inputs)
+      first_dim = reduce(lambda x, y: x * y, shape[:-1])
+      inputs = tf.reshape(inputs, shape=(first_dim, shape[-1])) # Reshape to 2 dimensions
+      
+      # Multiply by W
+      W = tf.get_variable('W', shape=(shape[-1], output_size))
+      inputs = tf.matmul(inputs, W)
+      inputs = tf.reshape(inputs, shape=(shape[:-1] + [output_size]))
+      return inputs
+
 
   """
   Calculates context vectors for two statements by using full-matching
@@ -308,10 +320,17 @@ class NLI(object):
       hidden_size = states1.get_shape().as_list()[2]
 
       W = tf.get_variable('W', shape=(hidden_size, K))
+
+      # Reduce hidden size from 300 to 100
+      states1_reduced = reduce_last_dim(states1, 100)
+      states2_reduced = reduce_last_dim(states2, 100)
+      h_last_reduced = reduce_last_dim(h_last, 100) 
+      p_last_reduced = reduce_last_dim(p_last, 100)
+
       # batch_size x statement1_len x 1 x k
-      context1 = self.multi_perspective(W, states1, h_last)
+      context1 = self.multi_perspective(W, states1_reduced, h_last_reduced) 
       # batch_size x 1 x statement2_len x k
-      context2 = self.multi_perspective(W, states2, p_last)
+      context2 = self.multi_perspective(W, states2_reduced, p_last_reduced)
 
       # batch_size x statement1_len x k
       context1 = tf.reshape(context1, (batch_size, -1, K))
@@ -338,8 +357,13 @@ class NLI(object):
       hidden_size = states1.get_shape().as_list()[2]
 
       W = tf.get_variable('W', shape=(hidden_size, K))
+
+      # Reduce hidden size from 300 to 100
+      states1_reduced = reduce_last_dim(states1, 100)
+      states2_reduced = reduce_last_dim(states1, 100)
+
       # batch_size x statement1_len x statement2_len x k
-      context = self.multi_perspective(W, states1, states2)
+      context = self.multi_perspective(W, states1_reduced, states2_reduced)
 
       # batch_size x statement1_len x k
       context1 = tf.reduce_max(context, axis=2)
