@@ -322,10 +322,10 @@ class NLI(object):
       W = tf.get_variable('W', shape=(hidden_size, K))
 
       # Reduce hidden size from 300 to 100
-      states1_reduced = reduce_last_dim(states1, 100)
-      states2_reduced = reduce_last_dim(states2, 100)
-      h_last_reduced = reduce_last_dim(h_last, 100) 
-      p_last_reduced = reduce_last_dim(p_last, 100)
+      states1_reduced = self.reduce_last_dim(states1, 100)
+      states2_reduced = self.reduce_last_dim(states2, 100)
+      h_last_reduced = self.reduce_last_dim(h_last, 100) 
+      p_last_reduced = self.reduce_last_dim(p_last, 100)
 
       # batch_size x statement1_len x 1 x k
       context1 = self.multi_perspective(W, states1_reduced, h_last_reduced) 
@@ -359,8 +359,8 @@ class NLI(object):
       W = tf.get_variable('W', shape=(hidden_size, K))
 
       # Reduce hidden size from 300 to 100
-      states1_reduced = reduce_last_dim(states1, 100)
-      states2_reduced = reduce_last_dim(states1, 100)
+      states1_reduced = self.reduce_last_dim(states1, 100)
+      states2_reduced = self.reduce_last_dim(states1, 100)
 
       # batch_size x statement1_len x statement2_len x k
       context = self.multi_perspective(W, states1_reduced, states2_reduced)
