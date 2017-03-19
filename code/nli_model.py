@@ -106,8 +106,7 @@ class NLISystem(object):
 
     ####################
     # MATCHING
-    ####################
-    
+    ####################    
     with tf.name_scope("Matching"):
       p_contexts = []
       h_contexts = []
