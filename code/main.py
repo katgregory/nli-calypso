@@ -39,6 +39,7 @@ tf.app.flags.DEFINE_bool("attentive_matching", False, "Chen's attention")
 tf.app.flags.DEFINE_bool("weight_attention", False, "Adds weight multiplication to attention calculation")
 tf.app.flags.DEFINE_bool("max_attentive_matching", False, "From Wang et al '17")
 tf.app.flags.DEFINE_bool("full_matching", False, "From Wang et al '17")
+tf.app.flags.DEFINE_bool("maxpool_matching", False, "From Wang et al '17")
 
 # HYPERPARAMETERS
 tf.app.flags.DEFINE_float("lr", 0.0004, "Learning rate.")
@@ -167,6 +168,7 @@ def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dro
     attentive_matching = FLAGS.attentive_matching,
     max_attentive_matching = FLAGS.max_attentive_matching,
     full_matching = FLAGS.full_matching,
+    maxpool_matching = FLAGS.maxpool_matching,
     infer_embeddings = FLAGS.infer_embeddings,
     weight_attention = FLAGS.weight_attention,
     n_bilstm_layers = FLAGS.n_bilstm_layers,

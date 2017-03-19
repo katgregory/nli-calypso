@@ -251,46 +251,49 @@ class NLI(object):
 
   def multi_perspective(self, W, v1, v2):
     # W: hidden_size x K
-    # v1: batch_size x sentence_len x hidden_size
-    # v2: batch_size x hidden_size
+    # v1: batch_size x statement1_len x hidden_size
+    # v2: batch_size x statement2_len x hidden_size
     batch_size = tf.shape(v1)[0]
+    statement1_len = tf.shape(v1)[1]
+    statement2_len = tf.shape(v2)[1]
     hidden_size = v1.get_shape().as_list()[2]
     K = tf.shape(W)[1]
 
     # reshape for broadcast
-    v1 = tf.reshape(v1, (batch_size, -1, hidden_size, 1))
-    v2 = tf.reshape(v2, (batch_size, 1, hidden_size, 1))
-    W = tf.reshape(W, (1, 1, hidden_size, K))
+    v1 = tf.reshape(v1, (batch_size, statement1_len, 1, hidden_size, 1))
+    v2 = tf.reshape(v2, (batch_size, 1, statement2_len, hidden_size, 1))
+    W = tf.reshape(W, (1, 1, 1, hidden_size, K))
 
-    # batch_size x sentence_len x hidden_size x k
+    # batch_size x statement1_len x 1 x hidden_size x k
     k1 = tf.mul(v1, W)
-    k1 = tf.nn.l2_normalize(k1, 3)
+    k1 = tf.nn.l2_normalize(k1, 4)
 
-    # batch_size x 1 x hidden_size x k
+    # batch_size x 1 x statement2_len x hidden_size x k
     k2 = tf.mul(v2, W)
-    k2 = tf.nn.l2_normalize(k2, 3)
+    k2 = tf.nn.l2_normalize(k2, 4)
 
+    # batch_size x statement1_len x statement2_len x hidden_size x k
     r = tf.mul(k1, k2)
-    r = tf.reduce_sum(r, axis=2)
+
+    # batch_size x statement1_len x statement2_len x k
+    r = tf.reduce_sum(r, axis=3)
     return r
-    # batch_size x sentence_len x k
-    # v1 = tf.reshape(v1, (batch_size * statement_len, hidden_size))
-    # k1 = tf.matmul(v1, W) # (batch_size * sentence_len) x K
-    # k1 = tf.reshape(k1, (batch_size, statement_len, K)) # batch_size x sentence_len x K
-    # k2 = tf.matmul(v2, W) # batch_size x K
-    # k2 = tf.reshape(k2, (batch_size, 1, K))
-
-
 
   def full_matching(self, states1, states2, p_last, h_last, K):
     with tf.variable_scope("Full-Matching"):
+      batch_size = tf.shape(states1)[0]
       hidden_size = states1.get_shape().as_list()[2]
       W = tf.get_variable('W', shape=(hidden_size, K))
 
       full_context1 = self.multi_perspective(W, states1, h_last)
       full_context2 = self.multi_perspective(W, states2, p_last)
 
-      return full_context1, full_context2
+      # batch_size x statement1_len x k
+      context1 = tf.reshape(full_context1, (batch_size, -1, K))
+      # batch_size x statement2_len x k
+      context2 = tf.reshape(full_context2, (batch_size, -1, K))
+
+      return context1, context2
 
   """
   Calculates context vectors for two statements by using maxpooling-matching
@@ -304,8 +307,20 @@ class NLI(object):
   and statement 2 respectively. context1 and context2 have the same dimensions as states1 and
   states2.
   """
-  def maxpool_matching(self, states1, states2):
-    NotImplemented
+  def maxpool_matching(self, states1, states2, K):
+    with tf.variable_scope("Maxpool-Matching"):
+      hidden_size = states1.get_shape().as_list()[2]
+      W = tf.get_variable('W', shape=(hidden_size, K))
+
+      # batch_size x statement1_len x statement2_len x k
+      context = self.multi_perspective(W, states1, states2)
+
+      # batch_size x statement1_len x k
+      context1 = tf.reduce_max(context, axis=2)
+      # batch_size x statement2_len x k
+      context2 = tf.reduce_max(context, axis=1)
+
+      return context1, context2
 
   
   """
