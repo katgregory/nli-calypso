@@ -403,7 +403,9 @@ def get_minibatches(data, minibatch_size, bucket=False, shuffle=True):
     elif shuffle:
         np.random.shuffle(indices)
     # RANDOMLY SHUFFLE THE BUCKETS
-    for minibatch_start in np.random.shuffle(np.arange(0, data_size, minibatch_size)):
+    bucket_indices = np.arange(0, data_size, minibatch_size)
+    np.random.shuffle(bucket_indices)
+    for minibatch_start in bucket_indices:
         minibatch_indices = indices[minibatch_start:minibatch_start + minibatch_size]
         yield [minibatch(d, minibatch_indices) for d in data] if list_data \
             else minibatch(data, minibatch_indices)
