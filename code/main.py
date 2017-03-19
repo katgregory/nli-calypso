@@ -37,8 +37,9 @@ tf.app.flags.DEFINE_integer("n_bilstm_layers", 1, "Number of layers in the stack
 tf.app.flags.DEFINE_integer("max_grad_norm", -1, "For clipping")
 
 # TYPES OF ATTENTION
-tf.app.flags.DEFINE_bool("attentive_matching", True, "") # Chen's attention
+tf.app.flags.DEFINE_bool("attentive_matching", True, "Chen's attention")
 tf.app.flags.DEFINE_bool("weight_attention", True, "Adds weight multiplication to attention calculation")
+tf.app.flags.DEFINE_bool("max_attentive_matching", True, "From Wang et al '17")
 
 # HYPERPARAMETERS
 tf.app.flags.DEFINE_float("lr", 0.0004, "Learning rate.")
@@ -165,6 +166,7 @@ def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dro
     bucket = FLAGS.bucket,
     stmt_processor = FLAGS.stmt_processor,
     attentive_matching = FLAGS.attentive_matching,
+    max_attentive_matching = FLAGS.max_attentive_matching,
     infer_embeddings = FLAGS.infer_embeddings,
     weight_attention = FLAGS.weight_attention,
     n_bilstm_layers = FLAGS.n_bilstm_layers,
@@ -250,8 +252,8 @@ def main(_):
 
   assert(FLAGS.validation or ((FLAGS.dev and not FLAGS.test) or (FLAGS.test and not FLAGS.dev))), "When not validating, must set exaclty one of --dev or --test flag to specify evaluation dataset."
   assert FLAGS.stmt_processor in ["bow", "lstm", "bilstm", "stacked"], "Statement processor must be one of bow, lstm, or bilstm."
-  assert not FLAGS.attentive_matching or FLAGS.stmt_processor in ["lstm", "bilstm", "stacked"], "Statement processor must be lstm or bilstm if attention is used."
-  assert not FLAGS.infer_embeddings or FLAGS.attentive_matching, "Attention must be enabled to infer embeddings"
+  assert not (FLAGS.attentive_matching or FLAGS.max_attentive_matching) or FLAGS.stmt_processor in ["lstm", "bilstm", "stacked"], "Statement processor must be lstm or bilstm if attention is used."
+  assert not FLAGS.infer_embeddings or (FLAGS.attentive_matching or FLAGS.max_attentive_matching), "Attention must be enabled to infer embeddings"
 
   # SET RANDOM SEED
   np.random.seed(244)

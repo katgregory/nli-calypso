@@ -136,7 +136,7 @@ class NLI(object):
 
   If in analytic_mode, this function returns a tuple of (e, r) where r is the original return value.
   """
-  def context_tensors(self, states1, states2, weight_attention):
+  def context_tensors(self, states1, states2, attentive_matching, max_attentive_matching, weight_attention):
     with tf.name_scope("Context-Tensors"):
       # dimensions
       batch_size = tf.shape(states1)[0]

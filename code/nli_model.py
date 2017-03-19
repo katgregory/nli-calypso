@@ -41,6 +41,7 @@ class NLISystem(object):
                bucket,
                stmt_processor,
                attentive_matching,
+               max_attentive_matching,
                infer_embeddings,
                weight_attention,
                n_bilstm_layers,
@@ -106,12 +107,12 @@ class NLISystem(object):
     ####################
     # Attention
     ####################
-    if attentive_matching:
-      with tf.name_scope("Attention"):
+    if attentive_matching or max_attentive_matching:
+      with tf.name_scope("Matching"):
         # Context generation
         with tf.variable_scope("Context") as scope:
           if nli.analytic_mode:
-            self.e, ret = nli.context_tensors(p_states, h_states, weight_attention)
+            self.e, ret = nli.context_tensors(p_states, h_states, attentive_matching, max_attentive_matching, weight_attention)
           else: ret = nli.context_tensors(p_states, h_states, weight_attention)
           p_context, h_context = ret
 
