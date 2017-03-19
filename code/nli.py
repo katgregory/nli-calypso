@@ -136,7 +136,7 @@ class NLI(object):
 
   If in analytic_mode, this function returns a tuple of (e, r) where r is the original return value.
   """
-  def context_tensors(self, states1, states2, weight_attention):
+  def context_tensors(self, states1, states2, attentive_matching, max_attentive_matching, weight_attention):
     with tf.name_scope("Context-Tensors"):
       # dimensions
       batch_size = tf.shape(states1)[0]
@@ -172,7 +172,6 @@ class NLI(object):
       magnitude1 = tf.reshape(tf.reduce_sum(e_exp, axis=1), (batch_size, -1, 1))
       # transpose to batch_size x 1 x statement2_len
       magnitude1 = tf.transpose(magnitude1, perm=[0, 2, 1])
-
       e_norm1 = tf.div(e_exp, magnitude1)
       context1 = tf.matmul(states2, e_norm1, transpose_a=True, transpose_b=True)
       context1 = tf.transpose(context1, perm=[0, 2, 1])
@@ -296,8 +295,7 @@ class NLI(object):
           
           if not last:
             r = fn(r, name="r-nonlin")
-
-          r = tf.nn.dropout(r, dropout, name="r-dropout")
+            r = tf.nn.dropout(r, dropout, name="r-dropout")
 
           if self.tblog: tf.summary.histogram("W", W)
           if self.tblog: tf.summary.histogram("b", b)

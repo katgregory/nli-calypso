@@ -1,0 +1,1643 @@
+Training accuracy for this epoch: 0.68744                                                                                                                                                        [1971/1971]
+Mean loss for this epoch: 0.72863992797
+        NEW BEST
+
+Epoch 7
+ 53%|#####2    | 26464/50000 [01:17<01:28, 265.76it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 773004730 get requests, put_count=773005341 evicted_count=372000 evic
+tion_rate=0.000481239 and unsatisfied allocation rate=0.000481203
+50016it [03:07, 91.77it/s]
+Amount of time to run this epoch: 187.095529795 secs
+Training accuracy for this epoch: 0.70328
+Mean loss for this epoch: 0.700892081702
+        NEW BEST
+
+Epoch 8
+50016it [03:06, 100.22it/s]
+Amount of time to run this epoch: 186.820288897 secs
+Training accuracy for this epoch: 0.71426
+Mean loss for this epoch: 0.674644970047
+        NEW BEST
+
+Epoch 9
+100%|#########9| 49984/50000 [03:06<00:00, 104.45it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 791656226 get requests, put_count=791656066 evicted_count=382000 evic
+tion_rate=0.000482533 and unsatisfied allocation rate=0.000483471
+50016it [03:06, 96.35it/s]
+Amount of time to run this epoch: 186.494659901 secs
+Training accuracy for this epoch: 0.72666
+Mean loss for this epoch: 0.65168424701
+        NEW BEST
+
+Amount of time to run this epoch: 186.494659901 secs                                                                                                                                             [1947/1971]
+Training accuracy for this epoch: 0.72666
+Mean loss for this epoch: 0.65168424701
+        NEW BEST
+
+EVALUATING
+Accuracy: 0.681
+Average Loss: 0.738624051213
+Token-level confusion matrix:
+go\gu           entailment      neutral         contradiction
+entailment      262.00          41.00           28.00
+neutral         77.00           201.00          55.00
+contradiction   61.00           57.00           218.00
+
+Token-level scores:
+label           acc             prec            rec             f1
+entailment      0.79            0.66            0.79            0.72
+neutral         0.77            0.67            0.60            0.64
+contradiction   0.80            0.72            0.65            0.68
+micro           0.79            0.68            0.68            0.68
+macro           0.79            0.68            0.68            0.68
+not-O           0.78            0.66            0.70            0.68
+
+############################
+TRIAL RESULTS:          lr: 1.46024418569e-05   dropout: 0.522092500674
+        ACCURACY:       train: 0.72666  test: 0.681
+########################################################
+########################################################
+
+RUNNING TRIAL:  11      lr: 0.000256622354093   dropout: 0.50896483195
+
+INFO:{'restore': False, 'embedding_size': 300, 'output_size': 3, 'validation_dir': 'validation_params', 'hyperparameter_grid_search_file': 'data/hyperparams/grid.p', 'weight_attention': True, 'epochs': 10
+, 'stmt_processor': 'bilstm', 'dropout_keep': 0.5, 'data_dir': 'data/snli', 'num_dev': 1000, 'pool_merge': True, 'lr': 0.0004, 'log_dir': 'log', 'test': False, 'lstm_hidden_size': 300, 'ff_hidden_size': 3
+00, 'optimizer': 'adam', 'vocab_path': 'data/snli/vocab.dat', 'unrolled_lstm': False, 'attention': True, 'batch_size': 32, 'stmt_hidden_size': 100, 'print_every': 1, 'max_grad_norm': -1, 'max_gradient_nor
+m': 10.0, 'num_classes': 3, 'num_train': 50000, 'validation': True, 'tboard_path': None, 'n_bilstm_layers': 1, 'train_dir': 'train_params', 'bucket': True, 'dev': True, 'keep': 0, 'infer_embeddings': Fals
+e, 'reg_lambda': -1, 'ff_num_layers': 2, 'embed_path': '', 'num_test': 1000, 'train_embed': True}
+INFO:Learning rate: 0.000256622354093
+INFO:Dropout keep: 0.50896483195
+INFO:Reg lambda: -1
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: a463:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 16042203
+INFO:Number of params: 16042203 (retreival took 1.687206 secs)
+
+Epoch 1
+Amount of time to run this epoch: 186.632193804 secs
+Training accuracy for this epoch: 0.6245
+Mean loss for this epoch: 0.829089755689
+        NEW BEST
+
+Epoch 2
+50016it [03:06, 101.58it/s]
+Amount of time to run this epoch: 186.259244204 secs
+Training accuracy for this epoch: 0.75244
+Mean loss for this epoch: 0.607771013363
+        NEW BEST
+
+Epoch 3
+50016it [03:05, 99.59it/s]
+Amount of time to run this epoch: 185.460175037 secs
+Training accuracy for this epoch: 0.8155
+Mean loss for this epoch: 0.47353931658
+        NEW BEST
+
+Epoch 4
+ 72%|#######2  | 36064/50000 [01:54<01:02, 224.34it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 817659897 get requests, put_count=817660508 evicted_count=392000 evic
+tion_rate=0.000479417 and unsatisfied allocation rate=0.000479383
+50016it [03:06, 99.39it/s]
+Amount of time to run this epoch: 186.527796984 secs
+Training accuracy for this epoch: 0.86338
+Mean loss for this epoch: 0.367599897077
+        NEW BEST
+
+Epoch 5
+50016it [03:07, 99.22it/s]
+Amount of time to run this epoch: 187.055145025 secs
+Training accuracy for this epoch: 0.90058
+Mean loss for this epoch: 0.278998689302
+        NEW BEST
+
+Epoch 6
+100%|#########9| 49984/50000 [03:05<00:00, 108.71it/s]Amount of time to run this epoch: 186.389842033 secs
+Training accuracy for this epoch: 0.92382
+Mean loss for this epoch: 0.216264633712
+        NEW BEST
+I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 834886488 get requests, put_count=834886966 evicted_count=402000 eviction_rate=0.000481502 and unsatisfied allocation rate=
+0.000481628
+50016it [03:06, 97.52it/s]
+
+Epoch 7
+50016it [03:06, 102.72it/s]                                                                                                                                                                      [1856/1971]
+Amount of time to run this epoch: 186.072145939 secs
+Training accuracy for this epoch: 0.94238
+Mean loss for this epoch: 0.168649212981
+        NEW BEST
+
+Epoch 8
+100%|#########9| 49984/50000 [03:07<00:00, 106.00it/s]Amount of time to run this epoch: 187.715790987 secs
+Training accuracy for this epoch: 0.95538
+Mean loss for this epoch: 0.134522874937
+        NEW BEST
+50016it [03:07, 95.19it/s]
+
+Epoch 9
+100%|#########9| 49984/50000 [03:05<00:00, 108.46it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 856484317 get requests, put_count=856484033 evicted_count=412000 evic
+tion_rate=0.000481036 and unsatisfied allocation rate=0.000482049
+50016it [03:06, 98.08it/s]
+Amount of time to run this epoch: 186.082155943 secs
+Training accuracy for this epoch: 0.96278
+Mean loss for this epoch: 0.112990329667
+        NEW BEST
+
+Epoch 10
+50016it [03:06, 100.47it/s]
+Amount of time to run this epoch: 186.194571972 secs
+Training accuracy for this epoch: 0.96956
+Mean loss for this epoch: 0.0922223076136
+        NEW BEST
+
+EVALUATING
+Accuracy: 0.761
+Average Loss: 1.13796563633
+Token-level confusion matrix:
+go\gu           entailment      neutral         contradiction
+entailment      270.00          43.00           18.00
+neutral         53.00           232.00          48.00
+contradiction   27.00           50.00           259.00
+
+Token-level scores:
+label           acc             prec            rec             f1
+entailment      0.86            0.77            0.82            0.79
+neutral         0.81            0.71            0.70            0.71
+contradiction   0.86            0.80            0.77            0.78
+micro           0.84            0.76            0.76            0.76
+macro           0.84            0.76            0.76            0.76
+not-O           0.83            0.74            0.76            0.75
+############################
+TRIAL RESULTS:          lr: 0.000256622354093   dropout: 0.50896483195
+        ACCURACY:       train: 0.96956  test: 0.761
+                New best TEST
+########################################################
+########################################################
+
+RUNNING TRIAL:  12      lr: 0.000466360529413   dropout: 0.706463052025
+
+INFO:{'restore': False, 'embedding_size': 300, 'output_size': 3, 'validation_dir': 'validation_params', 'hyperparameter_grid_search_file': 'data/hyperparams/grid.p', 'weight_attention': True, 'epochs': 10
+, 'stmt_processor': 'bilstm', 'dropout_keep': 0.5, 'data_dir': 'data/snli', 'num_dev': 1000, 'pool_merge': True, 'lr': 0.0004, 'log_dir': 'log', 'test': False, 'lstm_hidden_size': 300, 'ff_hidden_size': 3
+00, 'optimizer': 'adam', 'vocab_path': 'data/snli/vocab.dat', 'unrolled_lstm': False, 'attention': True, 'batch_size': 32, 'stmt_hidden_size': 100, 'print_every': 1, 'max_grad_norm': -1, 'max_gradient_nor
+m': 10.0, 'num_classes': 3, 'num_train': 50000, 'validation': True, 'tboard_path': None, 'n_bilstm_layers': 1, 'train_dir': 'train_params', 'bucket': True, 'dev': True, 'keep': 0, 'infer_embeddings': Fals
+e, 'reg_lambda': -1, 'ff_num_layers': 2, 'embed_path': '', 'num_test': 1000, 'train_embed': True}
+INFO:Learning rate: 0.000466360529413
+INFO:Dropout keep: 0.706463052025
+INFO:Reg lambda: -1
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: a463:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 16042203
+INFO:Number of params: 16042203 (retreival took 1.663000 secs)
+
+Epoch 1
+50016it [03:06, 93.34it/s]
+Amount of time to run this epoch: 186.445792913 secs
+Training accuracy for this epoch: 0.64822
+Mean loss for this epoch: 0.79397072246
+        NEW BEST
+
+Epoch 2
+ 93%|#########2| 46272/50000 [02:43<00:20, 183.90it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 877159948 get requests, put_count=877160554 evicted_count=422000 evic
+tion_rate=0.000481098 and unsatisfied allocation rate=0.000481072
+50016it [03:07, 98.96it/s]
+Amount of time to run this epoch: 187.020943165 secs
+Training accuracy for this epoch: 0.77534
+Mean loss for this epoch: 0.562564426262
+        NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 186.53339386 secs                                                                                                                                              [1769/1971]
+Training accuracy for this epoch: 0.83794
+Mean loss for this epoch: 0.427857404006
+        NEW BEST
+
+Epoch 4
+50016it [03:07, 99.23it/s]
+Amount of time to run this epoch: 187.74297595 secs
+Training accuracy for this epoch: 0.879
+Mean loss for this epoch: 0.331134474547
+        NEW BEST
+
+Epoch 5
+ 86%|########6 | 43200/50000 [02:27<00:32, 206.94it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 898117432 get requests, put_count=898118045 evicted_count=432000 evic
+tion_rate=0.000481006 and unsatisfied allocation rate=0.000480973
+50016it [03:06, 97.93it/s]
+Amount of time to run this epoch: 186.835952044 secs
+Training accuracy for this epoch: 0.91036
+Mean loss for this epoch: 0.256363964933
+        NEW BEST
+
+Epoch 6
+50016it [03:07, 96.67it/s]                            Amount of time to run this epoch: 187.159931183 secs
+
+Training accuracy for this epoch: 0.93094
+Mean loss for this epoch: 0.201685936465
+        NEW BEST
+
+Epoch 7
+100%|#########9| 49984/50000 [03:06<00:00, 104.35it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 914058516 get requests, put_count=914059123 evicted_count=442000 evic
+tion_rate=0.000483557 and unsatisfied allocation rate=0.000483531
+50016it [03:06, 97.47it/s]
+Amount of time to run this epoch: 186.429275036 secs
+Training accuracy for this epoch: 0.9445
+Mean loss for this epoch: 0.163797303236
+        NEW BEST
+
+Epoch 8
+100%|#########9| 49984/50000 [03:06<00:00, 111.18it/s]Amount of time to run this epoch: 186.97473979 secs
+Training accuracy for this epoch: 0.95542
+Mean loss for this epoch: 0.13538938365
+        NEW BEST
+50016it [03:06, 99.90it/s]
+
+Epoch 9
+Amount of time to run this epoch: 186.567359924 secs                                                                                                                                             [1723/1971]
+Training accuracy for this epoch: 0.96338
+Mean loss for this epoch: 0.111460343107
+        NEW BEST
+
+Epoch 10
+100%|#########9| 49984/50000 [03:06<00:00, 113.53it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 935624516 get requests, put_count=935624294 evicted_count=452000 evic
+tion_rate=0.0004831 and unsatisfied allocation rate=0.00048396
+50016it [03:06, 103.32it/s]
+
+Training accuracy for this epoch: 0.96802
+Mean loss for this epoch: 0.0989620608417
+        NEW BEST
+
+EVALUATING
+Accuracy: 0.769
+Average Loss: 1.03106633388
+Token-level confusion matrix:
+go\gu           entailment      neutral         contradiction
+entailment      267.00          45.00           19.00
+neutral         42.00           248.00          43.00
+contradiction   21.00           61.00           254.00
+
+Token-level scores:
+label           acc             prec            rec             f1
+entailment      0.87            0.81            0.81            0.81
+neutral         0.81            0.70            0.74            0.72
+contradiction   0.86            0.80            0.76            0.78
+micro           0.85            0.77            0.77            0.77
+macro           0.85            0.77            0.77            0.77
+not-O           0.84            0.75            0.78            0.76
+
+############################
+TRIAL RESULTS:          lr: 0.000466360529413   dropout: 0.706463052025
+        ACCURACY:       train: 0.96802  test: 0.769
+                New best TEST
+########################################################
+########################################################
+
+RUNNING TRIAL:  13      lr: 0.000247977177766   dropout: 0.708407520877
+
+INFO:{'restore': False, 'embedding_size': 300, 'output_size': 3, 'validation_dir': 'validation_params', 'hyperparameter_grid_search_file': 'data/hyperparams/grid.p', 'weight_attention': True, 'epochs': 10
+, 'stmt_processor': 'bilstm', 'dropout_keep': 0.5, 'data_dir': 'data/snli', 'num_dev': 1000, 'pool_merge': True, 'lr': 0.0004, 'log_dir': 'log', 'test': False, 'lstm_hidden_size': 300, 'ff_hidden_size': 3
+00, 'optimizer': 'adam', 'vocab_path': 'data/snli/vocab.dat', 'unrolled_lstm': False, 'attention': True, 'batch_size': 32, 'stmt_hidden_size': 100, 'print_every': 1, 'max_grad_norm': -1, 'max_gradient_nor
+m': 10.0, 'num_classes': 3, 'num_train': 50000, 'validation': True, 'tboard_path': None, 'n_bilstm_layers': 1, 'train_dir': 'train_params', 'bucket': True, 'dev': True, 'keep': 0, 'infer_embeddings': Fals
+e, 'reg_lambda': -1, 'ff_num_layers': 2, 'embed_path': '', 'num_test': 1000, 'train_embed': True}
+INFO:Learning rate: 0.000247977177766
+INFO:Dropout keep: 0.708407520877
+INFO:Reg lambda: -1
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: a463:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 16042203
+INFO:Number of params: 16042203 (retreival took 1.683366 secs)
+
+Epoch 1
+50016it [03:07, 94.76it/s]
+Amount of time to run this epoch: 187.215653896 secs
+Training accuracy for this epoch: 0.62848
+Mean loss for this epoch: 0.82408095737
+        NEW BEST
+
+Epoch 2
+50016it [03:07, 100.05it/s]
+Amount of time to run this epoch: 187.574066877 secs
+Training accuracy for this epoch: 0.75382
+Mean loss for this epoch: 0.601690097623
+        NEW BEST
+
+Epoch 3
+ 98%|#########8| 49088/50000 [02:59<00:06, 144.91it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 956954112 get requests, put_count=956954723 evicted_count=462000 evic
+tion_rate=0.000482781 and unsatisfied allocation rate=0.000482753
+50016it [03:06, 100.03it/s]
+Amount of time to run this epoch: 186.218560934 secs
+Training accuracy for this epoch: 0.81422
+Mean loss for this epoch: 0.471708258622
+        NEW BEST
+
+Epoch 4
+50016it [03:06, 99.03it/s]
+Amount of time to run this epoch: 186.238007069 secs
+Training accuracy for this epoch: 0.8611
+Mean loss for this epoch: 0.367849633813
+        NEW BEST
+
+Epoch 5
+50016it [03:06, 93.13it/s]
+Amount of time to run this epoch: 186.105411053 secs
+Training accuracy for this epoch: 0.89814                                                                                                                                                        [1636/1971]
+Mean loss for this epoch: 0.281535226354
+        NEW BEST
+
+Epoch 6
+ 75%|#######4  | 37472/50000 [02:00<00:53, 235.55it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 976222340 get requests, put_count=976222947 evicted_count=472000 evic
+tion_rate=0.000483496 and unsatisfied allocation rate=0.000483472
+50016it [03:06, 91.65it/s]
+Amount of time to run this epoch: 186.775017023 secs
+Training accuracy for this epoch: 0.9255
+Mean loss for this epoch: 0.212140888166
+        NEW BEST
+
+Epoch 7
+50016it [03:07, 94.78it/s]
+Amount of time to run this epoch: 187.023930073 secs
+Training accuracy for this epoch: 0.9417
+Mean loss for this epoch: 0.166240715661
+        NEW BEST
+
+Epoch 8
+50016it [03:05, 98.30it/s]
+Amount of time to run this epoch: 185.908201933 secs
+Training accuracy for this epoch: 0.9544
+Mean loss for this epoch: 0.134130143304
+        NEW BEST
+
+Epoch 9
+ 78%|#######8  | 39072/50000 [02:07<00:49, 220.39it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 998080092 get requests, put_count=998080699 evicted_count=482000 evic
+tion_rate=0.000482927 and unsatisfied allocation rate=0.000482903
+50016it [03:06, 92.04it/s]
+Amount of time to run this epoch: 186.511942148 secs
+Training accuracy for this epoch: 0.96268
+Mean loss for this epoch: 0.110926193562
+        NEW BEST
+
+Epoch 10
+50016it [03:05, 93.84it/s]
+Amount of time to run this epoch: 185.991600037 secs
+Training accuracy for this epoch: 0.96798
+Mean loss for this epoch: 0.0921862257763
+        NEW BEST
+
+EVALUATING
+Accuracy: 0.764
+Average Loss: 1.15201049298
+Token-level confusion matrix:
+go\gu           entailment      neutral         contradiction
+entailment      271.00          43.00           17.00
+neutral         47.00           250.00          36.00
+contradiction   26.00           67.00           243.00
+
+Token-level scores:
+label           acc             prec            rec             f1
+entailment      0.87            0.79            0.82            0.80
+neutral         0.81            0.69            0.75            0.72
+contradiction   0.85            0.82            0.72            0.77
+micro           0.84            0.76            0.76            0.76
+macro           0.84            0.77            0.76            0.76
+not-O           0.84            0.74            0.78            0.76
+
+############################
+TRIAL RESULTS:          lr: 0.000247977177766   dropout: 0.708407520877
+        ACCURACY:       train: 0.96798  test: 0.764
+########################################################
+########################################################
+
+RUNNING TRIAL:  14      lr: 0.000134610981711   dropout: 0.708086100662
+
+INFO:{'restore': False, 'embedding_size': 300, 'output_size': 3, 'validation_dir': 'validation_params', 'hyperparameter_grid_search_file': 'data/hyperparams/grid.p', 'weight_attention': True, 'epochs': 10
+, 'stmt_processor': 'bilstm', 'dropout_keep': 0.5, 'data_dir': 'data/snli', 'num_dev': 1000, 'pool_merge': True, 'lr': 0.0004, 'log_dir': 'log', 'test': False, 'lstm_hidden_size': 300, 'ff_hidden_size': 3
+00, 'optimizer': 'adam', 'vocab_path': 'data/snli/vocab.dat', 'unrolled_lstm': False, 'attention': True, 'batch_size': 32, 'stmt_hidden_size': 100, 'print_every': 1, 'max_grad_norm': -1, 'max_gradient_nor
+m': 10.0, 'num_classes': 3, 'num_train': 50000, 'validation': True, 'tboard_path': None, 'n_bilstm_layers': 1, 'train_dir': 'train_params', 'bucket': True, 'dev': True, 'keep': 0, 'infer_embeddings': Fals
+e, 'reg_lambda': -1, 'ff_num_layers': 2, 'embed_path': '', 'num_test': 1000, 'train_embed': True}
+INFO:Learning rate: 0.000134610981711
+INFO:Dropout keep: 0.708086100662
+INFO:Reg lambda: -1
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: a463:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 16042203
+INFO:Number of params: 16042203 (retreival took 1.673369 secs)
+
+Epoch 1
+50016it [03:06, 100.52it/s]
+Amount of time to run this epoch: 186.177557945 secs
+Training accuracy for this epoch: 0.60586
+Mean loss for this epoch: 0.856307923146
+        NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 185.463867188 secs
+Training accuracy for this epoch: 0.72156
+Mean loss for this epoch: 0.661312759819
+        NEW BEST
+
+Epoch 3
+50016it [03:06, 97.33it/s]
+Amount of time to run this epoch: 186.387760162 secs
+Training accuracy for this epoch: 0.77682
+Mean loss for this epoch: 0.547040162898
+        NEW BEST
+
+Epoch 4
+100%|#########9| 49984/50000 [03:04<00:00, 102.36it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 1036396496 get requests, put_count=1036397043 evicted_count=502000 ev
+iction_rate=0.00048437 and unsatisfied allocation rate=0.000484405
+50016it [03:05, 93.51it/s]
+Amount of time to run this epoch: 185.406337976 secs
+Training accuracy for this epoch: 0.82544
+Mean loss for this epoch: 0.446984627759
+        NEW BEST
+
+Epoch 5
+50016it [03:06, 100.58it/s]
+Amount of time to run this epoch: 186.235384941 secs
+Training accuracy for this epoch: 0.86522
+Mean loss for this epoch: 0.354187288944
+        NEW BEST
+
+Epoch 6
+50016it [03:05, 100.69it/s]
+Amount of time to run this epoch: 185.867028952 secs
+Training accuracy for this epoch: 0.8986
+Mean loss for this epoch: 0.271277323036
+        NEW BEST
+
+Epoch 7
+ 93%|#########3| 46592/50000 [02:44<00:18, 189.31it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 1057103500 get requests, put_count=1057104106 evicted_count=512000 ev
+iction_rate=0.000484342 and unsatisfied allocation rate=0.000484321
+50016it [03:06, 96.63it/s]
+Amount of time to run this epoch: 186.436720848 secs
+Training accuracy for this epoch: 0.9258
+Mean loss for this epoch: 0.208467100219
+        NEW BEST
+
+Epoch 8
+50016it [03:07, 98.97it/s]
+Amount of time to run this epoch: 187.363428116 secs
+Training accuracy for this epoch: 0.94254
+Mean loss for this epoch: 0.15877315814
+        NEW BEST
+
+Epoch 9
+50016it [03:06, 88.97it/s]
+Amount of time to run this epoch: 186.961577892 secs
+Training accuracy for this epoch: 0.95688
+Mean loss for this epoch: 0.124011223238
+        NEW BEST
+
+Epoch 10
+ 90%|########9 | 44896/50000 [02:34<00:26, 190.05it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 1078332488 get requests, put_count=1078333091 evicted_count=522000 ev
+iction_rate=0.00048408 and unsatisfied allocation rate=0.000484062
+50016it [03:05, 100.37it/s]
+Amount of time to run this epoch: 185.474460125 secs
+Training accuracy for this epoch: 0.96434
+Mean loss for this epoch: 0.103173009387
+        NEW BEST
+
+Epoch 11
+50016it [03:06, 91.30it/s]
+Amount of time to run this epoch: 186.375746965 secs
+Training accuracy for this epoch: 0.97002
+Mean loss for this epoch: 0.0860172911151
+        NEW BEST
+
+EVALUATING
+Accuracy: 0.731
+Average Loss: 1.34733156487
+Token-level confusion matrix:
+go\gu           entailment      neutral         contradiction
+entailment      268.00          49.00           14.00
+neutral         57.00           241.00          35.00
+contradiction   37.00           77.00           222.00
+
+Token-level scores:
+label           acc             prec            rec             f1
+entailment      0.84            0.74            0.81            0.77
+neutral         0.78            0.66            0.72            0.69                                                                                                                             [1457/1971]
+contradiction   0.84            0.82            0.66            0.73
+micro           0.82            0.73            0.73            0.73
+macro           0.82            0.74            0.73            0.73
+not-O           0.81            0.70            0.77            0.73
+
+############################
+TRIAL RESULTS:          lr: 0.000134610981711   dropout: 0.708086100662
+        ACCURACY:       train: 0.97002  test: 0.731
+                New best TRAIN
+########################################################
+########################################################
+
+RUNNING TRIAL:  15      lr: 0.000958364912631   dropout: 0.72307487992
+
+INFO:{'restore': False, 'embedding_size': 300, 'output_size': 3, 'validation_dir': 'validation_params', 'hyperparameter_grid_search_file': 'data/hyperparams/grid.p', 'weight_attention': True, 'epochs': 10
+, 'stmt_processor': 'bilstm', 'dropout_keep': 0.5, 'data_dir': 'data/snli', 'num_dev': 1000, 'pool_merge': True, 'lr': 0.0004, 'log_dir': 'log', 'test': False, 'lstm_hidden_size': 300, 'ff_hidden_size': 3
+00, 'optimizer': 'adam', 'vocab_path': 'data/snli/vocab.dat', 'unrolled_lstm': False, 'attention': True, 'batch_size': 32, 'stmt_hidden_size': 100, 'print_every': 1, 'max_grad_norm': -1, 'max_gradient_nor
+m': 10.0, 'num_classes': 3, 'num_train': 50000, 'validation': True, 'tboard_path': None, 'n_bilstm_layers': 1, 'train_dir': 'train_params', 'bucket': True, 'dev': True, 'keep': 0, 'infer_embeddings': Fals
+e, 'reg_lambda': -1, 'ff_num_layers': 2, 'embed_path': '', 'num_test': 1000, 'train_embed': True}
+INFO:Learning rate: 0.000958364912631
+INFO:Dropout keep: 0.72307487992
+INFO:Reg lambda: -1
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: a463:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 16042203
+INFO:Number of params: 16042203 (retreival took 1.645476 secs)
+
+Epoch 1
+50016it [03:05, 102.46it/s]
+Amount of time to run this epoch: 185.832079887 secs
+Training accuracy for this epoch: 0.63886
+Mean loss for this epoch: 0.814070052755
+        NEW BEST
+
+Epoch 2
+ 87%|########6 | 43296/50000 [02:27<00:32, 203.96it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 1099628287 get requests, put_count=1099628898 evicted_count=532000 ev
+iction_rate=0.0004838 and unsatisfied allocation rate=0.000483774
+50016it [03:06, 95.90it/s]                            Amount of time to run this epoch: 186.445256948 secs
+
+Training accuracy for this epoch: 0.76968
+Mean loss for this epoch: 0.578435479861
+        NEW BEST
+
+Epoch 3
+Training accuracy for this epoch: 0.82544
+Mean loss for this epoch: 0.458452501676
+        NEW BEST
+
+Epoch 4
+50016it [03:06, 95.96it/s]
+Amount of time to run this epoch: 186.049932957 secs
+Training accuracy for this epoch: 0.86208
+Mean loss for this epoch: 0.375058469921
+        NEW BEST
+
+Epoch 5
+ 54%|#####4    | 27072/50000 [01:19<01:21, 281.78it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 1118589209 get requests, put_count=1118589815 evicted_count=542000 ev
+iction_rate=0.000484539 and unsatisfied allocation rate=0.000484518
+50016it [03:06, 94.98it/s]
+Amount of time to run this epoch: 186.143636942 secs
+Training accuracy for this epoch: 0.88876
+Mean loss for this epoch: 0.311396832758
+        NEW BEST
+
+Epoch 6
+50016it [03:06, 101.78it/s]
+Amount of time to run this epoch: 186.865349054 secs
+Training accuracy for this epoch: 0.90764
+Mean loss for this epoch: 0.264626134699
+        NEW BEST
+
+Epoch 7
+100%|#########9| 49984/50000 [03:07<00:00, 110.41it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 1137169689 get requests, put_count=1137169437 evicted_count=552000 ev
+iction_rate=0.000485416 and unsatisfied allocation rate=0.00048615
+50016it [03:07, 101.10it/s]
+Amount of time to run this epoch: 187.413192987 secs
+Training accuracy for this epoch: 0.92192
+Mean loss for this epoch: 0.228192329184
+        NEW BEST
+
+Epoch 8
+50016it [03:06, 99.05it/s]
+Amount of time to run this epoch: 186.727991104 secs
+Training accuracy for this epoch: 0.92976
+Mean loss for this epoch: 0.205464277693
+        NEW BEST
+
+Epoch 9
+Amount of time to run this epoch: 185.764736176 secs                                                                                                                                             [1365/1971]
+Training accuracy for this epoch: 0.9408
+Mean loss for this epoch: 0.177609596071
+        NEW BEST
+
+Epoch 10
+ 93%|#########3| 46528/50000 [02:45<00:19, 180.61it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 1157871042 get requests, put_count=1157871654 evicted_count=562000 ev
+iction_rate=0.000485373 and unsatisfied allocation rate=0.000485349
+50016it [03:07, 98.32it/s]
+Amount of time to run this epoch: 187.411707878 secs
+Training accuracy for this epoch: 0.94522
+Mean loss for this epoch: 0.164884934938
+        NEW BEST
+
+EVALUATING
+Accuracy: 0.747
+Average Loss: 1.04553265497
+Token-level confusion matrix:
+go\gu           entailment      neutral         contradiction
+entailment      266.00          48.00           17.00
+neutral         52.00           234.00          47.00
+contradiction   26.00           63.00           247.00
+
+Token-level scores:
+label           acc             prec            rec             f1
+entailment      0.86            0.77            0.80            0.79
+neutral         0.79            0.68            0.70            0.69
+contradiction   0.85            0.79            0.74            0.76
+micro           0.83            0.75            0.75            0.75
+macro           0.83            0.75            0.75            0.75
+not-O           0.82            0.73            0.75            0.74
+
+############################
+TRIAL RESULTS:          lr: 0.000958364912631   dropout: 0.72307487992
+        ACCURACY:       train: 0.94522  test: 0.747
+########################################################
+########################################################
+
+RUNNING TRIAL:  16      lr: 0.000481899217199   dropout: 0.778312511689
+
+INFO:{'restore': False, 'embedding_size': 300, 'output_size': 3, 'validation_dir': 'validation_params', 'hyperparameter_grid_search_file': 'data/hyperparams/grid.p', 'weight_attention': True, 'epochs': 10
+, 'stmt_processor': 'bilstm', 'dropout_keep': 0.5, 'data_dir': 'data/snli', 'num_dev': 1000, 'pool_merge': True, 'lr': 0.0004, 'log_dir': 'log', 'test': False, 'lstm_hidden_size': 300, 'ff_hidden_size': 3
+00, 'optimizer': 'adam', 'vocab_path': 'data/snli/vocab.dat', 'unrolled_lstm': False, 'attention': True, 'batch_size': 32, 'stmt_hidden_size': 100, 'print_every': 1, 'max_grad_norm': -1, 'max_gradient_nor
+m': 10.0, 'num_classes': 3, 'num_train': 50000, 'validation': True, 'tboard_path': None, 'n_bilstm_layers': 1, 'train_dir': 'train_params', 'bucket': True, 'dev': True, 'keep': 0, 'infer_embeddings': Fals
+e, 'reg_lambda': -1, 'ff_num_layers': 2, 'embed_path': '', 'num_test': 1000, 'train_embed': True}
+INFO:Learning rate: 0.000481899217199
+INFO:Dropout keep: 0.778312511689
+INFO:Reg lambda: -1
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: a463:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 16042203
+INFO:Number of params: 16042203 (retreival took 1.837335 secs)
+
+Epoch 1
+50016it [03:06, 100.73it/s]
+Amount of time to run this epoch: 186.960872889 secs
+Training accuracy for this epoch: 0.64564
+Mean loss for this epoch: 0.797366031549
+        NEW BEST
+
+Epoch 2
+50016it [03:08, 98.07it/s]
+Amount of time to run this epoch: 188.63864398 secs
+Training accuracy for this epoch: 0.77718
+Mean loss for this epoch: 0.559727043485
+        NEW BEST
+
+Epoch 3
+100%|#########9| 49984/50000 [03:08<00:00, 109.26it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 1180364178 get requests, put_count=1180364018 evicted_count=572000 ev
+iction_rate=0.000484596 and unsatisfied allocation rate=0.000485226
+50016it [03:08, 98.88it/s]
+
+Training accuracy for this epoch: 0.83728
+Mean loss for this epoch: 0.42671671178
+        NEW BEST
+
+Epoch 4
+50016it [03:08, 91.01it/s]
+Amount of time to run this epoch: 188.926473856 secs
+Training accuracy for this epoch: 0.8806
+Mean loss for this epoch: 0.328413554103
+        NEW BEST
+
+Epoch 5
+50016it [03:08, 93.00it/s]
+Amount of time to run this epoch: 188.473520041 secs
+Training accuracy for this epoch: 0.91234
+Mean loss for this epoch: 0.252172900453
+        NEW BEST
+
+Epoch 6
+ 99%|#########8| 49440/50000 [03:02<00:03, 144.27it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 1201760046 get requests, put_count=1201760657 evicted_count=582000 e$
+iction_rate=0.000484289 and unsatisfied allocation rate=0.000484266
+50016it [03:07, 89.06it/s]
+Amount of time to run this epoch: 187.71524477 secs
+Training accuracy for this epoch: 0.93144
+Mean loss for this epoch: 0.201414444534
+        NEW BEST
+
+Epoch 7
+50016it [03:06, 97.06it/s]
+Amount of time to run this epoch: 186.939123154 secs
+Training accuracy for this epoch: 0.94392
+Mean loss for this epoch: 0.165558572524
+        NEW BEST
+
+Epoch 8
+50016it [03:06, 99.07it/s]
+Amount of time to run this epoch: 186.869605064 secs
+Training accuracy for this epoch: 0.9556
+Mean loss for this epoch: 0.133829994755
+        NEW BEST
+
+Epoch 9
+ 91%|######### | 45344/50000 [02:38<00:23, 196.19it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 1222377994 get requests, put_count=1222378601 evicted_count=592000 e$
+iction_rate=0.000484302 and unsatisfied allocation rate=0.000484282
+50016it [03:06, 268.00it/s]
+Amount of time to run this epoch: 186.624063969 secs
+Training accuracy for this epoch: 0.9629
+Mean loss for this epoch: 0.112807914627
+        NEW BEST
+
+Epoch 10
+50016it [03:08, 94.93it/s]
+Amount of time to run this epoch: 188.523880005 secs
+Training accuracy for this epoch: 0.96682
+Mean loss for this epoch: 0.101000798026
+        NEW BEST
+
+EVALUATING
+Accuracy: 0.756
+Average Loss: 1.05045479815
+Token-level confusion matrix:                                                                                                                                                                    [1233/1971]
+go\gu           entailment      neutral         contradiction
+entailment      265.00          49.00           17.00
+neutral         49.00           235.00          49.00
+contradiction   19.00           61.00           256.00
+
+Token-level scores:
+label           acc             prec            rec             f1
+entailment      0.87            0.80            0.80            0.80
+neutral         0.79            0.68            0.71            0.69
+contradiction   0.85            0.80            0.76            0.78
+micro           0.84            0.76            0.76            0.76
+macro           0.84            0.76            0.76            0.76
+not-O           0.83            0.74            0.75            0.75
+
+############################
+TRIAL RESULTS:          lr: 0.000481899217199   dropout: 0.778312511689
+        ACCURACY:       train: 0.96682  test: 0.756
+########################################################
+########################################################
+
+RUNNING TRIAL:  17      lr: 0.000377895111547   dropout: 0.589141648219
+
+INFO:{'restore': False, 'embedding_size': 300, 'output_size': 3, 'validation_dir': 'validation_params', 'hyperparameter_grid_search_file': 'data/hyperparams/grid.p', 'weight_attention': True, 'epochs': 10
+, 'stmt_processor': 'bilstm', 'dropout_keep': 0.5, 'data_dir': 'data/snli', 'num_dev': 1000, 'pool_merge': True, 'lr': 0.0004, 'log_dir': 'log', 'test': False, 'lstm_hidden_size': 300, 'ff_hidden_size': 3
+00, 'optimizer': 'adam', 'vocab_path': 'data/snli/vocab.dat', 'unrolled_lstm': False, 'attention': True, 'batch_size': 32, 'stmt_hidden_size': 100, 'print_every': 1, 'max_grad_norm': -1, 'max_gradient_nor
+m': 10.0, 'num_classes': 3, 'num_train': 50000, 'validation': True, 'tboard_path': None, 'n_bilstm_layers': 1, 'train_dir': 'train_params', 'bucket': True, 'dev': True, 'keep': 0, 'infer_embeddings': Fals
+e, 'reg_lambda': -1, 'ff_num_layers': 2, 'embed_path': '', 'num_test': 1000, 'train_embed': True}
+INFO:Learning rate: 0.000377895111547
+INFO:Dropout keep: 0.589141648219
+INFO:Reg lambda: -1
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: a463:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 16042203
+INFO:Number of params: 16042203 (retreival took 1.810639 secs)
+
+Epoch 1
+50016it [03:08, 91.76it/s]
+Amount of time to run this epoch: 188.992121935 secs
+Training accuracy for this epoch: 0.64204
+Mean loss for this epoch: 0.804588235309
+        NEW BEST
+
+Epoch 2
+50016it [03:08, 98.54it/s]
+Amount of time to run this epoch: 188.550888062 secs
+Training accuracy for this epoch: 0.7712
+Mean loss for this epoch: 0.569410851138
+        NEW BEST
+
+Epoch 3
+50016it [03:07, 98.01it/s]
+Amount of time to run this epoch: 187.711735964 secs
+Training accuracy for this epoch: 0.83178
+Mean loss for this epoch: 0.436200253394
+        NEW BEST
+
+Epoch 4
+50016it [03:08, 93.62it/s]
+Amount of time to run this epoch: 188.379163027 secs
+Training accuracy for this epoch: 0.8762
+Mean loss for this epoch: 0.334922957191
+        NEW BEST
+
+Epoch 5
+ 60%|######    | 30112/50000 [01:32<01:16, 260.86it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 1262964814 get requests, put_count=1262965426 evicted_count=612000 ev
+iction_rate=0.000484574 and unsatisfied allocation rate=0.000484551
+50016it [03:09, 98.95it/s]
+Amount of time to run this epoch: 189.15178299 secs
+Training accuracy for this epoch: 0.9069
+Mean loss for this epoch: 0.260884833197
+        NEW BEST
+
+Epoch 6
+50016it [03:09, 98.01it/s]
+Amount of time to run this epoch: 189.253572941 secs
+Training accuracy for this epoch: 0.93114
+Mean loss for this epoch: 0.200004462208
+        NEW BEST
+
+Epoch 7
+100%|#########9| 49984/50000 [03:08<00:00, 106.71it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 1281082950 get requests, put_count=1281082562 evicted_count=622000 ev
+iction_rate=0.000485527 and unsatisfied allocation rate=0.000486285
+50016it [03:09, 98.94it/s]
+Training accuracy for this epoch: 0.94526
+Mean loss for this epoch: 0.161260945211
+        NEW BEST
+
+Epoch 8
+50016it [03:08, 96.92it/s]                            Amount of time to run this epoch: 188.205832005 secs
+
+Training accuracy for this epoch: 0.9568
+Mean loss for this epoch: 0.130022906392
+        NEW BEST
+
+Epoch 9
+50016it [03:09, 94.32it/s]
+Amount of time to run this epoch: 189.141097069 secs
+Training accuracy for this epoch: 0.9626
+Mean loss for this epoch: 0.110999323008
+        NEW BEST
+
+Epoch 10
+ 90%|######### | 45152/50000 [02:38<00:26, 185.95it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 1301490554 get requests, put_count=1301491153 evicted_count=632000 ev
+iction_rate=0.000485597 and unsatisfied allocation rate=0.000485585
+50016it [03:08, 94.16it/s]
+Amount of time to run this epoch: 188.918713093 secs
+Training accuracy for this epoch: 0.96762
+Mean loss for this epoch: 0.0955378972639
+        NEW BEST
+
+EVALUATING
+Accuracy: 0.77
+Average Loss: 1.17446951661
+Token-level confusion matrix:
+go\gu           entailment      neutral         contradiction
+entailment      272.00          43.00           16.00
+neutral         49.00           238.00          46.00
+contradiction   20.00           56.00           260.00
+
+Token-level scores:
+label           acc             prec            rec             f1
+entailment      0.87            0.80            0.82            0.81
+neutral         0.81            0.71            0.71            0.71
+contradiction   0.86            0.81            0.77            0.79
+micro           0.85            0.77            0.77            0.77
+macro           0.85            0.77            0.77            0.77
+not-O           0.84            0.75            0.77            0.76
+
+############################
+TRIAL RESULTS:          lr: 0.000377895111547   dropout: 0.589141648219
+        ACCURACY:       train: 0.96762  test: 0.77
+                New best TEST
+########################################################
+########################################################
+
+RUNNING TRIAL:  18      lr: 0.000360365515808   dropout: 0.513323310868
+
+INFO:{'restore': False, 'embedding_size': 300, 'output_size': 3, 'validation_dir': 'validation_params', 'hyperparameter_grid_search_file': 'data/hyperparams/grid.p', 'weight_attention': True, 'epochs': 10
+, 'stmt_processor': 'bilstm', 'dropout_keep': 0.5, 'data_dir': 'data/snli', 'num_dev': 1000, 'pool_merge': True, 'lr': 0.0004, 'log_dir': 'log', 'test': False, 'lstm_hidden_size': 300, 'ff_hidden_size': 3
+00, 'optimizer': 'adam', 'vocab_path': 'data/snli/vocab.dat', 'unrolled_lstm': False, 'attention': True, 'batch_size': 32, 'stmt_hidden_size': 100, 'print_every': 1, 'max_grad_norm': -1, 'max_gradient_nor
+m': 10.0, 'num_classes': 3, 'num_train': 50000, 'validation': True, 'tboard_path': None, 'n_bilstm_layers': 1, 'train_dir': 'train_params', 'bucket': True, 'dev': True, 'keep': 0, 'infer_embeddings': Fals
+e, 'reg_lambda': -1, 'ff_num_layers': 2, 'embed_path': '', 'num_test': 1000, 'train_embed': True}
+INFO:Learning rate: 0.000360365515808
+INFO:Dropout keep: 0.513323310868
+INFO:Reg lambda: -1
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: a463:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 16042203
+INFO:Number of params: 16042203 (retreival took 1.671759 secs)
+
+Epoch 1
+50016it [03:07, 89.99it/s]
+Amount of time to run this epoch: 187.54028511 secs
+Training accuracy for this epoch: 0.63012
+Mean loss for this epoch: 0.820585298084
+        NEW BEST
+
+Epoch 2
+50016it [03:08, 98.77it/s]
+Amount of time to run this epoch: 188.051221132 secs
+Training accuracy for this epoch: 0.7648
+Mean loss for this epoch: 0.583946254359
+        NEW BEST
+
+Epoch 3
+100%|#########9| 49984/50000 [03:07<00:00, 102.81it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 1324273220 get requests, put_count=1324273108 evicted_count=642000 ev
+iction_rate=0.000484794 and unsatisfied allocation rate=0.000485319
+50016it [03:07, 88.29it/s]
+Amount of time to run this epoch: 187.697432041 secs
+Training accuracy for this epoch: 0.82782
+Mean loss for this epoch: 0.44984488624
+        NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 186.770953178 secs
+Training accuracy for this epoch: 0.87224
+Mean loss for this epoch: 0.346689114336
+        NEW BEST
+
+Epoch 5
+50016it [03:07, 90.56it/s]
+Amount of time to run this epoch: 187.808874846 secs
+Training accuracy for this epoch: 0.90664
+Mean loss for this epoch: 0.263976728202
+        NEW BEST
+
+Epoch 6
+ 96%|#########6| 48128/50000 [02:53<00:10, 170.52it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 1345321390 get requests, put_count=1345321992 evicted_count=652000 ev
+iction_rate=0.000484642 and unsatisfied allocation rate=0.000484628
+100%|#########9| 49984/50000 [03:05<00:00, 105.06it/s]Amount of time to run this epoch: 186.385159969 secs
+Training accuracy for this epoch: 0.928
+Mean loss for this epoch: 0.208676655417
+        NEW BEST
+50016it [03:06, 93.74it/s]
+
+Epoch 7
+50016it [03:07, 92.79it/s]
+Amount of time to run this epoch: 187.536249876 secs
+Training accuracy for this epoch: 0.94368
+Mean loss for this epoch: 0.169397991123
+        NEW BEST
+
+Epoch 8
+50016it [03:08, 100.61it/s]
+Amount of time to run this epoch: 188.902075052 secs
+Training accuracy for this epoch: 0.95476
+Mean loss for this epoch: 0.135719915647
+        NEW BEST
+
+Epoch 9
+ 67%|######7   | 33504/50000 [01:45<01:10, 234.23it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 1364182926 get requests, put_count=1364183534 evicted_count=662000 ev
+iction_rate=0.000485272 and unsatisfied allocation rate=0.000485254
+50016it [03:08, 98.33it/s]
+Amount of time to run this epoch: 188.53263998 secs
+Training accuracy for this epoch: 0.96334
+Mean loss for this epoch: 0.112524298964
+        NEW BEST
+
+Epoch 10
+50016it [03:07, 98.21it/s]
+Amount of time to run this epoch: 187.682565928 secs
+Training accuracy for this epoch: 0.96636
+Mean loss for this epoch: 0.100754259638
+        NEW BEST
+
+EVALUATING
+Accuracy: 0.773
+Average Loss: 1.08409131877
+Token-level confusion matrix:
+go\gu           entailment      neutral         contradiction
+entailment      271.00          48.00           12.00
+neutral         47.00           251.00          35.00
+contradiction   25.00           60.00           251.00
+
+Token-level scores:
+label           acc             prec            rec             f1
+entailment      0.87            0.79            0.82            0.80
+neutral         0.81            0.70            0.75            0.73
+contradiction   0.87            0.84            0.75            0.79
+micro           0.85            0.77            0.77            0.77
+macro           0.85            0.78            0.77            0.77
+not-O           0.84            0.74            0.79            0.76
+
+############################
+TRIAL RESULTS:          lr: 0.000360365515808   dropout: 0.513323310868
+        ACCURACY:       train: 0.96636  test: 0.773
+                New best TEST
+########################################################
+########################################################
+
+RUNNING TRIAL:  19      lr: 0.000292753908187   dropout: 0.744750470038
+
+INFO:{'restore': False, 'embedding_size': 300, 'output_size': 3, 'validation_dir': 'validation_params', 'hyperparameter_grid_search_file': 'data/hyperparams/grid.p', 'weight_attention': True, 'epochs': 10
+, 'stmt_processor': 'bilstm', 'dropout_keep': 0.5, 'data_dir': 'data/snli', 'num_dev': 1000, 'pool_merge': True, 'lr': 0.0004, 'log_dir': 'log', 'test': False, 'lstm_hidden_size': 300, 'ff_hidden_size': 3
+00, 'optimizer': 'adam', 'vocab_path': 'data/snli/vocab.dat', 'unrolled_lstm': False, 'attention': True, 'batch_size': 32, 'stmt_hidden_size': 100, 'print_every': 1, 'max_grad_norm': -1, 'max_gradient_nor
+m': 10.0, 'num_classes': 3, 'num_train': 50000, 'validation': True, 'tboard_path': None, 'n_bilstm_layers': 1, 'train_dir': 'train_params', 'bucket': True, 'dev': True, 'keep': 0, 'infer_embeddings': Fals
+e, 'reg_lambda': -1, 'ff_num_layers': 2, 'embed_path': '', 'num_test': 1000, 'train_embed': True}
+INFO:Learning rate: 0.000292753908187
+INFO:Dropout keep: 0.744750470038
+INFO:Reg lambda: -1
+INFO:Created model with fresh parameters.                                                                                                                                                         [967/1971]
+INFO:Num params: 16042203
+INFO:Number of params: 16042203 (retreival took 1.716395 secs)
+
+Epoch 1
+50016it [03:06, 91.70it/s]
+Amount of time to run this epoch: 186.745995998 secs
+Training accuracy for this epoch: 0.63518
+Mean loss for this epoch: 0.817041322351
+        NEW BEST
+
+Epoch 2
+ 38%|###8      | 19200/50000 [00:52<01:40, 305.26it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 1383820762 get requests, put_count=1383821370 evicted_count=672000 ev
+iction_rate=0.000485612 and unsatisfied allocation rate=0.000485594
+50016it [03:07, 101.04it/s]
+Amount of time to run this epoch: 187.6598351 secs
+Training accuracy for this epoch: 0.7628
+Mean loss for this epoch: 0.587013175986
+        NEW BEST
+
+Epoch 3
+50016it [03:07, 98.94it/s]
+Amount of time to run this epoch: 187.511518955 secs
+Training accuracy for this epoch: 0.823
+Mean loss for this epoch: 0.455443330562
+        NEW BEST
+
+Epoch 4
+100%|#########9| 49984/50000 [03:07<00:00, 107.92it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 1403415047 get requests, put_count=1403414735 evicted_count=682000 ev
+iction_rate=0.000485958 and unsatisfied allocation rate=0.000486595
+50016it [03:08, 96.81it/s]
+Amount of time to run this epoch: 188.10384202 secs
+Training accuracy for this epoch: 0.87048
+Mean loss for this epoch: 0.349429098478
+        NEW BEST
+
+Epoch 5
+100%|#########9| 49984/50000 [03:06<00:00, 107.72it/s]Amount of time to run this epoch: 186.968514919 secs
+Training accuracy for this epoch: 0.90524
+Mean loss for this epoch: 0.264946668918
+        NEW BEST
+50016it [03:06, 96.22it/s]
+
+Epoch 6
+Amount of time to run this epoch: 186.496140003 secs                                                                                                                                              [922/1971]
+Training accuracy for this epoch: 0.92968
+Mean loss for this epoch: 0.20394956506
+        NEW BEST
+
+Epoch 7
+ 99%|#########8| 49280/50000 [03:01<00:04, 153.18it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 1424764962 get requests, put_count=1424765560 evicted_count=692000 ev
+iction_rate=0.000485694 and unsatisfied allocation rate=0.000485684
+50016it [03:07, 95.59it/s]
+Amount of time to run this epoch: 187.398581982 secs
+Training accuracy for this epoch: 0.9444
+Mean loss for this epoch: 0.16243473787
+        NEW BEST
+
+Epoch 8
+50016it [03:07, 94.91it/s]
+Amount of time to run this epoch: 187.945730925 secs
+Training accuracy for this epoch: 0.95528
+Mean loss for this epoch: 0.131478677948
+        NEW BEST
+
+Epoch 9
+50016it [03:06, 85.72it/s]
+Amount of time to run this epoch: 186.864809036 secs
+Training accuracy for this epoch: 0.96298
+Mean loss for this epoch: 0.109872428408
+        NEW BEST
+
+Epoch 10
+ 99%|#########9| 49728/50000 [03:04<00:02, 131.20it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 1446471106 get requests, put_count=1446471716 evicted_count=702000 ev
+iction_rate=0.000485319 and unsatisfied allocation rate=0.0004853
+50016it [03:07, 100.62it/s]
+Amount of time to run this epoch: 187.260893106 secs
+Training accuracy for this epoch: 0.96954
+Mean loss for this epoch: 0.0904091005593
+        NEW BEST
+
+EVALUATING
+Accuracy: 0.747
+Average Loss: 1.10747098364
+Token-level confusion matrix:
+go\gu           entailment      neutral         contradiction
+entailment      264.00          46.00           21.00
+neutral         45.00           224.00          64.00
+contradiction   26.00           51.00           259.00
+
+Token-level scores:
+label           acc             prec            rec             f1
+entailment      0.86            0.79            0.80            0.79
+neutral         0.79            0.70            0.67            0.69
+contradiction   0.84            0.75            0.77            0.76
+micro           0.83            0.75            0.75            0.75
+macro           0.83            0.75            0.75            0.75
+not-O           0.83            0.74            0.73            0.74
+
+############################
+TRIAL RESULTS:          lr: 0.000292753908187   dropout: 0.744750470038
+        ACCURACY:       train: 0.96954  test: 0.747
+########################################################
+########################################################
+
+RUNNING TRIAL:  20      lr: 0.000603026955665   dropout: 0.807158986724
+
+INFO:{'restore': False, 'embedding_size': 300, 'output_size': 3, 'validation_dir': 'validation_params', 'hyperparameter_grid_search_file': 'data/hyperparams/grid.p', 'weight_attention': True, 'epochs': 10
+, 'stmt_processor': 'bilstm', 'dropout_keep': 0.5, 'data_dir': 'data/snli', 'num_dev': 1000, 'pool_merge': True, 'lr': 0.0004, 'log_dir': 'log', 'test': False, 'lstm_hidden_size': 300, 'ff_hidden_size': 3
+00, 'optimizer': 'adam', 'vocab_path': 'data/snli/vocab.dat', 'unrolled_lstm': False, 'attention': True, 'batch_size': 32, 'stmt_hidden_size': 100, 'print_every': 1, 'max_grad_norm': -1, 'max_gradient_nor
+m': 10.0, 'num_classes': 3, 'num_train': 50000, 'validation': True, 'tboard_path': None, 'n_bilstm_layers': 1, 'train_dir': 'train_params', 'bucket': True, 'dev': True, 'keep': 0, 'infer_embeddings': Fals
+e, 'reg_lambda': -1, 'ff_num_layers': 2, 'embed_path': '', 'num_test': 1000, 'train_embed': True}
+INFO:Learning rate: 0.000603026955665
+INFO:Dropout keep: 0.807158986724
+INFO:Reg lambda: -1
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: a463:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 16042203
+INFO:Number of params: 16042203 (retreival took 1.664114 secs)
+
+Epoch 1
+50016it [03:08, 92.88it/s]
+Amount of time to run this epoch: 188.919921875 secs
+Training accuracy for this epoch: 0.64962
+Mean loss for this epoch: 0.794669061251
+        NEW BEST
+
+Epoch 2
+50016it [03:08, 97.11it/s]
+Amount of time to run this epoch: 188.666778088 secs
+Training accuracy for this epoch: 0.77566
+Mean loss for this epoch: 0.557055696721
+        NEW BEST
+
+Epoch 3
+ 93%|#########2| 46496/50000 [02:45<00:18, 189.06it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 1467294602 get requests, put_count=1467295209 evicted_count=712000 ev
+iction_rate=0.000485247 and unsatisfied allocation rate=0.00048523
+50016it [03:08, 98.18it/s]
+Amount of time to run this epoch: 188.264431 secs
+Training accuracy for this epoch: 0.83808
+Mean loss for this epoch: 0.426616410228
+        NEW BEST
+
+Epoch 4
+50016it [03:09, 90.55it/s]
+Amount of time to run this epoch: 189.225928783 secs
+Training accuracy for this epoch: 0.88026
+Mean loss for this epoch: 0.330979194711
+        NEW BEST
+
+Epoch 5
+50016it [03:08, 93.32it/s]
+Amount of time to run this epoch: 188.103562117 secs
+Training accuracy for this epoch: 0.90852
+Mean loss for this epoch: 0.262765382505
+        NEW BEST
+
+Epoch 6
+ 71%|#######1  | 35552/50000 [01:52<01:00, 239.80it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 1486870039 get requests, put_count=1486870647 evicted_count=722000 ev
+iction_rate=0.000485584 and unsatisfied allocation rate=0.000485567
+50016it [03:07, 95.65it/s]
+Amount of time to run this epoch: 187.570841789 secs
+Training accuracy for this epoch: 0.92746
+Mean loss for this epoch: 0.213995256712
+        NEW BEST
+
+Epoch 7
+50016it [03:08, 104.08it/s]
+Amount of time to run this epoch: 188.499411821 secs
+Training accuracy for this epoch: 0.94118
+Mean loss for this epoch: 0.176213851471
+        NEW BEST
+
+Epoch 8
+Amount of time to run this epoch: 187.577638149 secs                                                                                                                                              [789/1971]
+Training accuracy for this epoch: 0.95178
+Mean loss for this epoch: 0.146643256906
+        NEW BEST
+
+Epoch 9
+50016it [03:08, 96.63it/s]
+Amount of time to run this epoch: 188.650257111 secs
+Training accuracy for this epoch: 0.9577
+Mean loss for this epoch: 0.128980405874
+        NEW BEST
+
+EVALUATING
+Accuracy: 0.757
+Average Loss: 1.07136554644
+Token-level confusion matrix:
+go\gu           entailment      neutral         contradiction
+entailment      273.00          49.00           9.00
+neutral         47.00           253.00          33.00
+contradiction   37.00           68.00           231.00
+
+Token-level scores:
+label           acc             prec            rec             f1
+entailment      0.86            0.76            0.82            0.79
+neutral         0.80            0.68            0.76            0.72
+contradiction   0.85            0.85            0.69            0.76
+micro           0.84            0.76            0.76            0.76
+macro           0.84            0.76            0.76            0.76
+not-O           0.83            0.72            0.79            0.76
+
+############################
+TRIAL RESULTS:          lr: 0.000603026955665   dropout: 0.807158986724
+        ACCURACY:       train: 0.9577   test: 0.757
+########################################################
+########################################################
+
+RUNNING TRIAL:  21      lr: 0.000925831095658   dropout: 0.551510090351
+
+INFO:{'restore': False, 'embedding_size': 300, 'output_size': 3, 'validation_dir': 'validation_params', 'hyperparameter_grid_search_file': 'data/hyperparams/grid.p', 'weight_attention': True, 'epochs': 10
+, 'stmt_processor': 'bilstm', 'dropout_keep': 0.5, 'data_dir': 'data/snli', 'num_dev': 1000, 'pool_merge': True, 'lr': 0.0004, 'log_dir': 'log', 'test': False, 'lstm_hidden_size': 300, 'ff_hidden_size': 3
+00, 'optimizer': 'adam', 'vocab_path': 'data/snli/vocab.dat', 'unrolled_lstm': False, 'attention': True, 'batch_size': 32, 'stmt_hidden_size': 100, 'print_every': 1, 'max_grad_norm': -1, 'max_gradient_nor
+m': 10.0, 'num_classes': 3, 'num_train': 50000, 'validation': True, 'tboard_path': None, 'n_bilstm_layers': 1, 'train_dir': 'train_params', 'bucket': True, 'dev': True, 'keep': 0, 'infer_embeddings': Fals
+e, 'reg_lambda': -1, 'ff_num_layers': 2, 'embed_path': '', 'num_test': 1000, 'train_embed': True}
+INFO:Learning rate: 0.000925831095658
+INFO:Dropout keep: 0.551510090351
+INFO:Reg lambda: -1
+
+INFO:Created model with fresh parameters.                                                                                                                                                         [742/1971]
+INFO:Num params: 16042203
+INFO:Number of params: 16042203 (retreival took 1.729528 secs)
+
+Epoch 1
+50016it [03:07, 94.13it/s]
+Amount of time to run this epoch: 187.417325974 secs
+Training accuracy for this epoch: 0.641
+Mean loss for this epoch: 0.80988208634
+        NEW BEST
+
+Epoch 2
+50016it [03:08, 99.22it/s]
+Amount of time to run this epoch: 188.496565819 secs
+Training accuracy for this epoch: 0.7713
+Mean loss for this epoch: 0.578632070585
+        NEW BEST
+
+Epoch 3
+ 74%|#######3  | 36768/50000 [01:58<00:54, 243.86it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 1530283791 get requests, put_count=1530284401 evicted_count=742000 ev
+iction_rate=0.000484877 and unsatisfied allocation rate=0.00048486
+50016it [03:08, 101.81it/s]
+Amount of time to run this epoch: 188.063663006 secs
+Training accuracy for this epoch: 0.82278
+Mean loss for this epoch: 0.464854073745
+        NEW BEST
+
+Epoch 4
+50016it [03:09, 93.39it/s]
+Amount of time to run this epoch: 189.154756069 secs
+Training accuracy for this epoch: 0.8614
+Mean loss for this epoch: 0.377671339569
+        NEW BEST
+
+Epoch 5
+50016it [03:07, 99.88it/s]
+Amount of time to run this epoch: 187.602194071 secs
+Training accuracy for this epoch: 0.88794
+Mean loss for this epoch: 0.312290230765
+        NEW BEST
+
+Epoch 6
+ 53%|#####3    | 26720/50000 [01:18<01:23, 278.18it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 1550352476 get requests, put_count=1550353082 evicted_count=752000 ev
+iction_rate=0.000485051 and unsatisfied allocation rate=0.000485036
+50016it [03:07, 99.18it/s]
+Amount of time to run this epoch: 187.747739077 secs                                                                                                                                              [697/1971]
+Training accuracy for this epoch: 0.90686
+Mean loss for this epoch: 0.265472818238
+        NEW BEST
+
+Epoch 7
+50016it [03:08, 96.56it/s]
+Amount of time to run this epoch: 188.887089968 secs
+Training accuracy for this epoch: 0.92046
+Mean loss for this epoch: 0.230990180951
+        NEW BEST
+
+Epoch 8
+100%|#########9| 49984/50000 [03:07<00:00, 107.79it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 1568975207 get requests, put_count=1568975199 evicted_count=762000 ev
+iction_rate=0.000485667 and unsatisfied allocation rate=0.000486044
+50016it [03:08, 90.61it/s]
+Amount of time to run this epoch: 188.221461058 secs
+Training accuracy for this epoch: 0.93168
+Mean loss for this epoch: 0.20147068274
+        NEW BEST
+
+Epoch 9
+50016it [03:07, 91.47it/s]
+Amount of time to run this epoch: 187.221715212 secs
+Training accuracy for this epoch: 0.9387
+Mean loss for this epoch: 0.181463140555
+        NEW BEST
+
+EVALUATING
+Accuracy: 0.743
+Average Loss: 1.01289466396
+Token-level confusion matrix:
+go\gu           entailment      neutral         contradiction
+entailment      269.00          46.00           16.00
+neutral         61.00           220.00          52.00
+contradiction   25.00           57.00           254.00
+
+Token-level scores:
+label           acc             prec            rec             f1
+entailment      0.85            0.76            0.81            0.78
+neutral         0.78            0.68            0.66            0.67
+contradiction   0.85            0.79            0.76            0.77
+micro           0.83            0.74            0.74            0.74
+macro           0.83            0.74            0.74            0.74
+not-O           0.82            0.72            0.74            0.73
+
+############################                                                                                                                                                                      [651/1971]
+TRIAL RESULTS:          lr: 0.000925831095658   dropout: 0.551510090351
+        ACCURACY:       train: 0.9387   test: 0.743
+########################################################
+########################################################
+
+RUNNING TRIAL:  22      lr: 0.000837756270667   dropout: 0.833538295147
+
+INFO:{'restore': False, 'embedding_size': 300, 'output_size': 3, 'validation_dir': 'validation_params', 'hyperparameter_grid_search_file': 'data/hyperparams/grid.p', 'weight_attention': True, 'epochs': 10
+, 'stmt_processor': 'bilstm', 'dropout_keep': 0.5, 'data_dir': 'data/snli', 'num_dev': 1000, 'pool_merge': True, 'lr': 0.0004, 'log_dir': 'log', 'test': False, 'lstm_hidden_size': 300, 'ff_hidden_size': 3
+00, 'optimizer': 'adam', 'vocab_path': 'data/snli/vocab.dat', 'unrolled_lstm': False, 'attention': True, 'batch_size': 32, 'stmt_hidden_size': 100, 'print_every': 1, 'max_grad_norm': -1, 'max_gradient_nor
+m': 10.0, 'num_classes': 3, 'num_train': 50000, 'validation': True, 'tboard_path': None, 'n_bilstm_layers': 1, 'train_dir': 'train_params', 'bucket': True, 'dev': True, 'keep': 0, 'infer_embeddings': Fals
+e, 'reg_lambda': -1, 'ff_num_layers': 2, 'embed_path': '', 'num_test': 1000, 'train_embed': True}
+INFO:Learning rate: 0.000837756270667
+INFO:Dropout keep: 0.833538295147
+INFO:Reg lambda: -1
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: a463:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 16042203
+INFO:Number of params: 16042203 (retreival took 1.673466 secs)
+
+Epoch 1
+50016it [03:08, 96.85it/s]
+Amount of time to run this epoch: 188.679661989 secs
+Training accuracy for this epoch: 0.6481
+Mean loss for this epoch: 0.798484735548
+        NEW BEST
+
+Epoch 2
+100%|#########9| 49984/50000 [03:07<00:00, 109.17it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 1590589039 get requests, put_count=1590589236 evicted_count=772000 ev
+iction_rate=0.000485355 and unsatisfied allocation rate=0.000485597
+50016it [03:08, 96.05it/s]
+Amount of time to run this epoch: 188.108006001 secs
+Training accuracy for this epoch: 0.77394
+Mean loss for this epoch: 0.564009458904
+        NEW BEST
+
+Epoch 3
+50016it [03:07, 89.78it/s]
+Amount of time to run this epoch: 187.66494894 secs
+Training accuracy for this epoch: 0.8333
+Mean loss for this epoch: 0.44145636363
+        NEW BEST
+
+Epoch 4
+50016it [03:07, 99.61it/s]
+Amount of time to run this epoch: 187.723455906 secs
+Training accuracy for this epoch: 0.87062
+Mean loss for this epoch: 0.35712200429
+        NEW BEST
+
+Epoch 5
+ 84%|########3 | 41984/50000 [02:21<00:38, 208.01it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 1610367668 get requests, put_count=1610368279 evicted_count=782000 e$
+iction_rate=0.000485603 and unsatisfied allocation rate=0.000485586
+50016it [03:07, 95.43it/s]
+Amount of time to run this epoch: 187.921849012 secs
+Training accuracy for this epoch: 0.89784
+Mean loss for this epoch: 0.291117694703
+        NEW BEST
+
+Epoch 6
+50016it [03:07, 100.80it/s]
+Amount of time to run this epoch: 187.62242794 secs
+Training accuracy for this epoch: 0.91398
+Mean loss for this epoch: 0.24658193239
+        NEW BEST
+
+Epoch 7
+50016it [03:08, 97.15it/s]
+Amount of time to run this epoch: 189.001908064 secs
+Training accuracy for this epoch: 0.9288
+Mean loss for this epoch: 0.207876337242
+        NEW BEST
+
+Epoch 8
+ 59%|#####8    | 29312/50000 [01:28<01:16, 271.77it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 1629883812 get requests, put_count=1629884425 evicted_count=792000 e$
+iction_rate=0.000485924 and unsatisfied allocation rate=0.000485906
+50016it [03:08, 97.69it/s]
+Amount of time to run this epoch: 188.506818056 secs
+Training accuracy for this epoch: 0.93684
+Mean loss for this epoch: 0.187409488019
+        NEW BEST
+
+Epoch 9
+50016it [03:08, 97.97it/s]                            Amount of time to run this epoch: 188.439761877 secs
+Training accuracy for this epoch: 0.94658
+Mean loss for this epoch: 0.161913085885
+        NEW BEST
+
+EVALUATING
+Accuracy: 0.769
+Average Loss: 0.9009840535
+Token-level confusion matrix:
+go\gu           entailment      neutral         contradiction
+entailment      262.00          54.00           15.00
+neutral         39.00           242.00          52.00
+contradiction   17.00           54.00           265.00
+
+Token-level scores:
+label           acc             prec            rec             f1
+entailment      0.88            0.82            0.79            0.81
+neutral         0.80            0.69            0.73            0.71
+contradiction   0.86            0.80            0.79            0.79
+micro           0.85            0.77            0.77            0.77
+macro           0.85            0.77            0.77            0.77
+not-O           0.84            0.75            0.76            0.76
+
+############################
+TRIAL RESULTS:          lr: 0.000837756270667   dropout: 0.833538295147
+        ACCURACY:       train: 0.94658  test: 0.769
+########################################################
+########################################################
+
+RUNNING TRIAL:  23      lr: 0.000609295998544   dropout: 0.965468101138
+
+INFO:{'restore': False, 'embedding_size': 300, 'output_size': 3, 'validation_dir': 'validation_params', 'hyperparameter_grid_search_file': 'data/hyperparams/grid.p', 'weight_attention': True, 'epochs': 10
+, 'stmt_processor': 'bilstm', 'dropout_keep': 0.5, 'data_dir': 'data/snli', 'num_dev': 1000, 'pool_merge': True, 'lr': 0.0004, 'log_dir': 'log', 'test': False, 'lstm_hidden_size': 300, 'ff_hidden_size': 3
+00, 'optimizer': 'adam', 'vocab_path': 'data/snli/vocab.dat', 'unrolled_lstm': False, 'attention': True, 'batch_size': 32, 'stmt_hidden_size': 100, 'print_every': 1, 'max_grad_norm': -1, 'max_gradient_nor
+m': 10.0, 'num_classes': 3, 'num_train': 50000, 'validation': True, 'tboard_path': None, 'n_bilstm_layers': 1, 'train_dir': 'train_params', 'bucket': True, 'dev': True, 'keep': 0, 'infer_embeddings': Fals
+e, 'reg_lambda': -1, 'ff_num_layers': 2, 'embed_path': '', 'num_test': 1000, 'train_embed': True}
+INFO:Learning rate: 0.000609295998544
+INFO:Dropout keep: 0.965468101138
+INFO:Reg lambda: -1
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: a463:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 16042203
+INFO:Number of params: 16042203 (retreival took 1.697462 secs)
+
+Epoch 1
+50016it [03:07, 88.84it/s]
+Amount of time to run this epoch: 187.816560984 secs
+Training accuracy for this epoch: 0.64992
+Mean loss for this epoch: 0.791955487132
+        NEW BEST
+
+Epoch 2
+ 41%|####      | 20256/50000 [00:56<01:38, 301.36it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 1650273256 get requests, put_count=1650273865 evicted_count=802000 ev
+iction_rate=0.00048598 and unsatisfied allocation rate=0.000485964
+50016it [03:08, 103.34it/s]
+Amount of time to run this epoch: 188.194177151 secs
+Training accuracy for this epoch: 0.77912
+Mean loss for this epoch: 0.554469179112
+        NEW BEST
+
+Epoch 3
+50016it [03:08, 96.04it/s]
+Amount of time to run this epoch: 188.510385036 secs
+Training accuracy for this epoch: 0.84016
+Mean loss for this epoch: 0.426186549367
+        NEW BEST
+
+Epoch 4
+100%|#########9| 49984/50000 [03:07<00:00, 103.52it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 1669739884 get requests, put_count=1669739728 evicted_count=812000 ev
+iction_rate=0.000486303 and unsatisfied allocation rate=0.000486746
+50016it [03:08, 91.34it/s]
+
+Training accuracy for this epoch: 0.88244
+Mean loss for this epoch: 0.331361361067
+        NEW BEST
+
+Epoch 5
+50016it [03:08, 99.68it/s]
+Amount of time to run this epoch: 188.135224819 secs
+Training accuracy for this epoch: 0.90652
+Mean loss for this epoch: 0.266956689794
+        NEW BEST
+
+Epoch 6
+50016it [03:08, 98.31it/s]
+Amount of time to run this epoch: 188.488109827 secs
+Training accuracy for this epoch: 0.92508
+Mean loss for this epoch: 0.218434284128
+        NEW BEST
+
+Epoch 7
+100%|#########9| 49792/50000 [03:06<00:01, 126.31it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 1691242300 get requests, put_count=1691242899 evicted_count=822000 ev
+iction_rate=0.000486033 and unsatisfied allocation rate=0.000486024
+50016it [03:08, 99.64it/s]
+Amount of time to run this epoch: 188.119148016 secs
+Training accuracy for this epoch: 0.9384
+Mean loss for this epoch: 0.182415153619
+        NEW BEST
+
+Epoch 8
+50016it [03:08, 100.19it/s]
+Amount of time to run this epoch: 188.210206985 secs
+Training accuracy for this epoch: 0.94906
+Mean loss for this epoch: 0.153378780254
+        NEW BEST
+
+Epoch 9
+50016it [03:08, 102.00it/s]
+Amount of time to run this epoch: 188.394831181 secs
+Training accuracy for this epoch: 0.95652
+Mean loss for this epoch: 0.131478831948
+        NEW BEST
+
+Epoch 10
+100%|#########9| 49984/50000 [03:08<00:00, 107.70it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 1712914601 get requests, put_count=1712914287 evicted_count=832000 ev
+iction_rate=0.000485722 and unsatisfied allocation rate=0.000486245
+50016it [03:08, 96.58it/s]
+Amount of time to run this epoch: 188.560981989 secs
+Training accuracy for this epoch: 0.96018
+Mean loss for this epoch: 0.118564981929
+        NEW BEST
+
+EVALUATING
+Accuracy: 0.779
+Average Loss: 0.980831369758
+Token-level confusion matrix:
+go\gu           entailment      neutral         contradiction
+entailment      269.00          44.00           18.00
+neutral         41.00           245.00          47.00
+contradiction   18.00           53.00           265.00
+
+Token-level scores:                                                                                                                                                                               [435/1971]
+label           acc             prec            rec             f1
+entailment      0.88            0.82            0.81            0.82
+neutral         0.81            0.72            0.74            0.73
+contradiction   0.86            0.80            0.79            0.80
+micro           0.85            0.78            0.78            0.78
+macro           0.85            0.78            0.78            0.78
+not-O           0.85            0.77            0.77            0.77
+
+############################
+TRIAL RESULTS:          lr: 0.000609295998544   dropout: 0.965468101138
+        ACCURACY:       train: 0.96018  test: 0.779
+                New best TEST
+########################################################
+########################################################
+
+RUNNING TRIAL:  24      lr: 0.000815105284894   dropout: 0.967937769695
+
+INFO:{'restore': False, 'embedding_size': 300, 'output_size': 3, 'validation_dir': 'validation_params', 'hyperparameter_grid_search_file': 'data/hyperparams/grid.p', 'weight_attention': True, 'epochs': 10
+, 'stmt_processor': 'bilstm', 'dropout_keep': 0.5, 'data_dir': 'data/snli', 'num_dev': 1000, 'pool_merge': True, 'lr': 0.0004, 'log_dir': 'log', 'test': False, 'lstm_hidden_size': 300, 'ff_hidden_size': 3
+00, 'optimizer': 'adam', 'vocab_path': 'data/snli/vocab.dat', 'unrolled_lstm': False, 'attention': True, 'batch_size': 32, 'stmt_hidden_size': 100, 'print_every': 1, 'max_grad_norm': -1, 'max_gradient_nor
+m': 10.0, 'num_classes': 3, 'num_train': 50000, 'validation': True, 'tboard_path': None, 'n_bilstm_layers': 1, 'train_dir': 'train_params', 'bucket': True, 'dev': True, 'keep': 0, 'infer_embeddings': Fals
+e, 'reg_lambda': -1, 'ff_num_layers': 2, 'embed_path': '', 'num_test': 1000, 'train_embed': True}
+INFO:Learning rate: 0.000815105284894
+INFO:Dropout keep: 0.967937769695
+INFO:Reg lambda: -1
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla M60, pci bus id: a463:00:00.0)
+INFO:Created model with fresh parameters.
+INFO:Num params: 16042203
+INFO:Number of params: 16042203 (retreival took 1.902866 secs)
+
+Epoch 1
+50016it [03:08, 89.59it/s]
+Amount of time to run this epoch: 188.655614853 secs
+Training accuracy for this epoch: 0.64972
+Mean loss for this epoch: 0.792969244227
+        NEW BEST
+
+Epoch 2
+50016it [03:09, 96.24it/s]
+Amount of time to run this epoch: 189.748728037 secs
+Training accuracy for this epoch: 0.77982
+Mean loss for this epoch: 0.55698131042
+        NEW BEST
+
+Epoch 3
+100%|#########9| 49984/50000 [03:08<00:00, 107.26it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 1734533030 get requests, put_count=1734533106 evicted_count=842000 ev
+iction_rate=0.000485433 and unsatisfied allocation rate=0.000485726
+50016it [03:09, 96.45it/s]
+
+Training accuracy for this epoch: 0.8362
+Mean loss for this epoch: 0.436244948183
+        NEW BEST
+
+Epoch 4
+50016it [03:09, 95.60it/s]
+Amount of time to run this epoch: 189.463935852 secs
+Training accuracy for this epoch: 0.87468
+Mean loss for this epoch: 0.347665618719
+        NEW BEST
+
+Epoch 5
+50016it [03:08, 98.08it/s]
+Amount of time to run this epoch: 188.319883108 secs
+Training accuracy for this epoch: 0.9001
+Mean loss for this epoch: 0.285821287323
+        NEW BEST
+
+Epoch 6
+ 93%|#########2| 46400/50000 [02:45<00:21, 165.89it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 1755200856 get requests, put_count=1755201463 evicted_count=852000 e$
+iction_rate=0.000485414 and unsatisfied allocation rate=0.000485401
+50016it [03:09, 92.52it/s]
+Amount of time to run this epoch: 189.397063971 secs
+Training accuracy for this epoch: 0.9174
+Mean loss for this epoch: 0.237343405625
+        NEW BEST
+
+Epoch 7
+50016it [03:08, 97.20it/s]                            Amount of time to run this epoch: 188.518177986 secs
+
+Training accuracy for this epoch: 0.93166
+Mean loss for this epoch: 0.199435702754
+        NEW BEST
+
+Epoch 8
+50016it [03:09, 100.20it/s]
+Amount of time to run this epoch: 189.388748169 secs
+Training accuracy for this epoch: 0.94028
+Mean loss for this epoch: 0.175459990201
+        NEW BEST
+
+Epoch 9
+ 79%|#######8  | 39296/50000 [02:10<00:48, 220.96it/s]I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 1775407492 get requests, put_count=1775408100 evicted_count=862000 ev
+iction_rate=0.000485522 and unsatisfied allocation rate=0.000485508
+50016it [03:08, 96.70it/s]
+Amount of time to run this epoch: 188.674574852 secs
+Training accuracy for this epoch: 0.9497
+Mean loss for this epoch: 0.151287062517
+        NEW BEST
+
+EVALUATING
+Accuracy: 0.753
+Average Loss: 1.00767538976
+Token-level confusion matrix:
+go\gu           entailment      neutral         contradiction
+entailment      273.00          45.00           13.00
+neutral         51.00           237.00          45.00
+contradiction   24.00           69.00           243.00
+
+Token-level scores:
+label           acc             prec            rec             f1
+entailment      0.87            0.78            0.82            0.80
+neutral         0.79            0.68            0.71            0.69
+contradiction   0.85            0.81            0.72            0.76
+micro           0.84            0.75            0.75            0.75
+macro           0.84            0.76            0.75            0.75
+not-O           0.83            0.73            0.77            0.75
+
+############################
+TRIAL RESULTS:          lr: 0.000815105284894   dropout: 0.967937769695
+        ACCURACY:       train: 0.9497   test: 0.753
+########################################################

@@ -40,7 +40,8 @@ class NLISystem(object):
                dropout_keep,
                bucket,
                stmt_processor,
-               attention,
+               attentive_matching,
+               max_attentive_matching,
                infer_embeddings,
                weight_attention,
                n_bilstm_layers,
@@ -106,12 +107,12 @@ class NLISystem(object):
     ####################
     # Attention
     ####################
-    if attention:
-      with tf.name_scope("Attention"):
+    if attentive_matching or max_attentive_matching:
+      with tf.name_scope("Matching"):
         # Context generation
         with tf.variable_scope("Context") as scope:
           if nli.analytic_mode:
-            self.e, ret = nli.context_tensors(p_states, h_states, weight_attention)
+            self.e, ret = nli.context_tensors(p_states, h_states, attentive_matching, max_attentive_matching, weight_attention)
           else: ret = nli.context_tensors(p_states, h_states, weight_attention)
           p_context, h_context = ret
 
@@ -137,7 +138,7 @@ class NLISystem(object):
     ####################
     # Merge
     ####################
-    if pool_merge and attention: merged = nli.pool_merge(p_composed, h_composed)
+    if pool_merge and attentive_matching: merged = nli.pool_merge(p_composed, h_composed)
     else: merged = nli.merge_states(p_last, h_last, stmt_hidden_size)
 
     ####################
@@ -375,11 +376,11 @@ class NLISystem(object):
         print('\nBATCH LOSS IS NAN!! Printing out...')
         print('Loss:', curr_loss, '\n')
         return -1, -1, -1, True
-      self.saver.save(session, 'train_params/epoch_model') # Only save parameters if we don't crash
+      self.saver.save(session, 'train_params/epoch_model' + str(epoch)) # Only save parameters if we don't crash
 
       # TEST FOR CONVERGENCE
-      if len(losses) >= 10 and (max(losses[-3:]) - min(losses[-3:])) <= 0.01:
-        break # TODO: Replace everything with constants
+      if len(losses) >= 10 and (max(losses[-3:]) - min(losses[-3:])) <= 0.03:
+        break 
 
       if epoch > 50: # HARD CUTOFF?
         break
