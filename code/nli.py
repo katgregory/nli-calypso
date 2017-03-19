@@ -201,7 +201,7 @@ class NLI(object):
       # reshape to batch_size x 1 x statement2_len to prepare for broadcast
       magnitude2 = tf.reshape(tf.reduce_sum(e, axis=1), (batch_size, 1, -1))
       # e_norm2: batch_size x statement1_len x statement2_len
-      e_norm2 = tf.div(e_exp, magnitude2)
+      e_norm2 = tf.div(e, magnitude2)
 
       ##############
       # Weighted sums
@@ -252,7 +252,7 @@ class NLI(object):
   :return: A context/state inference vector of dimension batch_size x statement_len x
   hidden_size
   """
-  def infer(self, contexts, states, hidden_size, dropout, embeddings=None):
+  def infer(self, context, states, hidden_size, dropout, embeddings=None):
     with tf.name_scope("Infer"):
       batch_size = tf.shape(context)[0]
       stmt_len = tf.shape(context)[1]

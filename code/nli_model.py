@@ -140,19 +140,18 @@ class NLISystem(object):
     with tf.variable_scope("Composition") as scope:
       if len(p_contexts) != 0:
         # Join matching methods
-        p_inferred = tf.concat(p_contexts, axis=2)
-        h_inferred = tf.concat(h_contexts, axis=2)
+        p_inferred = tf.concat(2, p_contexts)
+        h_inferred = tf.concat(2, h_contexts)
 
         # Composition
-        with tf.variable_scope("Composition") as scope:
-          if stmt_processor == "lstm":
-            compose = nli.LSTM(lstm_hidden_size)
-          elif stmt_processor == "bilstm":
-            compose = nli.biLSTM(lstm_hidden_size, n_bilstm_layers)
+        if stmt_processor == "lstm":
+          compose = nli.LSTM(lstm_hidden_size)
+        elif stmt_processor == "bilstm":
+          compose = nli.biLSTM(lstm_hidden_size, n_bilstm_layers)
 
-          p_composed, p_last = compose(p_inferred, self.premise_len_ph)
-          scope.reuse_variables()
-          h_composed, h_last = compose(h_inferred, self.hypothesis_len_ph)
+        p_composed, p_last = compose(p_inferred, self.premise_len_ph)
+        scope.reuse_variables()
+        h_composed, h_last = compose(h_inferred, self.hypothesis_len_ph)
 
     ####################
     # Merge
