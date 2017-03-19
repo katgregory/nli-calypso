@@ -250,6 +250,22 @@ class NLI(object):
     return (context1, context2)
 
   """
+  Calculates context vectors for two statements by using maxpooling-matching
+
+  :param states1: States of statement 1 as output from an LSTM, biLSTM, etc. Dimensions are
+  batch_size x statement1_len x hidden_size
+  :param states2: States of statement 2 as output from an LSTM, biLSTM, etc. Dimensions are
+  batch_size x statement2_len x hidden_size
+
+  :return: A tuple of (context1, context2) of context vectors for each of the words in statement 1
+  and statement 2 respectively. context1 and context2 have the same dimensions as states1 and
+  states2.
+  """
+  def maxpool_matching(self, states1, states2):
+    NotImplemented
+
+  
+  """
   Return a new vector that embodies inferred information from context and state vectors
   of a statement. Concatenates the context as needed + runs through FF network.
 
