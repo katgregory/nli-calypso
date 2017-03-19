@@ -42,6 +42,7 @@ class NLISystem(object):
                stmt_processor,
                attentive_matching,
                max_attentive_matching,
+               full_matching,
                infer_embeddings,
                weight_attention,
                n_bilstm_layers,
@@ -132,6 +133,10 @@ class NLISystem(object):
         max_p, max_h = nli.max_matching(p_states, h_states, self.e)
         p_contexts.append(max_p)
         h_contexts.append(max_h)
+
+      if full_matching:
+        p_contexts.append(p_last)
+        h_contexts.append(h_last)
 
     ####################
     # COMPOSITION
