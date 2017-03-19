@@ -109,20 +109,24 @@ class NLISystem(object):
     ####################
     if attentive_matching or max_attentive_matching:
       with tf.name_scope("Matching"):
-        # Context generation
+
+        # Matching/Attention
         with tf.variable_scope("Context") as scope:
-          if nli.analytic_mode:
-            self.e, ret = nli.context_tensors(p_states, h_states, attentive_matching, max_attentive_matching, weight_attention)
-          else: ret = nli.context_tensors(p_states, h_states, attentive_matching, max_attentive_matching, weight_attention)
-          p_context, h_context = ret
+          self.e = nli.attention(p_states, h_states, weight_attention)
+          chen_p, chen_h = nli.chen_matching(p_states, h_states, self.e)
+          max_p, max_h = nli.max_matching(p_states, h_states, self.e)
 
         # Inference
-        with tf.variable_scope("Inference") as scope:
-          p_inferred = nli.infer(p_context, p_states, lstm_hidden_size, self.dropout_ph,
+        with tf.variable_scope("Inference-Chen") as scope:
+          chen_p_inf = nli.infer(chen_p, p_states, lstm_hidden_size, self.dropout_ph,
                                  premise_embed if infer_embeddings else None)
           scope.reuse_variables()
-          h_inferred = nli.infer(h_context, h_states, lstm_hidden_size, self.dropout_ph,
+          chen_h_inf = nli.infer(chen_h, h_states, lstm_hidden_size, self.dropout_ph,
                                  hypothesis_embed if infer_embeddings else None)
+
+        # Join matching methods
+        p_inferred = tf.concat([chen_p,inf, max_p], axis=2)
+        h_inferred = tf.concat([chen_h,inf, max_h], axis=2)
 
         # Composition
         with tf.variable_scope("Composition") as scope:

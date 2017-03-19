@@ -35,7 +35,7 @@ class NLI(object):
       # return tf.nn.rnn_cell.DropoutWrapper(cell, output_keep_prob=dropout_keep)
 
   """
-  Run inputs through LSTM. Assumes that input statements are padded with zeros. Binds cells with 
+  Run inputs through LSTM. Assumes that input statements are padded with zeros. Binds cells with
   closure.
 
   :param statement: Statement as list of embeddings of dimensions batch_size x statement_len
@@ -46,10 +46,10 @@ class NLI(object):
 
   :return: function fn that takes 2 arguments: statement, stmt_len where statement is
   of dimensions batch_size x statement_len x embedding_size and stmt_len is of dimensions
-  batch_size x 1. 
+  batch_size x 1.
 
-  fn returns A tuple of (outputs, last_output) where outputs represents all 
-  LSTM outputs and is of dimensions batch_size x statement_len x hidden_size; and last_output 
+  fn returns A tuple of (outputs, last_output) where outputs represents all
+  LSTM outputs and is of dimensions batch_size x statement_len x hidden_size; and last_output
   represents the last output for each statement in the batch, of dimensions batch_size x hidden_size
   """
   def LSTM(self, lstm_hidden_size):
@@ -72,7 +72,7 @@ class NLI(object):
     return run
 
   """
-  Create biLSTM that can run inputs through stacked Bi-LSTM and output concatenation of 
+  Create biLSTM that can run inputs through stacked Bi-LSTM and output concatenation of
   forward and backward final hidden state. Assumes that input statements are padded with zeros.
   Binds cells with closure.
 
@@ -86,7 +86,7 @@ class NLI(object):
 
   :return: function fn that takes 2 arguments: statement, stmt_len where statement is
   of dimensions batch_size x statement_len x embedding_size and stmt_len is of dimensions
-  batch_size x 1. 
+  batch_size x 1.
 
   fn returns a tuple of (outputs, last_output) where outputs represents all biLSTM outputs and is
   of dimensions batch_size x statement_len x (hidden_size * 2); and last_output represents the last
@@ -122,27 +122,23 @@ class NLI(object):
     return run
 
   """
-  Calculates context vectors for two statements by using weighted similarity.
+  Calculates attention matrix for two statements
 
   :param states1: States of statement 1 as output from an LSTM, biLSTM, etc. Dimensions are
   batch_size x statement1_len x hidden_size
   :param states2: States of statement 2 as output from an LSTM, biLSTM, etc. Dimensions are
   batch_size x statement2_len x hidden_size
-  :param weight_attention: If true, add weight in atention calculation
+  :param weight_attention: If true, add weight in attention calculation
 
-  :return: A tuple of (context1, context2) of context vectors for each of the words in statement 1
-  and statement 2 respectively. context1 and context2 have the same dimensions as states1 and
-  states2.
-
-  If in analytic_mode, this function returns a tuple of (e, r) where r is the original return value.
+  :return: A matrix of attentions as exponentiated dot products of the hidden states of the
+  statements. Dimensions are batch_size x statement1_len x statement2_len
   """
-  def context_tensors(self, states1, states2, attentive_matching, max_attentive_matching, weight_attention):
-    with tf.name_scope("Context-Tensors"):
+  def attention(self, states1, states2, weight_attention):
+    with tf.name_scope("Attention-Matrix"):
       # dimensions
       batch_size = tf.shape(states1)[0]
       statement1_len, hidden_size = states1.get_shape().as_list()[1:3]
 
-      ############### CHEN'S ATTENTION #############################
       if weight_attention:
         # Reshape to 2D matrices for the first multiplication
         W = tf.get_variable("W", shape=(hidden_size, hidden_size), initializer=xavier())
@@ -168,46 +164,79 @@ class NLI(object):
       e = tf.clip_by_value(e, clip_value_min=-40, clip_value_max=40) # Fixes NaN error
       e_exp = tf.exp(e)
 
+      return e_exp
+
+  """
+  Calculates context vectors for two statements by using weighted similarity.
+
+  :param states1: States of statement 1 as output from an LSTM, biLSTM, etc. Dimensions are
+  batch_size x statement1_len x hidden_size
+  :param states2: States of statement 2 as output from an LSTM, biLSTM, etc. Dimensions are
+  batch_size x statement2_len x hidden_size
+  :param e: Attention matrix as returned by nli.attention. Dimensions are batch_size x
+  statement1_len x statement2_len
+
+  :return: A tuple of (context1, context2) of context vectors for each of the words in statement 1
+  and statement 2 respectively. context1 and context2 have the same dimensions as states1 and
+  states2.
+  """
+  def chen_matching(self, states1, states2, e):
+    with tf.name_scope("Chen-Matching"):
+      # dimensions
+      batch_size = tf.shape(states1)[0]
+      statement1_len, hidden_size = states1.get_shape().as_list()[1:3]
+
+      ##############
+      # Normalize e
+      ##############
+
       # output of tf.reduce_sum has dimensions batch_size x statement1_len
       # reshape to batch_size x statement1_len x 1 to prepare for broadcast
-      magnitude1 = tf.reshape(tf.reduce_sum(e_exp, axis=2), (batch_size, -1, 1))
+      magnitude1 = tf.reshape(tf.reduce_sum(e, axis=2), (batch_size, -1, 1))
       # e_norm1: batch_size x statement1_len x statement2_len
-      e_norm1 = tf.div(e_exp, magnitude1)
+      e_norm1 = tf.div(e, magnitude1)
       context1 = tf.matmul(states2, e_norm1)
 
       # output of tf.reduce_sum has dimensions batch_size x statement2_len
       # reshape to batch_size x 1 x statement2_len to prepare for broadcast
-      magnitude2 = tf.reshape(tf.reduce_sum(e_exp, axis=1), (batch_size, 1, -1))
+      magnitude2 = tf.reshape(tf.reduce_sum(e, axis=1), (batch_size, 1, -1))
       # e_norm2: batch_size x statement1_len x statement2_len
       e_norm2 = tf.div(e_exp, magnitude2)
 
-      def concateContexts(orig_context, new_context):
-        if orig_context:
-          return tf.concat(orig_context, new_context, axis=2)
-        return new_context
+      ##############
+      # Weighted sums
+      ##############
+      context1 = tf.matmul(e_norm1, states2)
+      context2 = tf.matmul(e_norm2, states1, transpose_a=True)
 
-      context1 = None
-      context2 = None
-      ################### CHEN'S ATTENTION ############################
-      if attentive_matching:
-        chen_context1 = tf.matmul(states2, e_norm1, transpose_a=True, transpose_b=True)
-        chen_context1 = tf.transpose(context1, perm=[0, 2, 1])
-        chen_context2 = tf.matmul(states1, e_norm2, transpose_a=True)
-        chen_context2 = tf.transpose(context2, perm=[0, 2, 1])
-        context1 = concateContexts(context1, chen_context1)
-        context2 = concateContexts(context2, chen_context2)       
-      #################### MAX ATTENTION ###############################
-      if max_attentive_matching:
-        max_indices1 = tf.argmax(e_norm1, axis=2) # Batch_size x statement1_len
-        max_context1 = tf.nn.embedding_lookup(state2, max_indices1) # Batch_size x statement1_len x hidden_size
-        max_indices2 = tf.argmax(e_norm2, axis=1) # Batch_size x statement2_len
-        max_context2 = tf.nn.embedding_lookup(state1, max_indices2) # Batch_size x statement2_len x hidden_size       
-        context1 = concateContexts(context1, max_context1)
-        context2 = concateContexts(context2, max_context2) 
+      return (context1, context2)
 
-      ret = context1, context2
-      if self.analytic_mode: return (e, ret)
-      else: return ret
+  """
+  Calculates context vectors for two statements by using max attentive matching.
+
+  :param states1: States of statement 1 as output from an LSTM, biLSTM, etc. Dimensions are
+  batch_size x statement1_len x hidden_size
+  :param states2: States of statement 2 as output from an LSTM, biLSTM, etc. Dimensions are
+  batch_size x statement2_len x hidden_size
+  :param e: Attention matrix as returned by nli.attention. Dimensions are batch_size x
+  statement1_len x statement2_len
+
+  :return: A tuple of (context1, context2) of context vectors for each of the words in statement 1
+  and statement 2 respectively. context1 and context2 have the same dimensions as states1 and
+  states2.
+  """
+  def max_matching(self, states1, states2, e):
+    # Batch_size x statement1_len
+    max_indices1 = tf.argmax(e, axis=2)
+    # Batch_size x statement1_len x hidden_size
+    max_context1 = tf.nn.embedding_lookup(state2, max_indices1)
+
+    # Batch_size x statement2_len
+    max_indices2 = tf.argmax(e, axis=1)
+    # Batch_size x statement2_len x hidden_size
+    max_context2 = tf.nn.embedding_lookup(state1, max_indices2)
+
+    return (context1, context2)
 
   """
   Return a new vector that embodies inferred information from context and state vectors
@@ -223,7 +252,7 @@ class NLI(object):
   :return: A context/state inference vector of dimension batch_size x statement_len x
   hidden_size
   """
-  def infer(self, context, states, hidden_size, dropout, embeddings=None):
+  def infer(self, contexts, states, hidden_size, dropout, embeddings=None):
     with tf.name_scope("Infer"):
       batch_size = tf.shape(context)[0]
       stmt_len = tf.shape(context)[1]
@@ -312,7 +341,7 @@ class NLI(object):
           b = tf.Variable(tf.zeros([o_size,]), name="b")
           mul = tf.matmul(r, W)
           r = tf.add(mul, b, name="r")
-          
+
           if not last:
             r = fn(r, name="r-nonlin")
             r = tf.nn.dropout(r, dropout, name="r-dropout")
@@ -339,6 +368,3 @@ class NLI(object):
     #    self.reg_list.append(W2)
 
     #    return W1, b1, mul1, r1, W2, b2, mul2, r2
-
-
-
