@@ -37,9 +37,9 @@ tf.app.flags.DEFINE_integer("n_bilstm_layers", 1, "Number of layers in the stack
 tf.app.flags.DEFINE_integer("max_grad_norm", -1, "For clipping")
 
 # TYPES OF ATTENTION
-tf.app.flags.DEFINE_bool("attentive_matching", True, "Chen's attention")
-tf.app.flags.DEFINE_bool("weight_attention", True, "Adds weight multiplication to attention calculation")
-tf.app.flags.DEFINE_bool("max_attentive_matching", True, "From Wang et al '17")
+tf.app.flags.DEFINE_bool("attentive_matching", False, "Chen's attention")
+tf.app.flags.DEFINE_bool("weight_attention", False, "Adds weight multiplication to attention calculation")
+tf.app.flags.DEFINE_bool("max_attentive_matching", False, "From Wang et al '17")
 
 # HYPERPARAMETERS
 tf.app.flags.DEFINE_float("lr", 0.0004, "Learning rate.")

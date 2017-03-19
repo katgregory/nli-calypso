@@ -113,7 +113,7 @@ class NLISystem(object):
         with tf.variable_scope("Context") as scope:
           if nli.analytic_mode:
             self.e, ret = nli.context_tensors(p_states, h_states, attentive_matching, max_attentive_matching, weight_attention)
-          else: ret = nli.context_tensors(p_states, h_states, weight_attention)
+          else: ret = nli.context_tensors(p_states, h_states, attentive_matching, max_attentive_matching, weight_attention)
           p_context, h_context = ret
 
         # Inference
