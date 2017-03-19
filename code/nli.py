@@ -369,7 +369,7 @@ class NLI(object):
       with tf.variable_scope("reduce-dim") as scope:
         states1_reduced = self.reduce_last_dim(states1, reduce_size)
         scope.reuse_variables()
-        states2_reduced = self.reduce_last_dim(states1, reduce_size)
+        states2_reduced = self.reduce_last_dim(states2, reduce_size)
 
       W = tf.get_variable('W', shape=(reduce_size, K))
 
