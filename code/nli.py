@@ -226,18 +226,101 @@ class NLI(object):
   states2.
   """
   def max_matching(self, states1, states2, e):
-    # Batch_size x statement1_len
-    max_indices1 = tf.argmax(e, axis=2)
-    # Batch_size x statement1_len x hidden_size
-    max_context1 = tf.nn.embedding_lookup(state2, max_indices1)
+    # dimensions
+    batch_size = tf.shape(states1)[0]
 
-    # Batch_size x statement2_len
-    max_indices2 = tf.argmax(e, axis=1)
-    # Batch_size x statement2_len x hidden_size
-    max_context2 = tf.nn.embedding_lookup(state1, max_indices2)
+    # batch_size x statement1_len x 1: reshape for broadcasting
+    max1 = tf.reshape(tf.reduce_max(e, axis=2), (batch_size, -1, 1))
+    # one hot vectors of batch_size x statement1_len x statement2_len
+    indices1 = tf.cast(tf.equal(e, max1), tf.float32)
+    # average the best if there are multiple
+    indices1 = indices1 / tf.reshape(tf.reduce_sum(indices1, axis=2), (batch_size, -1, 1))
+    # batch_size x statement1_len x hidden_size
+    context1 = tf.matmul(indices1, states2)
+
+    # batch_size x 1 x statement2_len: reshape for broadcasting
+    max2 = tf.reshape(tf.reduce_max(e, axis=1), (batch_size, 1, -1))
+    # one hot vectors of batch_size x statement1_len x statement2_len
+    indices2 = tf.cast(tf.equal(e, max2), tf.float32)
+    # average the best if there are multiple
+    indices2 = indices2 / tf.reshape(tf.reduce_sum(indices2, axis=1), (batch_size, 1, -1))
+    # batch_size x statement2_len x hidden_size
+    context2 = tf.matmul(indices2, states1, transpose_a=True)
 
     return (context1, context2)
 
+  def multi_perspective(self, W, v1, v2):
+    # W: hidden_size x K
+    # v1: batch_size x statement1_len x hidden_size
+    # v2: batch_size x statement2_len x hidden_size
+    batch_size = tf.shape(v1)[0]
+    hidden_size = v1.get_shape().as_list()[2]
+    K = tf.shape(W)[1]
+
+    # reshape for broadcast
+    v1 = tf.reshape(v1, (batch_size, -1, 1, hidden_size, 1))
+    v2 = tf.reshape(v2, (batch_size, 1, -1, hidden_size, 1))
+    W = tf.reshape(W, (1, 1, 1, hidden_size, K))
+
+    # batch_size x statement1_len x 1 x hidden_size x k
+    k1 = tf.mul(v1, W)
+    k1 = tf.nn.l2_normalize(k1, 4)
+
+    # batch_size x 1 x statement2_len x hidden_size x k
+    k2 = tf.mul(v2, W)
+    k2 = tf.nn.l2_normalize(k2, 4)
+
+    # batch_size x statement1_len x statement2_len x hidden_size x k
+    r = tf.mul(k1, k2)
+
+    # batch_size x statement1_len x statement2_len x k
+    r = tf.reduce_sum(r, axis=3)
+    return r
+
+  def full_matching(self, states1, states2, p_last, h_last, K):
+    with tf.variable_scope("Full-Matching"):
+      batch_size = tf.shape(states1)[0]
+      hidden_size = states1.get_shape().as_list()[2]
+      W = tf.get_variable('W', shape=(hidden_size, K))
+
+      full_context1 = self.multi_perspective(W, states1, h_last)
+      full_context2 = self.multi_perspective(W, states2, p_last)
+
+      # batch_size x statement1_len x k
+      context1 = tf.reshape(full_context1, (batch_size, -1, K))
+      # batch_size x statement2_len x k
+      context2 = tf.reshape(full_context2, (batch_size, -1, K))
+
+      return context1, context2
+
+  """
+  Calculates context vectors for two statements by using maxpooling-matching
+
+  :param states1: States of statement 1 as output from an LSTM, biLSTM, etc. Dimensions are
+  batch_size x statement1_len x hidden_size
+  :param states2: States of statement 2 as output from an LSTM, biLSTM, etc. Dimensions are
+  batch_size x statement2_len x hidden_size
+
+  :return: A tuple of (context1, context2) of context vectors for each of the words in statement 1
+  and statement 2 respectively. context1 and context2 have the same dimensions as states1 and
+  states2.
+  """
+  def maxpool_matching(self, states1, states2, K):
+    with tf.variable_scope("Maxpool-Matching"):
+      hidden_size = states1.get_shape().as_list()[2]
+      W = tf.get_variable('W', shape=(hidden_size, K))
+
+      # batch_size x statement1_len x statement2_len x k
+      context = self.multi_perspective(W, states1, states2)
+
+      # batch_size x statement1_len x k
+      context1 = tf.reduce_max(context, axis=2)
+      # batch_size x statement2_len x k
+      context2 = tf.reduce_max(context, axis=1)
+
+      return context1, context2
+
+  
   """
   Return a new vector that embodies inferred information from context and state vectors
   of a statement. Concatenates the context as needed + runs through FF network.
@@ -296,12 +379,12 @@ class NLI(object):
   :return: Merged hidden state of dimensions batch_size x (hidden_size * 2)
   """
   def merge_states(self, state1, state2, hidden_size):
-    with tf.variable_scope("Merge-States"):
+    with tf.name_scope("Merge-States"):
       state1_size = state1.get_shape().as_list()[1]
       state2_size = state2.get_shape().as_list()[1]
 
       # weight hidden layers before merging
-      with tf.variable_scope("Hidden-Weights"):
+      with tf.name_scope("Hidden-Weights"):
 
         W1 = tf.get_variable("W1", shape=(state1_size, hidden_size), initializer=xavier())
         r1 = tf.matmul(state1, W1)
