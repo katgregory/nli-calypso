@@ -399,10 +399,11 @@ def get_minibatches(data, minibatch_size, bucket=False, shuffle=True):
     indices = np.arange(data_size)
     if bucket:
         formatted_data = zip(*data) # List of tuples (premise, premise_len, hypothesis, hypothesis_len, label)
-        indices = sorted(indices, key=lambda i: len(formatted_data[i][0]) + len(formatted_data[i][2]) + np.random.random())
+        indices = sorted(indices, key=lambda i: len(formatted_data[i][0]) + len(formatted_data[i][2]) + np.random.random()) # Bucketed
     elif shuffle:
         np.random.shuffle(indices)
-    for minibatch_start in np.arange(0, data_size, minibatch_size): 
+    # RANDOMLY SHUFFLE THE BUCKETS
+    for minibatch_start in np.random.shuffle(np.arange(0, data_size, minibatch_size)):
         minibatch_indices = indices[minibatch_start:minibatch_start + minibatch_size]
         yield [minibatch(d, minibatch_indices) for d in data] if list_data \
             else minibatch(data, minibatch_indices)
