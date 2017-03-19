@@ -254,14 +254,12 @@ class NLI(object):
     # v1: batch_size x statement1_len x hidden_size
     # v2: batch_size x statement2_len x hidden_size
     batch_size = tf.shape(v1)[0]
-    statement1_len = tf.shape(v1)[1]
-    statement2_len = tf.shape(v2)[1]
     hidden_size = v1.get_shape().as_list()[2]
     K = tf.shape(W)[1]
 
     # reshape for broadcast
-    v1 = tf.reshape(v1, (batch_size, statement1_len, 1, hidden_size, 1))
-    v2 = tf.reshape(v2, (batch_size, 1, statement2_len, hidden_size, 1))
+    v1 = tf.reshape(v1, (batch_size, -1, 1, hidden_size, 1))
+    v2 = tf.reshape(v2, (batch_size, 1, -1, hidden_size, 1))
     W = tf.reshape(W, (1, 1, 1, hidden_size, K))
 
     # batch_size x statement1_len x 1 x hidden_size x k
