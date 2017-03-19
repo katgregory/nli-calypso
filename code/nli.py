@@ -231,16 +231,19 @@ class NLI(object):
 
     # batch_size x statement1_len x 1: reshape for broadcasting
     max1 = tf.reshape(tf.reduce_max(e, axis=2), (batch_size, -1, 1))
-    # boolean mask of batch_size x statement1_len x statement2_len
+    # one hot vectors of batch_size x statement1_len x statement2_len
     indices1 = tf.cast(tf.equal(e, max1), tf.float32)
+    # average the best if there are multiple
+    indices1 = indices1 / tf.reshape(tf.reduce_sum(indices1, axis=2), (batch_size, -1, 1))
     # batch_size x statement1_len x hidden_size
     context1 = tf.matmul(indices1, states2)
 
-
     # batch_size x 1 x statement2_len: reshape for broadcasting
     max2 = tf.reshape(tf.reduce_max(e, axis=1), (batch_size, 1, -1))
-    # boolean mask of batch_size x statement1_len x statement2_len
+    # one hot vectors of batch_size x statement1_len x statement2_len
     indices2 = tf.cast(tf.equal(e, max2), tf.float32)
+    # average the best if there are multiple
+    indices2 = indices2 / tf.reshape(tf.reduce_sum(indices2, axis=1), (batch_size, 1, -1))
     # batch_size x statement2_len x hidden_size
     context2 = tf.matmul(indices2, states1, transpose_a=True)
 
