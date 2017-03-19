@@ -134,9 +134,11 @@ class NLISystem(object):
         p_contexts.append(max_p)
         h_contexts.append(max_h)
 
+      # FULL MATCHING
       if full_matching:
-        p_contexts.append(p_last)
-        h_contexts.append(h_last)
+        full_p, full_h = nli.full_matching(p_states, h_states, p_last, h_last, 20)
+        p_contexts.append(full_p)
+        h_contexts.append(full_h)
 
     ####################
     # COMPOSITION

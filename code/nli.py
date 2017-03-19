@@ -249,6 +249,49 @@ class NLI(object):
 
     return (context1, context2)
 
+  def multi_perspective(self, W, v1, v2):
+    # W: hidden_size x K
+    # v1: batch_size x sentence_len x hidden_size
+    # v2: batch_size x hidden_size
+    batch_size = tf.shape(v1)[0]
+    hidden_size = v1.get_shape().as_list()[2]
+    K = tf.shape(W)[1]
+
+    # reshape for broadcast
+    v1 = tf.reshape(v1, (batch_size, -1, hidden_size, 1))
+    v2 = tf.reshape(v2, (batch_size, 1, hidden_size, 1))
+    W = tf.reshape(W, (1, 1, hidden_size, K))
+
+    # batch_size x sentence_len x hidden_size x k
+    k1 = tf.mul(v1, W)
+    k1 = tf.nn.l2_normalize(k1, 3)
+
+    # batch_size x 1 x hidden_size x k
+    k2 = tf.mul(v2, W)
+    k2 = tf.nn.l2_normalize(k2, 3)
+
+    r = tf.mul(k1, k2)
+    r = tf.reduce_sum(r, axis=2)
+    return r
+    # batch_size x sentence_len x k
+    # v1 = tf.reshape(v1, (batch_size * statement_len, hidden_size))
+    # k1 = tf.matmul(v1, W) # (batch_size * sentence_len) x K
+    # k1 = tf.reshape(k1, (batch_size, statement_len, K)) # batch_size x sentence_len x K
+    # k2 = tf.matmul(v2, W) # batch_size x K
+    # k2 = tf.reshape(k2, (batch_size, 1, K))
+
+
+
+  def full_matching(self, states1, states2, p_last, h_last, K):
+    with tf.variable_scope("Full-Matching"):
+      hidden_size = states1.get_shape().as_list()[2]
+      W = tf.get_variable('W', shape=(hidden_size, K))
+
+      full_context1 = self.multi_perspective(W, states1, h_last)
+      full_context2 = self.multi_perspective(W, states2, p_last)
+
+      return full_context1, full_context2
+
   """
   Return a new vector that embodies inferred information from context and state vectors
   of a statement. Concatenates the context as needed + runs through FF network.
