@@ -1,0 +1,79 @@
+
+Epoch 1
+Amount of time to run this epoch: 1999.19470096 secs
+Training accuracy for this epoch: 0.795338999248
+Mean loss for this epoch: 0.516588456654
+	NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 2018.37554216 secs
+Training accuracy for this epoch: 0.854161243759
+Mean loss for this epoch: 0.390164248624
+	NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 2023.64287591 secs
+Training accuracy for this epoch: 0.87950131697
+Mean loss for this epoch: 0.333447434581
+	NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 2026.02607298 secs
+Training accuracy for this epoch: 0.897875190902
+Mean loss for this epoch: 0.288977061276
+	NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 2029.1298449 secs
+Training accuracy for this epoch: 0.912337290008
+Mean loss for this epoch: 0.253378128056
+	NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 2032.03393197 secs
+Training accuracy for this epoch: 0.922747452978
+Mean loss for this epoch: 0.2268030167
+	NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 2038.7136662 secs
+Training accuracy for this epoch: 0.930884090235
+Mean loss for this epoch: 0.205126768129
+	NEW BEST
+
+Epoch 8
+Amount of time to run this epoch: 2044.83960414 secs
+Training accuracy for this epoch: 0.937710128202
+Mean loss for this epoch: 0.187410169646
+	NEW BEST
+
+Epoch 9
+Amount of time to run this epoch: 2042.02476382 secs
+Training accuracy for this epoch: 0.943136373317
+Mean loss for this epoch: 0.172372049892
+	NEW BEST
+
+Epoch 10
+Amount of time to run this epoch: 2048.16890907 secs
+Training accuracy for this epoch: 0.946860659632
+Mean loss for this epoch: 0.161724497522
+	NEW BEST
+
+EVALUATING
+Accuracy: 0.850233692339
+Average Loss: 0.559234767741
+Token-level confusion matrix:
+go\gu        	entailment   	neutral      	contradiction
+entailment   	2934.00      	292.00       	103.00       
+neutral      	309.00       	2575.00      	351.00       
+contradiction	119.00       	300.00       	2859.00      
+
+Token-level scores:
+label        	acc          	prec         	rec          	f1           
+entailment   	0.92         	0.87         	0.88         	0.88         
+neutral      	0.87         	0.81         	0.80         	0.80         
+contradiction	0.91         	0.86         	0.87         	0.87         
+micro        	0.90         	0.85         	0.85         	0.85         
+macro        	0.90         	0.85         	0.85         	0.85         
+not-O        	0.89         	0.84         	0.84         	0.84         
+
