@@ -168,16 +168,17 @@ class NLI(object):
       e = tf.clip_by_value(e, clip_value_min=-40, clip_value_max=40) # Fixes NaN error
       e_exp = tf.exp(e)
 
-      # output of tf.reduce_sum has dimensions batch_size x statement2_len
-      # reshape to batch_size x statement2_len x 1 to prepare for broadcast
-      magnitude1 = tf.reshape(tf.reduce_sum(e_exp, axis=1), (batch_size, -1, 1))
-      # transpose to batch_size x 1 x statement2_len
-      magnitude1 = tf.transpose(magnitude1, perm=[0, 2, 1])
-      e_norm1 = tf.div(e_exp, magnitude1)
-
       # output of tf.reduce_sum has dimensions batch_size x statement1_len
       # reshape to batch_size x statement1_len x 1 to prepare for broadcast
-      magnitude2 = tf.reshape(tf.reduce_sum(e_exp, axis=2), (batch_size, -1, 1))
+      magnitude1 = tf.reshape(tf.reduce_sum(e_exp, axis=2), (batch_size, -1, 1))
+      # e_norm1: batch_size x statement1_len x statement2_len
+      e_norm1 = tf.div(e_exp, magnitude1)
+      context1 = tf.matmul(states2, e_norm1)
+
+      # output of tf.reduce_sum has dimensions batch_size x statement2_len
+      # reshape to batch_size x 1 x statement2_len to prepare for broadcast
+      magnitude2 = tf.reshape(tf.reduce_sum(e_exp, axis=1), (batch_size, 1, -1))
+      # e_norm2: batch_size x statement1_len x statement2_len
       e_norm2 = tf.div(e_exp, magnitude2)
 
       def concateContexts(orig_context, new_context):
@@ -265,8 +266,6 @@ class NLI(object):
 
   :return: Merged hidden state of dimensions batch_size x (hidden_size * 2)
   """
-
-  
   def merge_states(self, state1, state2, hidden_size):
     with tf.variable_scope("Merge-States"):
       state1_size = state1.get_shape().as_list()[1]
