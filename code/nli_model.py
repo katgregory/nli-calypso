@@ -105,16 +105,17 @@ class NLISystem(object):
       h_states, h_last = process_stmt(hypothesis_embed, self.hypothesis_len_ph)
 
     ####################
-    # Attention
+    # MATCHING
     ####################
-    if attentive_matching or max_attentive_matching:
-      with tf.name_scope("Matching"):
+    
+    with tf.name_scope("Matching"):
+      p_contexts = []
+      h_contexts = []
 
-        # Matching/Attention
-        with tf.variable_scope("Context") as scope:
-          self.e = nli.attention(p_states, h_states, weight_attention)
-          chen_p, chen_h = nli.chen_matching(p_states, h_states, self.e)
-          max_p, max_h = nli.max_matching(p_states, h_states, self.e)
+      # CHEN
+      if attentive_matching:
+        self.e = nli.attention(p_states, h_states, weight_attention)
+        chen_p, chen_h = nli.chen_matching(p_states, h_states, self.e)
 
         # Inference
         with tf.variable_scope("Inference-Chen") as scope:
@@ -124,9 +125,23 @@ class NLISystem(object):
           chen_h_inf = nli.infer(chen_h, h_states, lstm_hidden_size, self.dropout_ph,
                                  hypothesis_embed if infer_embeddings else None)
 
+        p_contexts.append(chen_p_inf)
+        h_contexts.append(chen_h_inf)
+
+      # MAX ATTENTIVE
+      if max_attentive_matching:
+        max_p, max_h = nli.max_matching(p_states, h_states, self.e)
+        p_contexts.append(max_p)
+        h_contexts.append(max_h)
+
+    ####################
+    # COMPOSITION
+    ####################
+    with tf.variable_scope("Composition") as scope:
+      if len(p_contexts) != 0:
         # Join matching methods
-        p_inferred = tf.concat([chen_p,inf, max_p], axis=2)
-        h_inferred = tf.concat([chen_h,inf, max_h], axis=2)
+        p_inferred = tf.concat(p_contexts, axis=2)
+        h_inferred = tf.concat(h_contexts, axis=2)
 
         # Composition
         with tf.variable_scope("Composition") as scope:
