@@ -40,7 +40,8 @@ class NLISystem(object):
                dropout_keep,
                bucket,
                stmt_processor,
-               attention,
+               attentive_matching,
+               max_attentive_matching,
                infer_embeddings,
                weight_attention,
                n_bilstm_layers,
@@ -106,13 +107,13 @@ class NLISystem(object):
     ####################
     # Attention
     ####################
-    if attention:
-      with tf.name_scope("Attention"):
+    if attentive_matching or max_attentive_matching:
+      with tf.name_scope("Matching"):
         # Context generation
         with tf.variable_scope("Context") as scope:
           if nli.analytic_mode:
-            self.e, ret = nli.context_tensors(p_states, h_states, weight_attention)
-          else: ret = nli.context_tensors(p_states, h_states, weight_attention)
+            self.e, ret = nli.context_tensors(p_states, h_states, attentive_matching, max_attentive_matching, weight_attention)
+          else: ret = nli.context_tensors(p_states, h_states, attentive_matching, max_attentive_matching, weight_attention)
           p_context, h_context = ret
 
         # Inference
@@ -137,7 +138,7 @@ class NLISystem(object):
     ####################
     # Merge
     ####################
-    if pool_merge and attention: merged = nli.pool_merge(p_composed, h_composed)
+    if pool_merge and attentive_matching: merged = nli.pool_merge(p_composed, h_composed)
     else: merged = nli.merge_states(p_last, h_last, stmt_hidden_size)
 
     ####################
@@ -300,7 +301,10 @@ class NLISystem(object):
     with tqdm(total=int(len(dataset[0]))) as pbar:
       premise_analysis = []
       hypothesis_analysis = []
+      goldlabels_analysis = []
+      predicted_labels_analysis = []
       e_analysis = []
+      correct_analysis = []
       for i, batch in enumerate(minibatches(dataset, batch_size, bucket=self.bucket)):
         premises, premise_lens, hypotheses, hypothesis_lens, goldlabels = batch
 
@@ -323,11 +327,16 @@ class NLISystem(object):
 
         premise_analysis.append([[rev_vocab[i] for i in premise] for premise in premises])
         hypothesis_analysis.append([[rev_vocab[i] for i in hypothesis] for hypothesis in hypotheses])
+        goldlabels_analysis.append(goldlabels)
+        predicted_labels_analysis.append(np.argmax(probs, axis=1))
         e_analysis.append(e)
+
+        correct = np.equal(np.argmax(probs, axis=1), np.argmax(goldlabels, axis=1))
+        correct_analysis.append(correct)
 
         pbar.update(batch_size)
 
-    return (premise_analysis, hypothesis_analysis, e_analysis)
+    return (premise_analysis, hypothesis_analysis, e_analysis, correct_analysis, goldlabels_analysis, predicted_labels_analysis)
 
   """
   Loop through dataset and call optimize() to train model

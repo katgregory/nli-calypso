@@ -136,12 +136,13 @@ class NLI(object):
 
   If in analytic_mode, this function returns a tuple of (e, r) where r is the original return value.
   """
-  def context_tensors(self, states1, states2, weight_attention):
+  def context_tensors(self, states1, states2, attentive_matching, max_attentive_matching, weight_attention):
     with tf.name_scope("Context-Tensors"):
       # dimensions
       batch_size = tf.shape(states1)[0]
       statement1_len, hidden_size = states1.get_shape().as_list()[1:3]
 
+      ############### CHEN'S ATTENTION #############################
       if weight_attention:
         # Reshape to 2D matrices for the first multiplication
         W = tf.get_variable("W", shape=(hidden_size, hidden_size), initializer=xavier())
@@ -167,23 +168,44 @@ class NLI(object):
       e = tf.clip_by_value(e, clip_value_min=-40, clip_value_max=40) # Fixes NaN error
       e_exp = tf.exp(e)
 
-      # output of tf.reduce_sum has dimensions batch_size x statement2_len
-      # reshape to batch_size x statement2_len x 1 to prepare for broadcast
-      magnitude1 = tf.reshape(tf.reduce_sum(e_exp, axis=1), (batch_size, -1, 1))
-      # transpose to batch_size x 1 x statement2_len
-      magnitude1 = tf.transpose(magnitude1, perm=[0, 2, 1])
-      e_norm1 = tf.div(e_exp, magnitude1)
-      context1 = tf.matmul(states2, e_norm1, transpose_a=True, transpose_b=True)
-      context1 = tf.transpose(context1, perm=[0, 2, 1])
-
       # output of tf.reduce_sum has dimensions batch_size x statement1_len
       # reshape to batch_size x statement1_len x 1 to prepare for broadcast
-      magnitude2 = tf.reshape(tf.reduce_sum(e_exp, axis=2), (batch_size, -1, 1))
-      e_norm2 = tf.div(e_exp, magnitude2)
-      context2 = tf.matmul(states1, e_norm2, transpose_a=True)
-      context2 = tf.transpose(context2, perm=[0, 2, 1])
+      magnitude1 = tf.reshape(tf.reduce_sum(e_exp, axis=2), (batch_size, -1, 1))
+      # e_norm1: batch_size x statement1_len x statement2_len
+      e_norm1 = tf.div(e_exp, magnitude1)
+      context1 = tf.matmul(states2, e_norm1)
 
-      ret = context1, context2 
+      # output of tf.reduce_sum has dimensions batch_size x statement2_len
+      # reshape to batch_size x 1 x statement2_len to prepare for broadcast
+      magnitude2 = tf.reshape(tf.reduce_sum(e_exp, axis=1), (batch_size, 1, -1))
+      # e_norm2: batch_size x statement1_len x statement2_len
+      e_norm2 = tf.div(e_exp, magnitude2)
+
+      def concateContexts(orig_context, new_context):
+        if orig_context:
+          return tf.concat(orig_context, new_context, axis=2)
+        return new_context
+
+      context1 = None
+      context2 = None
+      ################### CHEN'S ATTENTION ############################
+      if attentive_matching:
+        chen_context1 = tf.matmul(states2, e_norm1, transpose_a=True, transpose_b=True)
+        chen_context1 = tf.transpose(context1, perm=[0, 2, 1])
+        chen_context2 = tf.matmul(states1, e_norm2, transpose_a=True)
+        chen_context2 = tf.transpose(context2, perm=[0, 2, 1])
+        context1 = concateContexts(context1, chen_context1)
+        context2 = concateContexts(context2, chen_context2)       
+      #################### MAX ATTENTION ###############################
+      if max_attentive_matching:
+        max_indices1 = tf.argmax(e_norm1, axis=2) # Batch_size x statement1_len
+        max_context1 = tf.nn.embedding_lookup(state2, max_indices1) # Batch_size x statement1_len x hidden_size
+        max_indices2 = tf.argmax(e_norm2, axis=1) # Batch_size x statement2_len
+        max_context2 = tf.nn.embedding_lookup(state1, max_indices2) # Batch_size x statement2_len x hidden_size       
+        context1 = concateContexts(context1, max_context1)
+        context2 = concateContexts(context2, max_context2) 
+
+      ret = context1, context2
       if self.analytic_mode: return (e, ret)
       else: return ret
 
@@ -244,8 +266,6 @@ class NLI(object):
 
   :return: Merged hidden state of dimensions batch_size x (hidden_size * 2)
   """
-
-  
   def merge_states(self, state1, state2, hidden_size):
     with tf.variable_scope("Merge-States"):
       state1_size = state1.get_shape().as_list()[1]
