@@ -201,9 +201,9 @@ def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dro
     # Run and train model
     else:
       if FLAGS.restore_path is not None:
-        # nli.saver.restore(sess, pjoin(FLAGS.train_dir, get_save_filename(lr, dropout_keep)))
         nli.saver.restore(sess, FLAGS.restore_path)
-        epoch_number, train_accuracy, train_loss = nli.train(sess, train_dataset, rev_vocab, FLAGS.train_dir, FLAGS.batch_size)
+        # epoch_number, train_accuracy, train_loss = nli.train(sess, train_dataset, rev_vocab, FLAGS.train_dir, FLAGS.batch_size)
+        epoch_number, train_accuracy, train_loss, error = -1, -1, -1, False
       else:
         epoch_number, train_accuracy, train_loss, error = nli.train(sess, train_dataset, rev_vocab, FLAGS.train_dir, FLAGS.batch_size)
 
