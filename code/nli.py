@@ -230,13 +230,15 @@ class NLI(object):
       # dimensions
       batch_size = tf.shape(states1)[0]
 
-      indices1 = tf.Print(indices1, [indices1]) # TODO: Remove
 
       # batch_size x statement1_len x 1: reshape for broadcasting
       max1 = tf.reshape(tf.reduce_max(e, axis=2), (batch_size, -1, 1))
       # one hot vectors of batch_size x statement1_len x statement2_len
       indices1 = tf.cast(tf.equal(e, max1), tf.float32)
       indices1_toreturn = indices1 # TODO: Remove
+
+      indices1 = tf.Print(indices1, [indices1]) # TODO: Remove
+
       # average the best if there are multiple
       indices1 = indices1 / tf.reshape(tf.reduce_sum(indices1, axis=2), (batch_size, -1, 1))
       # batch_size x statement1_len x hidden_size
