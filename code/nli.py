@@ -288,7 +288,14 @@ class NLI(object):
       r = tf.reduce_sum(r, axis=3)
       return r
 
+  '''
+  Reduces the last dimension of a tensor to output_size
 
+  :inputs: tensor to reduce (ex. batch_size x sentence_len x hidden_size or batch_size x hidden_size, etc.)
+  :output_size: new dimension of the last dimension of inputs
+
+  :return: Inputs with the last dimension reduced to output_size
+  '''
   def reduce_last_dim(self, inputs, output_size):
     with tf.variable_scope("Reduce_Last_Dimension"):
       static_shape = inputs.get_shape().as_list()
