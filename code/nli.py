@@ -265,7 +265,7 @@ class NLI(object):
   def multi_perspective(self, W, v1, v2):
     with tf.name_scope("multi_perspective"):
       batch_size = tf.shape(v1)[0]
-      hidden_size = v1.get_shape().as_list()[2]
+      hidden_size = v1.get_shape().as_list()[-1]
       K = tf.shape(W)[1]
 
       # reshape for broadcast
@@ -289,6 +289,25 @@ class NLI(object):
       return r
 
 
+  def reduce_last_dim(self, inputs, output_size):
+    with tf.variable_scope("Reduce_Last_Dimension"):
+      static_shape = inputs.get_shape().as_list()
+      shape = tf.shape(inputs)
+
+      last_dim = static_shape[-1]
+      first_dim = tf.reduce_prod(shape[:-1])
+      inputs = tf.reshape(inputs, shape=(first_dim, last_dim)) # Reshape to 2 dimensions
+      
+      # Multiply by W
+      W = tf.get_variable('W', shape=(last_dim, output_size))
+      outputs = tf.matmul(inputs, W)
+      
+      final_shape = tf.concat(0, [shape[:-1], [output_size]])
+      outputs = tf.reshape(outputs, shape=final_shape)
+      outputs.set_shape(static_shape[:-1] + [output_size])
+      return outputs
+
+
   """
   Calculates context vectors for two statements by using full-matching
 
@@ -305,13 +324,22 @@ class NLI(object):
     with tf.variable_scope("Full-Matching"):
       # dimensions
       batch_size = tf.shape(states1)[0]
-      hidden_size = states1.get_shape().as_list()[2]
+      reduce_size = 100
 
-      W = tf.get_variable('W', shape=(hidden_size, K))
+      # Reduce hidden size from 300 to 100
+      with tf.variable_scope("reduce-dim") as scope:
+        states1_reduced = self.reduce_last_dim(states1, reduce_size)
+        scope.reuse_variables()
+        states2_reduced = self.reduce_last_dim(states2, reduce_size)
+        h_last_reduced = self.reduce_last_dim(h_last, reduce_size) 
+        p_last_reduced = self.reduce_last_dim(p_last, reduce_size)
+
+      W = tf.get_variable('W', shape=(reduce_size, K))
+
       # batch_size x statement1_len x 1 x k
-      context1 = self.multi_perspective(W, states1, h_last)
+      context1 = self.multi_perspective(W, states1_reduced, h_last_reduced)
       # batch_size x 1 x statement2_len x k
-      context2 = self.multi_perspective(W, states2, p_last)
+      context2 = self.multi_perspective(W, states2_reduced, p_last_reduced)
 
       # batch_size x statement1_len x k
       context1 = tf.reshape(context1, (batch_size, -1, K))
@@ -335,11 +363,18 @@ class NLI(object):
   def maxpool_matching(self, states1, states2, K):
     with tf.variable_scope("Maxpool-Matching"):
       # dimensions
-      hidden_size = states1.get_shape().as_list()[2]
+      reduce_size = 100
 
-      W = tf.get_variable('W', shape=(hidden_size, K))
+      # Reduce hidden size from 300 to 100
+      with tf.variable_scope("reduce-dim") as scope:
+        states1_reduced = self.reduce_last_dim(states1, reduce_size)
+        scope.reuse_variables()
+        states2_reduced = self.reduce_last_dim(states2, reduce_size)
+
+      W = tf.get_variable('W', shape=(reduce_size, K))
+
       # batch_size x statement1_len x statement2_len x k
-      context = self.multi_perspective(W, states1, states2)
+      context = self.multi_perspective(W, states1_reduced, states2_reduced)
 
       # batch_size x statement1_len x k
       context1 = tf.reduce_max(context, axis=2)
