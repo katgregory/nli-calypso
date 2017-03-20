@@ -353,14 +353,14 @@ class NLISystem(object):
           self.dropout_ph: self.dropout_keep
         }
 
-        output_feed = [self.loss, self.probs, self.e_real, self.idx1, self.idx2]
+        output_feed = [self.loss, self.probs, self.e, self.idx1, self.idx2]
         loss, probs, e, idx1, idx2 = session.run(output_feed, input_feed)
 
         premise_analysis.append([[rev_vocab[i] for i in premise] for premise in premises])
         hypothesis_analysis.append([[rev_vocab[i] for i in hypothesis] for hypothesis in hypotheses])
         goldlabels_analysis.append(goldlabels)
         predicted_labels_analysis.append(np.argmax(probs, axis=1))
-        e_analysis.append(e)
+        e_analysis.append(idx1)
 
         correct = np.equal(np.argmax(probs, axis=1), np.argmax(goldlabels, axis=1))
         correct_analysis.append(correct)
