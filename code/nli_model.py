@@ -115,7 +115,7 @@ class NLISystem(object):
 
       # CHEN
       if attentive_matching:
-        self.e, self.e_real = nli.attention(p_states, h_states, weight_attention)
+        self.e = nli.attention(p_states, h_states, weight_attention)
         chen_p, chen_h = nli.chen_matching(p_states, h_states, self.e)
 
         # Inference
