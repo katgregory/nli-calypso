@@ -162,6 +162,7 @@ class NLI(object):
         e = tf.matmul(states1, states2, transpose_b=True)
 
       # e = tf.clip_by_value(e, clip_value_min=-40, clip_value_max=40) # Fixes NaN error
+      e = tf.clip_by_value(e, clip_value_min=-100000, clip_value_max=100000) # Fixes NaN error
       # e_exp = tf.exp(e)
 
       return e
