@@ -161,10 +161,10 @@ class NLI(object):
         # e: batch_size x statement1_len x statement2_len
         e = tf.matmul(states1, states2, transpose_b=True)
 
-      e = tf.clip_by_value(e, clip_value_min=-40, clip_value_max=40) # Fixes NaN error
-      e_exp = tf.exp(e)
+      # e = tf.clip_by_value(e, clip_value_min=-40, clip_value_max=40) # Fixes NaN error
+      # e_exp = tf.exp(e)
 
-      return e_exp
+      return e
 
   """
   Calculates context vectors for two statements by using weighted similarity.
@@ -234,6 +234,7 @@ class NLI(object):
       max1 = tf.reshape(tf.reduce_max(e, axis=2), (batch_size, -1, 1))
       # one hot vectors of batch_size x statement1_len x statement2_len
       indices1 = tf.cast(tf.equal(e, max1), tf.float32)
+      indices1_toreturn = indices1 # TODO: Remove
       # average the best if there are multiple
       indices1 = indices1 / tf.reshape(tf.reduce_sum(indices1, axis=2), (batch_size, -1, 1))
       # batch_size x statement1_len x hidden_size
@@ -243,12 +244,13 @@ class NLI(object):
       max2 = tf.reshape(tf.reduce_max(e, axis=1), (batch_size, 1, -1))
       # one hot vectors of batch_size x statement1_len x statement2_len
       indices2 = tf.cast(tf.equal(e, max2), tf.float32)
+      indices2_toreturn = indices2 #TODO: Remove
       # average the best if there are multiple
       indices2 = indices2 / tf.reshape(tf.reduce_sum(indices2, axis=1), (batch_size, 1, -1))
       # batch_size x statement2_len x hidden_size
       context2 = tf.matmul(indices2, states1, transpose_a=True)
 
-      return (context1, context2)
+      return (context1, context2, indices1_toreturn, indices2_toreturn)
 
   """
   Multi-perspective similarity of two vectors.

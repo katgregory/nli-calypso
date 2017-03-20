@@ -50,6 +50,8 @@ for i in range(num_batches):
     e = np.delete(e, np.s_[h_len:], 1)
     e = np.delete(e, np.s_[p_len:], 0)
 
+    # e = np.log(e)
+
     print premise, hypothesis
 
     predicted = num_to_name(predicted)

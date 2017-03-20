@@ -115,7 +115,7 @@ class NLISystem(object):
 
       # CHEN
       if attentive_matching:
-        self.e = nli.attention(p_states, h_states, weight_attention)
+        self.e, self.e_real = nli.attention(p_states, h_states, weight_attention)
         chen_p, chen_h = nli.chen_matching(p_states, h_states, self.e)
 
         # Inference
@@ -131,7 +131,7 @@ class NLISystem(object):
 
       # MAX ATTENTIVE
       if max_attentive_matching:
-        max_p, max_h = nli.max_matching(p_states, h_states, self.e)
+        max_p, max_h, self.idx1, self.idx2 = nli.max_matching(p_states, h_states, self.e)
         p_contexts.append(max_p)
         h_contexts.append(max_h)
 
@@ -353,8 +353,8 @@ class NLISystem(object):
           self.dropout_ph: self.dropout_keep
         }
 
-        output_feed = [self.loss, self.probs, self.e]
-        loss, probs, e = session.run(output_feed, input_feed)
+        output_feed = [self.loss, self.probs, self.e_real, self.idx1, self.idx2]
+        loss, probs, e, idx1, idx2 = session.run(output_feed, input_feed)
 
         premise_analysis.append([[rev_vocab[i] for i in premise] for premise in premises])
         hypothesis_analysis.append([[rev_vocab[i] for i in hypothesis] for hypothesis in hypotheses])
