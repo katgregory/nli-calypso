@@ -115,8 +115,8 @@ class NLISystem(object):
 
       # CHEN
       if attentive_matching:
-        self.e = nli.attention(p_states, h_states, weight_attention)
-        chen_p, chen_h = nli.chen_matching(p_states, h_states, self.e)
+        self.e, e_exp = nli.attention(p_states, h_states, weight_attention)
+        chen_p, chen_h = nli.chen_matching(p_states, h_states, e_exp) # TODO: was self.e
 
         # Inference
         with tf.variable_scope("Inference-Chen") as scope:
