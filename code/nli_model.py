@@ -131,7 +131,7 @@ class NLISystem(object):
 
       # MAX ATTENTIVE
       if max_attentive_matching:
-        max_p, max_h, self.idx1, self.idx2 = nli.max_matching(p_states, h_states, self.e)
+        max_p, max_h = nli.max_matching(p_states, h_states, self.e)
         p_contexts.append(max_p)
         h_contexts.append(max_h)
 
