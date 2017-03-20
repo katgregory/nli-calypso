@@ -230,6 +230,8 @@ class NLI(object):
       # dimensions
       batch_size = tf.shape(states1)[0]
 
+      indices1 = tf.Print(indices1, [indices1]) # TODO: Remove
+
       # batch_size x statement1_len x 1: reshape for broadcasting
       max1 = tf.reshape(tf.reduce_max(e, axis=2), (batch_size, -1, 1))
       # one hot vectors of batch_size x statement1_len x statement2_len
@@ -239,8 +241,6 @@ class NLI(object):
       indices1 = indices1 / tf.reshape(tf.reduce_sum(indices1, axis=2), (batch_size, -1, 1))
       # batch_size x statement1_len x hidden_size
       context1 = tf.matmul(indices1, states2)
-
-      indices1 = tf.print(indices1, [indices1]) # TODO: Remove
 
       # batch_size x 1 x statement2_len: reshape for broadcasting
       max2 = tf.reshape(tf.reduce_max(e, axis=1), (batch_size, 1, -1))
