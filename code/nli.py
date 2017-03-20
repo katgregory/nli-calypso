@@ -161,10 +161,10 @@ class NLI(object):
         # e: batch_size x statement1_len x statement2_len
         e = tf.matmul(states1, states2, transpose_b=True)
 
-      e = tf.clip_by_value(e, clip_value_min=-40, clip_value_max=40) # Fixes NaN error
-      e_exp = tf.exp(e)
+      # e = tf.clip_by_value(e, clip_value_min=-40, clip_value_max=40) # Fixes NaN error
+      # e_exp = tf.exp(e)
 
-      return e_exp
+      return e
 
   """
   Calculates context vectors for two statements by using weighted similarity.
@@ -192,15 +192,17 @@ class NLI(object):
 
       # output of tf.reduce_sum has dimensions batch_size x statement1_len
       # reshape to batch_size x statement1_len x 1 to prepare for broadcast
-      magnitude1 = tf.reshape(tf.reduce_sum(e, axis=2), (batch_size, -1, 1))
+      # magnitude1 = tf.reshape(tf.reduce_sum(e, axis=2), (batch_size, -1, 1))
       # e_norm1: batch_size x statement1_len x statement2_len
-      e_norm1 = tf.div(e, magnitude1)
+      # e_norm1 = tf.div(e, magnitude1)
+      e_norm1 = tf.nn.l2_normalize(e, 2)
 
       # output of tf.reduce_sum has dimensions batch_size x statement2_len
       # reshape to batch_size x 1 x statement2_len to prepare for broadcast
-      magnitude2 = tf.reshape(tf.reduce_sum(e, axis=1), (batch_size, 1, -1))
+      # magnitude2 = tf.reshape(tf.reduce_sum(e, axis=1), (batch_size, 1, -1))
       # e_norm2: batch_size x statement1_len x statement2_len
-      e_norm2 = tf.div(e, magnitude2)
+      # e_norm2 = tf.div(e, magnitude2)
+      e_norm2 = tf.nn.l2_normalize(e, 1)
 
       ##############
       # Weighted sums
