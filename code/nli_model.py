@@ -116,7 +116,7 @@ class NLISystem(object):
       # CHEN
       if attentive_matching:
         self.e = nli.attention(p_states, h_states, weight_attention)
-        chen_p, chen_h = nli.chen_matching(p_states, h_states, self.e)
+        chen_p, chen_h = nli.chen_matching(p_states, h_states, self.e) # TODO: was self.e
 
         # Inference
         with tf.variable_scope("Inference-Chen") as scope:
@@ -401,7 +401,6 @@ class NLISystem(object):
         print("\tNEW BEST")
         best_epoch = (epoch, curr_accuracy)
       losses.append(curr_loss)
-      epoch += 1
 
       if curr_loss != curr_loss: # Nan - aka we f-ed up.
         print('\nBATCH LOSS IS NAN!! Printing out...')
@@ -413,10 +412,14 @@ class NLISystem(object):
 
       # STOP AT CONVERGENCE
       if len(losses) >= 10 and (max(losses[-3:]) - min(losses[-3:])) <= 0.03:
+        self.saver.save(session, 'train_params/epoch_model' + str(epoch))
         break 
 
       if epoch > 50: # HARD CUTOFF?
         break
+
+      epoch += 1
+
 
     return (best_epoch[0], best_epoch[1], losses, False)
 

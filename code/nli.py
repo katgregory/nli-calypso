@@ -161,10 +161,11 @@ class NLI(object):
         # e: batch_size x statement1_len x statement2_len
         e = tf.matmul(states1, states2, transpose_b=True)
 
+      # Exponentiate Chen but not for Max
+      # e_exp = tf.exp(tf.clip_by_value(e, clip_value_min=-40, clip_value_max=40))
       e = tf.clip_by_value(e, clip_value_min=-10000000, clip_value_max=10000000) # Fixes NaN error
-      # e_exp = tf.exp(e)
 
-      return e
+      return e 
 
   """
   Calculates context vectors for two statements by using weighted similarity.
