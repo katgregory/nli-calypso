@@ -401,7 +401,6 @@ class NLISystem(object):
         print("\tNEW BEST")
         best_epoch = (epoch, curr_accuracy)
       losses.append(curr_loss)
-      epoch += 1
 
       if curr_loss != curr_loss: # Nan - aka we f-ed up.
         print('\nBATCH LOSS IS NAN!! Printing out...')
@@ -418,6 +417,9 @@ class NLISystem(object):
 
       if epoch > 50: # HARD CUTOFF?
         break
+
+      epoch += 1
+
 
     return (best_epoch[0], best_epoch[1], losses, False)
 
