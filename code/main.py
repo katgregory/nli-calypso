@@ -222,9 +222,9 @@ def run_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab, lr, dro
 
 def validate_model(embeddings, train_dataset, eval_dataset, vocab, rev_vocab):
   # Define ranges to randomly sample over
-  lr_bounds = [0.00001, 0.001]
+  lr_bounds = [0.0001, 0.01]
   dropout_bounds = [0.5, 1.0]
-  num_validation_samples = 10
+  num_validation_samples = 20
 
   results_map = {}
   best_train_accuracy = 0
