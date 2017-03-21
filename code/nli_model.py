@@ -115,8 +115,8 @@ class NLISystem(object):
 
       # CHEN
       if attentive_matching:
-        self.e, e_exp = nli.attention(p_states, h_states, weight_attention)
-        chen_p, chen_h = nli.chen_matching(p_states, h_states, e_exp) # TODO: was self.e
+        self.e = nli.attention(p_states, h_states, weight_attention)
+        chen_p, chen_h = nli.chen_matching(p_states, h_states, self.e) # TODO: was self.e
 
         # Inference
         with tf.variable_scope("Inference-Chen") as scope:
@@ -413,6 +413,7 @@ class NLISystem(object):
 
       # STOP AT CONVERGENCE
       if len(losses) >= 10 and (max(losses[-3:]) - min(losses[-3:])) <= 0.03:
+        self.saver.save(session, 'train_params/epoch_model' + str(epoch))
         break 
 
       if epoch > 50: # HARD CUTOFF?
