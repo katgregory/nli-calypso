@@ -1,0 +1,89 @@
+Epoch 1
+Amount of time to run this epoch: 2380.57517195 secs
+Training accuracy for this epoch: 0.633798535405
+Mean loss for this epoch: 0.820460310872
+        NEW BEST
+
+Epoch 2
+Amount of time to run this epoch: 2380.87695193 secs
+Training accuracy for this epoch: 0.729994702995
+Mean loss for this epoch: 0.651175147685
+        NEW BEST
+
+Epoch 3
+Amount of time to run this epoch: 2379.6551199 secs
+Training accuracy for this epoch: 0.769380031928
+Mean loss for this epoch: 0.573102344913
+        NEW BEST
+
+Epoch 4
+Amount of time to run this epoch: 2387.47221398 secs
+Training accuracy for this epoch: 0.792532132436
+Mean loss for this epoch: 0.52419211303
+        NEW BEST
+
+Epoch 5
+Amount of time to run this epoch: 2385.67389703 secs
+Training accuracy for this epoch: 0.809795637525
+Mean loss for this epoch: 0.487191308571
+        NEW BEST
+
+Epoch 6
+Amount of time to run this epoch: 2389.49838591 secs
+Training accuracy for this epoch: 0.823391284879
+Mean loss for this epoch: 0.459060623901
+        NEW BEST
+
+Epoch 7
+Amount of time to run this epoch: 2388.02885008 secs
+Training accuracy for this epoch: 0.835532531077
+Mean loss for this epoch: 0.433433992799
+        NEW BEST
+
+Epoch 8
+Amount of time to run this epoch: 2392.24749422 secs
+Training accuracy for this epoch: 0.844106034764
+Mean loss for this epoch: 0.414386146186
+        NEW BEST
+
+Epoch 9
+Amount of time to run this epoch: 2389.11051989 secs
+Training accuracy for this epoch: 0.852126174306
+Mean loss for this epoch: 0.396836785204
+        NEW BEST
+
+Epoch 10
+Amount of time to run this epoch: 2390.539958 secs
+Training accuracy for this epoch: 0.859560184722
+Mean loss for this epoch: 0.379255611381
+        NEW BEST
+
+Epoch 11
+Amount of time to run this epoch: 2387.99394703 secs
+Training accuracy for this epoch: 0.866327973832
+Mean loss for this epoch: 0.365306954667
+        NEW BEST
+
+Epoch12
+Amount of time to run this epoch: 2392.58093405 secs
+Training accuracy for this epoch: 0.872012698251
+Mean loss for this epoch: 0.351603934576
+        NEW BEST
+
+EVALUATING
+Accuracy: 0.818228002439
+Average Loss: 0.48275332523
+Token-level confusion matrix:
+go\gu           entailment      neutral         contradiction
+entailment      2844.00         355.00          130.00
+neutral         347.00          2464.00         424.00
+contradiction   155.00          378.00          2745.00
+
+Token-level scores:
+label           acc             prec            rec             f1
+entailment      0.90            0.85            0.85            0.85
+neutral         0.85            0.77            0.76            0.77
+contradiction   0.89            0.83            0.84            0.83
+micro           0.88            0.82            0.82            0.82
+macro           0.88            0.82            0.82            0.82
+not-O           0.87            0.81            0.81            0.81
