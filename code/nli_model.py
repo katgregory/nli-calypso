@@ -80,7 +80,7 @@ class NLISystem(object):
     ##########################
     # Build neural net
     ##########################
-    nli = NLI(tblog=True, analytic_mode=analytic_mode)
+    nli = NLI(tblog=False, analytic_mode=analytic_mode)
 
     ####################
     # Embedding lookup
