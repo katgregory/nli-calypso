@@ -9,7 +9,7 @@ Kenny Xu
 kenxu95(at)stanford(dot)edu
 
 Kat Gregory
-katg(at)stanford(dot(dot)edu
+katg(at)stanford(dot)edu
 
 
 ## Abstract:
