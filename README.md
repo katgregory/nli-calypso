@@ -1,16 +1,19 @@
-# cs224n
-CS224n final project
+CALYPSO: A Neural Network Model for Natural Language Inference
+
+Colin Man
+colinman(at)stanford(dot)edu
+
+Kenny Xu
+kenxu95(at)stanford(dot)edu
+
+Kat Gregory
+katg(at)stanford(dot(dot)edu
 
 
-INSTRUCTIONS FOR RUNNING MAIN.py
+TO RUN:
+python code/main.py --help
+for instructions
 
-############ SINGLE RUN OVER VALIDATION OR TEST SET #################
-python code/main.py [--num_train] [--dev or --test] [--num_dev or --num_test] [--lr] [--dropout_keep] [--reg_lambda]
 
-############# HYPERPARAMETER VALIDATION ##########
-python code/main.py validation [--num_train] [--num_dev]
-
-EXAMPLE:
-python code/main.py run --num_train=100000 --dev --num_dev --lr=0.001 --reg_lambda=0.01
-
-(default values are used if not flag is not defined. See bottom of code/main.py)
+ABSTRACT:
+The ability to infer meaning from text has long been regarded as one of the ``benchmarks'' of the quest to artificially approximate human intelligence. The field of Natural Language Inference explores this task by explicitly modeling inference relationships in natural language. In this work, we present the CALYPSO model, which builds upon Chen et al. '16's EBIM model by enhancing the matching layer with modifications to Chen's soft attention as well as three matching algorithms inspired by Wang et al. '17. Although CALYPSO's 82\% accuracy is 3.2\% lower than that of our EBIM implementation, our ablation study and comparison of training loss over time suggest that every modification has value and that hyperparameter tuning as well as revisions to the merging framework promise better results.
